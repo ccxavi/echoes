@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://dn0fviuxjiqgp"]
+
+[ext_resource type="PackedScene" uid="uid://dy3t6hvcil60e" path="res://scenes/player.tscn" id="1_uwrxv"]
+[ext_resource type="Texture2D" uid="uid://cjnbas7op7xjr" path="res://icon.svg" id="2_yqjtg"]
+
+[node name="Game" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_uwrxv")]
+z_index = 10
+position = Vector2(4, -8)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(-1, 1)
+rotation = -1.5707964
+zoom = Vector2(2, 2)
+
+[node name="temp_test_floor" type="Area2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="temp_test_floor"]
+scale = Vector2(4.34375, 4.34375)
+texture = ExtResource("2_yqjtg")
