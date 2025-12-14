@@ -3,6 +3,10 @@ extends Node2D
 var characters: Array = []
 var active_character_index: int = 0
 var is_switching = false 
+
+# New variable to track the cooldown state
+var can_switch = true
+const SWITCH_COOLDOWN = 2
 const onCharacterSwitchSpeed = 0.3
 
 @onready var camera: Camera2D = %Camera2D
@@ -15,24 +19,24 @@ func _ready():
 		if child is CharacterBody2D:
 			characters.append(child)
 	
-	# Enable first character, disable others
 	for i in range(characters.size()):
 		if i == 0: activate_character(characters[i])
 		else: deactivate_character(characters[i])
 
 func _unhandled_input(event):
-	# If we are already switching, ignore ALL input
-	if is_switching:
+	# Block input if we are currently animating OR if we are on cooldown
+	if is_switching or not can_switch:
 		return
 
 	if event.is_action_pressed("switch_next"):
-		perform_switch(1) # Pass 1 for Next
+		perform_switch(1) 
 	elif event.is_action_pressed("switch_prev"):
-		perform_switch(-1) # Pass -1 for Previous
+		perform_switch(-1) 
 
-# We merged "switch_to_next" into this generic function
 func perform_switch(direction: int):
 	is_switching = true 
+	can_switch = false # Lock the cooldown immediately
+	
 	var old_char = characters[active_character_index]
 	
 	# 1. Play VFX
@@ -49,12 +53,10 @@ func perform_switch(direction: int):
 		var fps = switch_vfx.sprite_frames.get_animation_speed("switch")
 		if fps > 0: duration = frames / fps
 	
-	# 4. SWAP MATH (Handles both Next and Prev)
-	# Adding characters.size() ensures we don't get negative numbers when going back from 0
+	# 4. SWAP MATH
 	active_character_index = (active_character_index + direction + characters.size()) % characters.size()
 	
 	var new_char = characters[active_character_index]
-	
 	new_char.global_position = old_char.global_position
 	
 	deactivate_character(old_char)
@@ -76,7 +78,16 @@ func perform_switch(direction: int):
 	# 7. Restore Speed & Cleanup
 	new_char.speed = original_speed
 	switch_vfx.visible = false
+	
+	# Unlock the PHYSICS/MOVEMENT immediately so player can walk
 	is_switching = false
+	
+	# 8. COOLDOWN TIMER
+	# Start the 0.5s timer only after the switch is fully done
+	await get_tree().create_timer(SWITCH_COOLDOWN).timeout
+	
+	# Allow switching again
+	can_switch = true
 
 func play_vfx(pos: Vector2):
 	switch_vfx.global_position = pos
