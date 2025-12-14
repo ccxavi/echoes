@@ -9,9 +9,8 @@ const onCharacterSwitchSpeed = 0.3
 @onready var switch_vfx: AnimatedSprite2D = $switch_vfx
 
 func _ready():
-	switch_vfx.visible = false # Hide smoke at start
+	switch_vfx.visible = false 
 	
-	# Get all Character children (ignores the VFX node)
 	for child in get_children():
 		if child is CharacterBody2D:
 			characters.append(child)
@@ -22,29 +21,38 @@ func _ready():
 		else: deactivate_character(characters[i])
 
 func _unhandled_input(event):
-	if event.is_action_pressed("switch_next") and not is_switching:
-		switch_to_next()
+	# If we are already switching, ignore ALL input
+	if is_switching:
+		return
 
-func switch_to_next():
+	if event.is_action_pressed("switch_next"):
+		perform_switch(1) # Pass 1 for Next
+	elif event.is_action_pressed("switch_prev"):
+		perform_switch(-1) # Pass -1 for Previous
+
+# We merged "switch_to_next" into this generic function
+func perform_switch(direction: int):
 	is_switching = true 
 	var old_char = characters[active_character_index]
 	
-	# play vfx
+	# 1. Play VFX
 	play_vfx(old_char.global_position)
 	
-	# hide old character
+	# 2. Hide Old Character
 	if old_char.has_node("main_sprite"):
 		old_char.get_node("main_sprite").visible = false
 	
-	# calculate duration
+	# 3. Calculate Duration
 	var duration = 0.5
 	if switch_vfx.sprite_frames.has_animation("switch"):
 		var frames = switch_vfx.sprite_frames.get_frame_count("switch")
 		var fps = switch_vfx.sprite_frames.get_animation_speed("switch")
 		if fps > 0: duration = frames / fps
 	
-	# swap logic
-	active_character_index = (active_character_index + 1) % characters.size()
+	# 4. SWAP MATH (Handles both Next and Prev)
+	# Adding characters.size() ensures we don't get negative numbers when going back from 0
+	active_character_index = (active_character_index + direction + characters.size()) % characters.size()
+	
 	var new_char = characters[active_character_index]
 	
 	new_char.global_position = old_char.global_position
@@ -52,23 +60,21 @@ func switch_to_next():
 	deactivate_character(old_char)
 	activate_character(new_char)
 	
-	# apply character speed during animation
+	# 5. Apply Slow Speed
 	var original_speed = new_char.speed
 	new_char.speed = original_speed * onCharacterSwitchSpeed
 	
-	# hide new sprite & wait
+	# 6. Hide New Sprite & Wait
 	if new_char.has_node("main_sprite"):
 		new_char.get_node("main_sprite").visible = false
 		
-		# wait for half the smoke animation
+		# Wait for half the smoke animation
 		await get_tree().create_timer(duration * 0.5).timeout
 		
 		new_char.get_node("main_sprite").visible = true
 	
-	# restore speed
+	# 7. Restore Speed & Cleanup
 	new_char.speed = original_speed
-	
-	# cleanup
 	switch_vfx.visible = false
 	is_switching = false
 
@@ -80,7 +86,6 @@ func play_vfx(pos: Vector2):
 
 func activate_character(char_node):
 	char_node.visible = true
-	# Force visibility reset just in case
 	if char_node.has_node("main_sprite"):
 		char_node.get_node("main_sprite").visible = true
 		
