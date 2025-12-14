@@ -1,23 +1,25 @@
-extends CharacterBody2D
+class_name Character extends CharacterBody2D
 
 @export var speed = 300.0
-@onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+@onready var animated_sprite_2d: AnimatedSprite2D = $main_sprite
+@onready var effects_sprite: AnimatedSprite2D = $sfx
 
-# We need this to lock movement while attacking
 var is_attacking = false
 
 func _ready():
-	# Connect the signal so we know when the sword swing ends
-	# This is crucial! It tells the script "Okay, you can move again."
 	animated_sprite_2d.animation_finished.connect(_on_animation_finished)
+	effects_sprite.animation_finished.connect(_on_effect_finished)
+	
+	# Hide the smoke effect at the start
+	effects_sprite.visible = false
 
-func _physics_process(delta):
-	# 1. PRIORITY CHECK: If we are attacking, don't move or change animation
+func _physics_process(_delta):
+	# If we are attacking/switching, don't move
 	if is_attacking:
 		return 
 
 	# --- 2. ATTACK INPUT ---
-	if Input.is_action_just_pressed("attack"): # Make sure "attack" is in Input Map
+	if Input.is_action_just_pressed("attack"): 
 		start_attack()
 		return # Stop processing movement for this frame
 
@@ -35,39 +37,51 @@ func _physics_process(delta):
 
 	# --- 5. RUN/IDLE ANIMATION ---
 	if direction != Vector2.ZERO:
-		animated_sprite_2d.play("run")
+		play_anim("run")
 	else:
-		animated_sprite_2d.play("idle")
+		play_anim("idle")
 
 	# --- 6. APPLY PHYSICS ---
 	move_and_slide()
 
-# --- NEW ATTACK LOGIC ---
+func play_anim(anim_name: String):
+	if animated_sprite_2d.sprite_frames and animated_sprite_2d.sprite_frames.has_animation(anim_name):
+		animated_sprite_2d.play(anim_name)
+
 func start_attack():
 	is_attacking = true
-	velocity = Vector2.ZERO # Stop moving when attacking (prevents sliding)
+	velocity = Vector2.ZERO 
 	
 	var mouse_pos = get_global_mouse_position()
 	var diff = mouse_pos - global_position
 	
-	# Math: Check if the mouse is more "Vertical" or more "Horizontal"
 	if abs(diff.y) > abs(diff.x):
-		# Vertical Attack
 		if diff.y < 0:
-			animated_sprite_2d.play("attack_up")
+			play_anim("attack_up")
 		else:
-			animated_sprite_2d.play("attack_down")
+			play_anim("attack_down")
 	else:
-		# Horizontal Attack
-		animated_sprite_2d.play("attack_side")
-		# We still need to flip the sprite for side attacks
+		play_anim("attack_side")
 		if diff.x < 0:
 			animated_sprite_2d.flip_h = true
 		else:
 			animated_sprite_2d.flip_h = false
 
-# This function runs automatically when the animation ends
+func play_switch_anim():
+	is_attacking = true
+	velocity = Vector2.ZERO
+	
+	# Play the shared smoke effect
+	effects_sprite.visible = true
+	effects_sprite.play("switch")
+	
+	play_anim("idle")
+
 func _on_animation_finished():
-	if is_attacking:
+	if animated_sprite_2d.animation in ["attack_side", "attack_up", "attack_down"]:
 		is_attacking = false
-		# The physics process will take over again in the next frame
+
+func _on_effect_finished():
+	if effects_sprite.animation == "switch":
+		effects_sprite.visible = false
+		is_attacking = false
