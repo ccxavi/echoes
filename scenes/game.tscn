@@ -1,26 +1,103 @@
-[gd_scene load_steps=6 format=3 uid="uid://dn0fviuxjiqgp"]
+[gd_scene load_steps=17 format=3 uid="uid://dn0fviuxjiqgp"]
 
 [ext_resource type="Script" uid="uid://c31hciya3r48y" path="res://scripts/camera.gd" id="1_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://bvmcwgcna44v1" path="res://scenes/knight.tscn" id="1_uwrxv"]
 [ext_resource type="Script" uid="uid://xv1nackckx0h" path="res://scripts/party_manager.gd" id="2_lbhrr"]
 [ext_resource type="Texture2D" uid="uid://cjnbas7op7xjr" path="res://icon.svg" id="2_yqjtg"]
 [ext_resource type="PackedScene" uid="uid://ctnrjswxupaej" path="res://scenes/goblin.tscn" id="3_iywne"]
+[ext_resource type="Texture2D" uid="uid://bpg874l6ah17g" path="res://assets/Explosions.png" id="3_p57ef"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p57ef"]
+atlas = ExtResource("3_p57ef")
+region = Rect2(0, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u5sy4"]
+atlas = ExtResource("3_p57ef")
+region = Rect2(192, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gee14"]
+atlas = ExtResource("3_p57ef")
+region = Rect2(384, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0tnpc"]
+atlas = ExtResource("3_p57ef")
+region = Rect2(576, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vtaks"]
+atlas = ExtResource("3_p57ef")
+region = Rect2(768, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kvpfn"]
+atlas = ExtResource("3_p57ef")
+region = Rect2(960, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dinhu"]
+atlas = ExtResource("3_p57ef")
+region = Rect2(1152, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kvuet"]
+atlas = ExtResource("3_p57ef")
+region = Rect2(1344, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_trtic"]
+atlas = ExtResource("3_p57ef")
+region = Rect2(1536, 0, 192, 192)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ca42v"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p57ef")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u5sy4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gee14")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0tnpc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vtaks")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kvpfn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dinhu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kvuet")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_trtic")
+}],
+"loop": false,
+"name": &"switch",
+"speed": 10.0
+}]
 
 [node name="Game" type="Node2D"]
 
 [node name="Camera2D" type="Camera2D" parent="."]
+unique_name_in_owner = true
 position = Vector2(3, -7)
 rotation = -1.5707964
 zoom = Vector2(2, 2)
 script = ExtResource("1_lnu2h")
 
-[node name="party-manager" type="Node2D" parent="."]
+[node name="party_manager" type="Node2D" parent="."]
 z_index = 5
 script = ExtResource("2_lbhrr")
 
-[node name="knight" parent="party-manager" instance=ExtResource("1_uwrxv")]
+[node name="switch_vfx" type="AnimatedSprite2D" parent="party_manager"]
+sprite_frames = SubResource("SpriteFrames_ca42v")
+animation = &"switch"
 
-[node name="goblin" parent="party-manager" instance=ExtResource("3_iywne")]
+[node name="knight" parent="party_manager" instance=ExtResource("1_uwrxv")]
+
+[node name="goblin" parent="party_manager" instance=ExtResource("3_iywne")]
 
 [node name="temp_test_floor" type="Area2D" parent="."]
 
