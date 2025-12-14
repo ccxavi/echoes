@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dughaakmk0663"
-path="res://.godot/imported/Warrior_Blue.png-06ddf1b33e709600c19c4a3c01b7258d.ctex"
+uid="uid://b7yro1h7irdwq"
+path="res://.godot/imported/Idle.png-5403e08a3e8f50f660718a8d53b858f5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Warrior_Blue.png"
-dest_files=["res://.godot/imported/Warrior_Blue.png-06ddf1b33e709600c19c4a3c01b7258d.ctex"]
+source_file="res://assets/characters/fighter/SeparateAnim/Idle.png"
+dest_files=["res://.godot/imported/Idle.png-5403e08a3e8f50f660718a8d53b858f5.ctex"]
 
 [params]
 

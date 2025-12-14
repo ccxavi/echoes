@@ -1,6 +1,6 @@
 class_name Character extends CharacterBody2D
 
-@export var speed = 300.0
+@export var speed = 100.0
 @onready var animated_sprite_2d: AnimatedSprite2D = $main_sprite
 
 # Only used for Combat now. Switching is handled by PartyManager disabling us.
