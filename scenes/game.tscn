@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://dn0fviuxjiqgp"]
+[gd_scene load_steps=21 format=3 uid="uid://dn0fviuxjiqgp"]
 
 [ext_resource type="Script" uid="uid://c31hciya3r48y" path="res://scripts/camera.gd" id="1_lnu2h"]
 [ext_resource type="Script" uid="uid://xv1nackckx0h" path="res://scripts/party_manager.gd" id="2_lbhrr"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://crptpm7brbr5u" path="res://scenes/characters/monk.tscn" id="5_p57ef"]
 [ext_resource type="PackedScene" uid="uid://d0buro6mkrfpt" path="res://scenes/characters/lancer.tscn" id="6_u5sy4"]
 [ext_resource type="PackedScene" uid="uid://f8a0hr62euxq" path="res://scenes/characters/goblin.tscn" id="7_gee14"]
+[ext_resource type="PackedScene" uid="uid://d1dh7ws0nub2h" path="res://scenes/levels/village.tscn" id="8_0tnpc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dinhu"]
 region = Rect2(160, 0, 32, 32)
@@ -92,7 +93,6 @@ animations = [{
 unique_name_in_owner = true
 position = Vector2(3, -7)
 rotation = -1.5707964
-zoom = Vector2(2, 2)
 script = ExtResource("1_lnu2h")
 
 [node name="party_manager" type="Node2D" parent="."]
@@ -110,6 +110,9 @@ animation = &"switch"
 [node name="laner" parent="party_manager" instance=ExtResource("6_u5sy4")]
 
 [node name="goblin" parent="party_manager" instance=ExtResource("7_gee14")]
+
+[node name="Village" parent="." instance=ExtResource("8_0tnpc")]
+position = Vector2(-135, -19)
 
 [node name="temp_test_floor" type="Area2D" parent="."]
 
