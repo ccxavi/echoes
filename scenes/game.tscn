@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://dn0fviuxjiqgp"]
+[gd_scene load_steps=23 format=3 uid="uid://dn0fviuxjiqgp"]
 
 [ext_resource type="Script" uid="uid://c31hciya3r48y" path="res://scripts/camera.gd" id="1_lnu2h"]
 [ext_resource type="Script" uid="uid://xv1nackckx0h" path="res://scripts/party_manager.gd" id="2_lbhrr"]
@@ -8,6 +8,9 @@
 [ext_resource type="PackedScene" uid="uid://crptpm7brbr5u" path="res://scenes/characters/monk.tscn" id="5_p57ef"]
 [ext_resource type="PackedScene" uid="uid://d0buro6mkrfpt" path="res://scenes/characters/lancer.tscn" id="6_u5sy4"]
 [ext_resource type="PackedScene" uid="uid://f8a0hr62euxq" path="res://scenes/characters/goblin.tscn" id="7_gee14"]
+[ext_resource type="PackedScene" uid="uid://ct7ydfoh1m6ps" path="res://scenes/enemies/ghost.tscn" id="8_0tnpc"]
+[ext_resource type="PackedScene" uid="uid://bgphg425e04cf" path="res://scenes/enemies/bird.tscn" id="8_kvpfn"]
+[ext_resource type="PackedScene" uid="uid://d05jqxv24l657" path="res://scenes/enemies/pig.tscn" id="9_dinhu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dinhu"]
 region = Rect2(160, 0, 32, 32)
@@ -92,7 +95,7 @@ animations = [{
 unique_name_in_owner = true
 position = Vector2(3, -7)
 rotation = -1.5707964
-zoom = Vector2(2, 2)
+zoom = Vector2(4, 4)
 script = ExtResource("1_lnu2h")
 
 [node name="party_manager" type="Node2D" parent="."]
@@ -110,6 +113,21 @@ animation = &"switch"
 [node name="laner" parent="party_manager" instance=ExtResource("6_u5sy4")]
 
 [node name="goblin" parent="party_manager" instance=ExtResource("7_gee14")]
+
+[node name="enemies" type="Node2D" parent="."]
+z_index = 5
+
+[node name="bird" parent="enemies" instance=ExtResource("8_kvpfn")]
+position = Vector2(214, -45)
+scale = Vector2(1.5199994, 1.5199994)
+
+[node name="pig" parent="enemies" instance=ExtResource("9_dinhu")]
+position = Vector2(375.00003, -42.000004)
+scale = Vector2(1.5199994, 1.5199994)
+
+[node name="ghost" parent="enemies" instance=ExtResource("8_0tnpc")]
+position = Vector2(298.00003, -42.000004)
+scale = Vector2(1.5199994, 1.5199994)
 
 [node name="temp_test_floor" type="Area2D" parent="."]
 
