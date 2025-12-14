@@ -1,7 +1,8 @@
-[gd_scene load_steps=27 format=3 uid="uid://crptpm7brbr5u"]
+[gd_scene load_steps=28 format=3 uid="uid://crptpm7brbr5u"]
 
 [ext_resource type="PackedScene" uid="uid://dy3t6hvcil60e" path="res://scenes/character.tscn" id="1_hgnqc"]
 [ext_resource type="Texture2D" uid="uid://cu03itxtisfbs" path="res://assets/characters/Monk/Heal.png" id="2_8icvp"]
+[ext_resource type="Script" uid="uid://dmlxywq1bcje8" path="res://scripts/monk.gd" id="2_o4mlt"]
 [ext_resource type="Texture2D" uid="uid://bl6updmbqcsns" path="res://assets/characters/Monk/Idle.png" id="3_o4mlt"]
 [ext_resource type="Texture2D" uid="uid://bsv5kns731ng3" path="res://assets/characters/Monk/Run.png" id="4_vwfsv"]
 
@@ -126,83 +127,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_3ewjo")
 }],
 "loop": false,
-"name": &"attack_down",
-"speed": 10.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_7kooe")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_wcnp6")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_3qxq0")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ewf1v")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_f7h75")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_v8cnc")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_w75ef")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_afl3x")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_dcgok")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vno4y")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_3ewjo")
-}],
-"loop": false,
-"name": &"attack_side",
-"speed": 10.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_7kooe")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_wcnp6")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_3qxq0")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ewf1v")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_f7h75")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_v8cnc")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_w75ef")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_afl3x")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_dcgok")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vno4y")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_3ewjo")
-}],
-"loop": false,
-"name": &"attack_up",
+"name": &"heal",
 "speed": 10.0
 }, {
 "frames": [{
@@ -247,7 +172,8 @@ animations = [{
 }]
 
 [node name="character" instance=ExtResource("1_hgnqc")]
+script = ExtResource("2_o4mlt")
 
 [node name="main_sprite" parent="." index="0"]
 sprite_frames = SubResource("SpriteFrames_bwx0r")
-animation = &"attack_down"
+animation = &"heal"
