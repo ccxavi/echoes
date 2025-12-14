@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bpg874l6ah17g"
-path="res://.godot/imported/Explosions.png-27439d23b9285df8719a4864806fa2cc.ctex"
+uid="uid://108pbpv8cwe4"
+path="res://.godot/imported/Walk.png-ef21a88203900d5b9bb7deb788fbf71f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Explosions.png"
-dest_files=["res://.godot/imported/Explosions.png-27439d23b9285df8719a4864806fa2cc.ctex"]
+source_file="res://assets/characters/gladiator/SeparateAnim/Walk.png"
+dest_files=["res://.godot/imported/Walk.png-ef21a88203900d5b9bb7deb788fbf71f.ctex"]
 
 [params]
 

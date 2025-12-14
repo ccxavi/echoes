@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b3qcn71nu07hx"
-path="res://.godot/imported/Explosions.png-da5ffd42f09fe6fca5f4340c89c3cbb2.ctex"
+uid="uid://bunsgpnc0qk2s"
+path="res://.godot/imported/Idle.png-7afaa4a454e910a5673b8a307a3d04fb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Explosions.png"
-dest_files=["res://.godot/imported/Explosions.png-da5ffd42f09fe6fca5f4340c89c3cbb2.ctex"]
+source_file="res://assets/characters/sultan/SeparateAnim/Idle.png"
+dest_files=["res://.godot/imported/Idle.png-7afaa4a454e910a5673b8a307a3d04fb.ctex"]
 
 [params]
 
