@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://dn0fviuxjiqgp"]
+[gd_scene load_steps=21 format=3 uid="uid://dn0fviuxjiqgp"]
 
 [ext_resource type="Script" uid="uid://c31hciya3r48y" path="res://scripts/camera.gd" id="1_lnu2h"]
 [ext_resource type="Script" uid="uid://xv1nackckx0h" path="res://scripts/party_manager.gd" id="2_lbhrr"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://crptpm7brbr5u" path="res://scenes/characters/monk.tscn" id="5_p57ef"]
 [ext_resource type="PackedScene" uid="uid://d0buro6mkrfpt" path="res://scenes/characters/lancer.tscn" id="6_u5sy4"]
 [ext_resource type="PackedScene" uid="uid://f8a0hr62euxq" path="res://scenes/characters/goblin.tscn" id="7_gee14"]
+[ext_resource type="PackedScene" uid="uid://d1dh7ws0nub2h" path="res://scenes/levels/village.tscn" id="8_0tnpc"]
 [ext_resource type="PackedScene" uid="uid://ct7ydfoh1m6ps" path="res://scenes/enemies/ghost.tscn" id="8_0tnpc"]
 [ext_resource type="PackedScene" uid="uid://bgphg425e04cf" path="res://scenes/enemies/bird.tscn" id="8_kvpfn"]
 [ext_resource type="PackedScene" uid="uid://d05jqxv24l657" path="res://scenes/enemies/pig.tscn" id="9_dinhu"]
@@ -114,6 +115,8 @@ animation = &"switch"
 
 [node name="goblin" parent="party_manager" instance=ExtResource("7_gee14")]
 
+[node name="Village" parent="." instance=ExtResource("8_0tnpc")]
+position = Vector2(-135, -19)
 [node name="enemies" type="Node2D" parent="."]
 z_index = 5
 position = Vector2(1, 0)
