@@ -10,7 +10,7 @@ class_name Enemy extends CharacterBody2D
 @export var damage = 10
 @export var attack_cooldown = 1.0
 @export var knockback_friction = 600.0
-@export var knockback_power = 400.0   
+@export var knockback_power = 400.0    
 
 @export_group("AI")
 @export var detection_range = 200.0 
@@ -26,15 +26,13 @@ var knockback_velocity = Vector2.ZERO
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var hitbox: Area2D = $hitbox
 @onready var vfx: AnimatedSprite2D = $vfx
-# NEW: Reference the particles
 @onready var hit_particles: CPUParticles2D = $HitParticles 
 
 func _ready():
 	hp = max_hp
 	
 	# 1. SETUP VFX
-	vfx.visible = false # Start hidden
-	# Connect the signal so we know when the slash is done
+	vfx.visible = false 
 	if not vfx.animation_finished.is_connected(_on_vfx_finished):
 		vfx.animation_finished.connect(_on_vfx_finished)
 
@@ -112,29 +110,36 @@ func face_direction(dir_x: float):
 	elif dir_x > 0: animated_sprite_2d.flip_h = false
 
 # --- COMBAT LOGIC ---
-func take_damage(amount: int, source_pos: Vector2 = Vector2.ZERO):
+func take_damage(amount: int, source_pos: Vector2 = Vector2.ZERO, is_critical: bool = false):
 	hp -= amount
-	print(name + " Hit! HP: " + str(hp))
 	
-	# --- VFX LOGIC ---
+	# Debug print
+	var hit_type = "CRITICAL HIT!" if is_critical else "Hit!"
+	print("%s %s HP: %s" % [name, hit_type, str(hp)])
+	
+	# 1. VFX (Slash)
 	vfx.visible = true
-	vfx.frame = 0 # Force restart from beginning
+	vfx.frame = 0 
 	vfx.play("slash")
-	
-	# --- EXISTING KNOCKBACK LOGIC ---
+
+	# 2. KNOCKBACK
 	if source_pos != Vector2.ZERO:
 		var knockback_dir = (global_position - source_pos).normalized()
-		knockback_velocity = knockback_dir * knockback_power
+		var power = knockback_power * 1.5 if is_critical else knockback_power
+		knockback_velocity = knockback_dir * power
 		
-		# Removed particle rotation to keep dust static
 		if hit_particles: hit_particles.rotation = knockback_dir.angle()
 
-	# --- PAIN ANIMATION ---
-	modulate = Color(10, 10, 10) 
+	# 3. FLASH COLOR
+	if is_critical:
+		modulate = Color(3, 0, 0) # Glowing Red for Crit
+	else:
+		modulate = Color(10, 10, 10) # Bright White for Normal
+	
 	var tween = create_tween()
 	tween.tween_property(self, "modulate", Color.WHITE, 0.2)
 	
-	# --- PARTICLES ---
+	# 4. PLAY PARTICLES
 	if hit_particles:
 		hit_particles.restart() 
 		hit_particles.emitting = true
@@ -175,5 +180,4 @@ func _on_hitbox_body_entered(_body):
 	pass
 
 func _on_vfx_finished():
-	# Hide the sprite immediately when animation ends
 	vfx.visible = false
