@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://d0buro6mkrfpt"]
+[gd_scene load_steps=44 format=3 uid="uid://d0buro6mkrfpt"]
 
 [ext_resource type="PackedScene" uid="uid://dy3t6hvcil60e" path="res://scenes/character.tscn" id="1_caj3b"]
 [ext_resource type="Texture2D" uid="uid://du1f54fafiiet" path="res://assets/characters/Lancer/Lancer_Right_Attack.png" id="2_7gq8s"]
@@ -279,25 +279,9 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qvwsx"]
-radius = 28.0
-height = 74.0
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_qvwsx"]
-size = Vector2(79, 25.75)
-
 [node name="character" instance=ExtResource("1_caj3b")]
 script = ExtResource("2_qvwsx")
 
 [node name="main_sprite" parent="." index="0"]
 sprite_frames = SubResource("SpriteFrames_p7tjj")
-animation = &"attack_side"
-
-[node name="CollisionShape2D" parent="." index="1"]
-position = Vector2(10, 12)
-shape = SubResource("CapsuleShape2D_qvwsx")
-
-[node name="CollisionShape2D" parent="WeaponPivot/AttackArea" index="0"]
-position = Vector2(80.5, 12.875)
-shape = SubResource("RectangleShape2D_qvwsx")
-debug_color = Color(0.6151023, 0.5257668, 0.31466037, 0.41960785)
+animation = &"attack_down_diag"
