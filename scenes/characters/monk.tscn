@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://crptpm7brbr5u"]
+[gd_scene load_steps=28 format=3 uid="uid://crptpm7brbr5u"]
 
 [ext_resource type="PackedScene" uid="uid://dy3t6hvcil60e" path="res://scenes/character.tscn" id="1_hgnqc"]
 [ext_resource type="Texture2D" uid="uid://cu03itxtisfbs" path="res://assets/characters/Monk/Heal.png" id="2_8icvp"]
@@ -171,16 +171,9 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_o4mlt"]
-radius = 27.0
-height = 76.0
-
 [node name="character" instance=ExtResource("1_hgnqc")]
 script = ExtResource("2_o4mlt")
 
 [node name="main_sprite" parent="." index="0"]
 sprite_frames = SubResource("SpriteFrames_bwx0r")
 animation = &"heal"
-
-[node name="CollisionShape2D" parent="." index="1"]
-shape = SubResource("CapsuleShape2D_o4mlt")
