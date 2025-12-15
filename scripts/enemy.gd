@@ -22,6 +22,12 @@ var hp = max_hp
 var can_attack = true
 var knockback_velocity = Vector2.ZERO 
 
+# --- BURN STATE ---
+var is_burning: bool = false
+var burn_duration: float = 0.0
+var burn_damage_per_tick: int = 0
+var burn_tick_timer: float = 0.0
+
 # --- NODES ---
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var hitbox: Area2D = $hitbox
@@ -51,6 +57,9 @@ func _physics_process(delta: float) -> void:
 		velocity = knockback_velocity
 		move_and_slide()
 		return 
+	
+	if is_burning:
+		_process_burn(delta)
 
 	# 2. State Check
 	if not can_attack:
@@ -110,40 +119,52 @@ func face_direction(dir_x: float):
 	elif dir_x > 0: animated_sprite_2d.flip_h = false
 
 # --- COMBAT LOGIC ---
-func take_damage(amount: int, source_pos: Vector2 = Vector2.ZERO, is_critical: bool = false):
+func take_damage(amount: int, source_pos: Vector2 = Vector2.ZERO, is_critical: bool = false, is_fire_damage: bool = false):
 	hp -= amount
 	
-	# Debug print
-	var hit_type = "CRITICAL HIT!" if is_critical else "Hit!"
-	print("%s %s HP: %s" % [name, hit_type, str(hp)])
-	
-	# 1. VFX (Slash)
+	# --- 1. ANIMATION & VFX ---
 	vfx.visible = true
-	vfx.frame = 0 
-	vfx.play("slash")
+	vfx.frame = 0
+	
+	if is_fire_damage:
+		# LOGIC: This damage came from the fire tick
+		vfx.play("fire") 
+		vfx.rotation = randf_range(0, 6.28) 
+	else:
+		# LOGIC: This damage came from a physical hit (Sword/Arrow)
+		# Even if they are burning, we play the slash because a sword just hit them!
+		vfx.play("slash") 
+		vfx.rotation = 0
 
-	# 2. KNOCKBACK
-	if source_pos != Vector2.ZERO:
+	# --- 2. KNOCKBACK ---
+	# We ONLY apply knockback if it is NOT fire damage.
+	# Physical hits get knockback. Fire ticks do not.
+	if source_pos != Vector2.ZERO and not is_fire_damage:
 		var knockback_dir = (global_position - source_pos).normalized()
 		var power = knockback_power * 1.5 if is_critical else knockback_power
 		knockback_velocity = knockback_dir * power
 		
-		if hit_particles: hit_particles.rotation = knockback_dir.angle()
+		# Rotate particles to face away from the hit
+		if hit_particles: 
+			hit_particles.rotation = knockback_dir.angle()
+			hit_particles.restart()
+			hit_particles.emitting = true
 
-	# 3. FLASH COLOR
-	if is_critical:
-		modulate = Color(3, 0, 0) # Glowing Red for Crit
+	# --- 3. FLASH COLOR ---
+	if is_fire_damage:
+		modulate = Color(2, 0.5, 0) # Orange Flash
+	elif is_critical:
+		modulate = Color(3, 0, 0)   # Red Flash
 	else:
-		modulate = Color(10, 10, 10) # Bright White for Normal
+		modulate = Color(10, 10, 10) # White Flash
 	
 	var tween = create_tween()
 	tween.tween_property(self, "modulate", Color.WHITE, 0.2)
 	
-	# 4. PLAY PARTICLES
-	if hit_particles:
-		hit_particles.restart() 
-		hit_particles.emitting = true
-	
+	# Debugging
+	var source = "Burn" if is_fire_damage else "Attack"
+	print("%s took %s damage from %s. HP: %s" % [name, amount, source, hp])
+
 	if hp <= 0:
 		die()
 
@@ -181,3 +202,24 @@ func _on_hitbox_body_entered(_body):
 
 func _on_vfx_finished():
 	vfx.visible = false
+
+func apply_burn(dmg_per_tick: int, duration: float):
+	is_burning = true
+	burn_damage_per_tick = dmg_per_tick
+	burn_duration = duration
+	burn_tick_timer = 0.0
+	
+	# Visual feedback: Turn Orange
+	modulate = Color(1.5, 0.5, 0)
+
+func _process_burn(delta: float):
+	burn_duration -= delta
+	burn_tick_timer -= delta
+	
+	if burn_tick_timer <= 0:
+		take_damage(burn_damage_per_tick, Vector2.ZERO, false, true)
+		burn_tick_timer = 1.0 
+	
+	if burn_duration <= 0:
+		is_burning = false
+		modulate = Color.WHITE

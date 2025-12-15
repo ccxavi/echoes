@@ -6,6 +6,10 @@ extends Character
 @export var dash_duration = 0.2
 @export var dash_cooldown = 1.0
 
+@export var fire_damage = 2
+@export var damage_time = 4.0 # do fire_damage every 4 seconds
+
+
 # --- STATE ---
 var is_dashing = false
 var can_dash = true
@@ -81,3 +85,28 @@ func spawn_dash_ghost():
 	var tween = create_tween()
 	tween.tween_property(ghost, "modulate:a", 0.0, 0.3) # Fade alpha to 0 over 0.3s
 	tween.tween_callback(ghost.queue_free) # Delete when done
+
+func start_attack():
+	# 1. Setup State (Same as parent)
+	is_attacking = true
+	velocity = Vector2.ZERO 
+	
+	var mouse_pos = get_global_mouse_position()
+	var diff = mouse_pos - global_position
+	
+	# 2. Rotate & Animate (Same as parent)
+	weapon_pivot.look_at(mouse_pos)
+	play_attack_animation(diff) # Defined in parent, we can reuse it
+	
+	# 3. Wait for impact frame
+	await get_tree().create_timer(0.2).timeout
+	
+	# 4. FIRE ATTACK LOGIC
+	# Unlike parent: No Crit, No Knockback, Just Burn.
+	var bodies = attack_area.get_overlapping_bodies()
+	
+	for body in bodies:
+		if body.is_in_group("enemy"):
+			if body.has_method("apply_burn"):
+				body.apply_burn(fire_damage, damage_time) 
+				print("Applied Burn to ", body.name)

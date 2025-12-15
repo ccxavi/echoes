@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://f8a0hr62euxq"]
+[gd_scene load_steps=38 format=3 uid="uid://f8a0hr62euxq"]
 
 [ext_resource type="PackedScene" uid="uid://dy3t6hvcil60e" path="res://scenes/character.tscn" id="1_55yry"]
 [ext_resource type="Texture2D" uid="uid://d2cndkh5dysn8" path="res://assets/characters/Goblin/Torch_Red.png" id="2_a13gh"]
@@ -253,17 +253,24 @@ animations = [{
 radius = 33.0
 height = 82.0
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_a13gh"]
+radius = 25.0
+height = 92.0
+
 [node name="character" instance=ExtResource("1_55yry")]
 script = ExtResource("2_nrghv")
 dash_speed = 600.0
 dash_duration = 0.2
 dash_cooldown = 1.0
+fire_damage = 2
+damage_time = 4.0
 
 [node name="main_sprite" parent="." index="0"]
 sprite_frames = SubResource("SpriteFrames_4kp7v")
-animation = &"attack_up"
-frame = 5
-frame_progress = 1.0
 
 [node name="CollisionShape2D" parent="." index="1"]
 shape = SubResource("CapsuleShape2D_55yry")
+
+[node name="CollisionShape2D" parent="WeaponPivot/AttackArea" index="0"]
+position = Vector2(56, 0)
+shape = SubResource("CapsuleShape2D_a13gh")
