@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://b0h0b2cpm8gto"]
+[gd_scene load_steps=34 format=3 uid="uid://b0h0b2cpm8gto"]
 
 [ext_resource type="PackedScene" uid="uid://dy3t6hvcil60e" path="res://scenes/character.tscn" id="1_oi8ld"]
 [ext_resource type="Texture2D" uid="uid://dlfjgvfmjjt54" path="res://assets/characters/Warrior/Warrior_Yellow.png" id="2_buhye"]
@@ -241,25 +241,8 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5oo6o"]
-radius = 37.0
-height = 74.0
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_5oo6o"]
-size = Vector2(53.75, 26.5)
-
 [node name="character" instance=ExtResource("1_oi8ld")]
 
 [node name="main_sprite" parent="." index="0"]
 sprite_frames = SubResource("SpriteFrames_4kxua")
-animation = &"attack_side"
-frame = 5
-frame_progress = 1.0
-
-[node name="CollisionShape2D" parent="." index="1"]
-shape = SubResource("CapsuleShape2D_5oo6o")
-
-[node name="CollisionShape2D" parent="WeaponPivot/AttackArea" index="0"]
-position = Vector2(51, 5.25)
-shape = SubResource("RectangleShape2D_5oo6o")
-debug_color = Color(0.62906164, 0.52095544, 0.28727975, 0.41960785)
+animation = &"attack_up"
