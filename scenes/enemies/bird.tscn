@@ -1,0 +1,81 @@
+[gd_scene load_steps=13 format=3 uid="uid://bgphg425e04cf"]
+
+[ext_resource type="PackedScene" uid="uid://ubd6545ym8aw" path="res://scenes/enemy.tscn" id="1_xk242"]
+[ext_resource type="Texture2D" uid="uid://cpiitv3kh7bqu" path="res://assets/enemies/bird/Idle (40x48).png" id="2_jwqbt"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4nl08"]
+atlas = ExtResource("2_jwqbt")
+region = Rect2(0, 0, 40, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bxlv3"]
+atlas = ExtResource("2_jwqbt")
+region = Rect2(40, 0, 40, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ivntt"]
+atlas = ExtResource("2_jwqbt")
+region = Rect2(80, 0, 40, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7rudy"]
+atlas = ExtResource("2_jwqbt")
+region = Rect2(120, 0, 40, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xli2c"]
+atlas = ExtResource("2_jwqbt")
+region = Rect2(160, 0, 40, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hjoo3"]
+atlas = ExtResource("2_jwqbt")
+region = Rect2(200, 0, 40, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c1kme"]
+atlas = ExtResource("2_jwqbt")
+region = Rect2(240, 0, 40, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nsyxd"]
+atlas = ExtResource("2_jwqbt")
+region = Rect2(280, 0, 40, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2qb1n"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4nl08")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bxlv3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ivntt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7rudy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xli2c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hjoo3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c1kme")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nsyxd")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jwqbt"]
+radius = 15.0
+height = 40.0
+
+[node name="Node2D" instance=ExtResource("1_xk242")]
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+sprite_frames = SubResource("SpriteFrames_2qb1n")
+autoplay = "default"
+
+[node name="CollisionShape2D" parent="hitbox" index="0"]
+shape = SubResource("CapsuleShape2D_jwqbt")
