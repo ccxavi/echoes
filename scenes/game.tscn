@@ -1,6 +1,6 @@
-[gd_scene load_steps=21 format=3 uid="uid://dn0fviuxjiqgp"]
+[gd_scene load_steps=22 format=3 uid="uid://biag3wmhtsxtp"]
 
-[ext_resource type="Script" uid="uid://c31hciya3r48y" path="res://scripts/camera.gd" id="1_lnu2h"]
+[ext_resource type="Script" path="res://scripts/camera.gd" id="1_lnu2h"]
 [ext_resource type="Script" uid="uid://xv1nackckx0h" path="res://scripts/party_manager.gd" id="2_lbhrr"]
 [ext_resource type="Texture2D" uid="uid://cjnbas7op7xjr" path="res://icon.svg" id="2_yqjtg"]
 [ext_resource type="Texture2D" uid="uid://qx8mxoj6eoyq" path="res://assets/effects/Explosions.png" id="3_lbhrr"]
@@ -8,10 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://crptpm7brbr5u" path="res://scenes/characters/monk.tscn" id="5_p57ef"]
 [ext_resource type="PackedScene" uid="uid://d0buro6mkrfpt" path="res://scenes/characters/lancer.tscn" id="6_u5sy4"]
 [ext_resource type="PackedScene" uid="uid://f8a0hr62euxq" path="res://scenes/characters/goblin.tscn" id="7_gee14"]
-[ext_resource type="PackedScene" uid="uid://d1dh7ws0nub2h" path="res://scenes/levels/village.tscn" id="8_0tnpc"]
-[ext_resource type="PackedScene" uid="uid://ct7ydfoh1m6ps" path="res://scenes/enemies/ghost.tscn" id="8_0tnpc"]
-[ext_resource type="PackedScene" uid="uid://bgphg425e04cf" path="res://scenes/enemies/bird.tscn" id="8_kvpfn"]
-[ext_resource type="PackedScene" uid="uid://d05jqxv24l657" path="res://scenes/enemies/pig.tscn" id="9_dinhu"]
+[ext_resource type="PackedScene" uid="uid://dbvl1xbqu22qb" path="res://scenes/pauseMenu.tscn" id="9_0tnpc"]
+[ext_resource type="PackedScene" uid="uid://du6scg0nqprkx" path="res://scenes/echoDeck.tscn" id="10_vtaks"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dinhu"]
 region = Rect2(160, 0, 32, 32)
@@ -96,7 +94,7 @@ animations = [{
 unique_name_in_owner = true
 position = Vector2(3, -7)
 rotation = -1.5707964
-zoom = Vector2(4, 4)
+zoom = Vector2(2, 2)
 script = ExtResource("1_lnu2h")
 
 [node name="party_manager" type="Node2D" parent="."]
@@ -107,34 +105,23 @@ script = ExtResource("2_lbhrr")
 sprite_frames = SubResource("SpriteFrames_ca42v")
 animation = &"switch"
 
-[node name="warrior" parent="party_manager" instance=ExtResource("4_iywne")]
+[node name="Warrior" parent="party_manager" instance=ExtResource("4_iywne")]
 
-[node name="monk" parent="party_manager" instance=ExtResource("5_p57ef")]
+[node name="Monk" parent="party_manager" instance=ExtResource("5_p57ef")]
 
-[node name="laner" parent="party_manager" instance=ExtResource("6_u5sy4")]
+[node name="Lancer" parent="party_manager" instance=ExtResource("6_u5sy4")]
 
-[node name="goblin" parent="party_manager" instance=ExtResource("7_gee14")]
-
-[node name="Village" parent="." instance=ExtResource("8_0tnpc")]
-position = Vector2(-135, -19)
-[node name="enemies" type="Node2D" parent="."]
-z_index = 5
-position = Vector2(1, 0)
-
-[node name="bird" parent="enemies" instance=ExtResource("8_kvpfn")]
-position = Vector2(214, -45)
-scale = Vector2(1.5199994, 1.5199994)
-
-[node name="pig" parent="enemies" instance=ExtResource("9_dinhu")]
-position = Vector2(375.00003, -42.000004)
-scale = Vector2(1.5199994, 1.5199994)
-
-[node name="ghost" parent="enemies" instance=ExtResource("8_0tnpc")]
-position = Vector2(298.00003, -42.000004)
-scale = Vector2(1.5199994, 1.5199994)
+[node name="Goblin" parent="party_manager" instance=ExtResource("7_gee14")]
 
 [node name="temp_test_floor" type="Area2D" parent="."]
 
 [node name="Sprite2D" type="Sprite2D" parent="temp_test_floor"]
 scale = Vector2(2.03125, 2.0312505)
 texture = ExtResource("2_yqjtg")
+
+[node name="CanvasLayer" parent="." instance=ExtResource("9_0tnpc")]
+visible = false
+
+[node name="echoDeck" parent="." instance=ExtResource("10_vtaks")]
+
+[connection signal="switch_requested" from="echoDeck" to="party_manager" method="_on_echo_deck_switch_requested"]
