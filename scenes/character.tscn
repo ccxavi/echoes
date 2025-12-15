@@ -11,6 +11,7 @@ animations = [{
 }]
 
 [node name="character" type="CharacterBody2D" groups=["player"]]
+collision_layer = 4
 script = ExtResource("1_g2els")
 
 [node name="main_sprite" type="AnimatedSprite2D" parent="."]
@@ -24,7 +25,7 @@ autoplay = "idle"
 [node name="WeaponPivot" type="Node2D" parent="."]
 
 [node name="AttackArea" type="Area2D" parent="WeaponPivot"]
-collision_layer = 7
-collision_mask = 7
+collision_layer = 8
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WeaponPivot/AttackArea"]

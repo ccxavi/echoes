@@ -13,7 +13,7 @@ class_name Enemy extends CharacterBody2D
 @export var knockback_power = 400.0    
 
 @export_group("AI")
-@export var detection_range = 200.0 
+@export var detection_range = 1000.0 
 @export var stop_distance = 20.0    
 @export var attack_windup_time = 0.8 
 
