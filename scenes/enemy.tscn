@@ -1,17 +1,87 @@
-[gd_scene load_steps=4 format=3 uid="uid://ubd6545ym8aw"]
+[gd_scene load_steps=12 format=3 uid="uid://ubd6545ym8aw"]
 
 [ext_resource type="Script" uid="uid://ctjxlfrs606" path="res://scripts/enemy.gd" id="1_7p1mj"]
+[ext_resource type="Texture2D" uid="uid://8nnqpt2h12c" path="res://assets/effects/slash.png" id="2_md0e3"]
+[ext_resource type="Texture2D" uid="uid://8jwixdteculs" path="res://assets/effects/hit/3.png" id="3_4ra3w"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ra3w"]
+atlas = ExtResource("2_md0e3")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5uy6h"]
+atlas = ExtResource("2_md0e3")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c4w8v"]
+atlas = ExtResource("2_md0e3")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xwavj"]
+atlas = ExtResource("2_md0e3")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nenq2"]
+atlas = ExtResource("2_md0e3")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_md484"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4ra3w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5uy6h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c4w8v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xwavj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nenq2")
+}],
+"loop": false,
+"name": &"slash",
+"speed": 10.0
+}]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_8tegq"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7p1mj"]
 radius = 15.0
 
-[node name="Enemy" type="CharacterBody2D"]
+[node name="Enemy" type="CharacterBody2D" groups=["enemy"]]
 position = Vector2(34, 17)
 collision_layer = 2
 collision_mask = 2
 script = ExtResource("1_7p1mj")
+
+[node name="vfx" type="AnimatedSprite2D" parent="."]
+z_index = 20
+rotation = 0.7853982
+scale = Vector2(2, 1.871)
+sprite_frames = SubResource("SpriteFrames_md484")
+animation = &"slash"
+frame = 4
+frame_progress = 1.0
+
+[node name="HitParticles" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 1
+texture = ExtResource("3_4ra3w")
+lifetime = 3.0
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+emission_shape = 1
+emission_sphere_radius = 0.01
+gravity = Vector2(0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+scale_amount_min = 1.5
+scale_amount_max = 2.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_8tegq")
