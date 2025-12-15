@@ -2,7 +2,7 @@ class_name Character extends CharacterBody2D
 
 @export_group("Stats")
 @export var speed = 300.0
-@export var damage = 1
+@export var damage = 1 # temp
 @export var crit_chance = 0.2      # 20% Chance
 @export var crit_multiplier = 2.0  # Double damage on crit
 
@@ -62,22 +62,33 @@ func start_attack():
 	# 4. DETECT ENEMIES & CALCULATE CRIT
 	var bodies = attack_area.get_overlapping_bodies()
 	
-	# Roll for Critical Hit
+	# A. Calculate Stats
 	var is_critical = randf() <= crit_chance
 	var final_damage = damage
 	
 	if is_critical:
 		final_damage *= crit_multiplier
-		print("CRITICAL HIT!")
-		freeze_frame(0.05, 0.15)
+	
+	# B. Deal Damage & COUNT HITS
+	var hit_count = 0 # Changed from boolean to integer
 	
 	for body in bodies:
 		if body.is_in_group("enemy"):
 			if body.has_method("take_damage"):
-				# PASS THE 'is_critical' BOOLEAN HERE!
 				body.take_damage(final_damage, global_position, is_critical)
+				hit_count += 1
+	
+	# C. Apply Freeze Frame Logic
+	if is_critical and hit_count > 0:
+		# PRIORITY 1: Critical Hit (Heaviest Freeze)
+		print("CRITICAL HIT! Heavy Freeze.")
+		freeze_frame(0.05, 0.15) # 0.15 seconds
+		
+	elif hit_count > 1:
+		# PRIORITY 2: Multi-Hit Cleave (Lighter Freeze)
+		print("Multi-Hit! Light Freeze.")
+		freeze_frame(0.1, 0.1) # 0.1 seconds
 
-# --- NEW: FREEZE FRAME HELPER ---
 func freeze_frame(time_scale: float, duration: float):
 	# 1. Slow down the engine
 	Engine.time_scale = time_scale
@@ -88,7 +99,6 @@ func freeze_frame(time_scale: float, duration: float):
 	# 3. Reset speed
 	Engine.time_scale = 1.0
 
-# --- VIRTUAL FUNCTION (Standard 4-Way Logic) ---
 func play_attack_animation(diff: Vector2):
 	if abs(diff.y) > abs(diff.x):
 		if diff.y < 0: 
