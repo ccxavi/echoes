@@ -116,6 +116,7 @@ animation = &"switch"
 
 [node name="enemies" type="Node2D" parent="."]
 z_index = 5
+position = Vector2(1, 0)
 
 [node name="bird" parent="enemies" instance=ExtResource("8_kvpfn")]
 position = Vector2(214, -45)
