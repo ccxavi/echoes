@@ -13,9 +13,9 @@ class_name Enemy extends CharacterBody2D
 @export var knockback_power = 400.0    
 
 @export_group("AI")
-@export var detection_range = 1000.0 
+@export var detection_range = 600.0 
 @export var stop_distance = 20.0    
-@export var attack_windup_time = 0.8 
+@export var attack_windup_time = 0.5
 
 # --- STATE VARIABLES ---
 var hp = max_hp
@@ -84,9 +84,12 @@ func _physics_process(delta: float) -> void:
 	# 5. Decide Action
 	if dist <= stop_distance:
 		velocity = Vector2.ZERO
-		# If we are close enough, stop moving and ATTACK
 		if can_attack: 
-			start_attack_sequence()
+			start_attack_sequence(target) # Pass target to face them
+		else:
+			# If on cooldown but close, play idle
+			if animated_sprite_2d.animation != "attack":
+				play_anim("idle")
 		
 	elif dist < detection_range:
 		chase_target(target)
@@ -102,7 +105,10 @@ func chase_target(target: Node2D):
 	velocity = final_velocity
 	move_and_slide()
 	
+	# Play Run Animation
 	play_anim("run")
+	
+	# Flip sprite based on movement direction
 	face_direction(direction.x)
 
 func idle_behavior():
@@ -120,8 +126,11 @@ func get_separation_force() -> Vector2:
 	return force
 
 func face_direction(dir_x: float):
-	if dir_x < 0: animated_sprite_2d.flip_h = true
-	elif dir_x > 0: animated_sprite_2d.flip_h = false
+	# Assuming your sprite defaults to facing RIGHT:
+	if dir_x < 0: 
+		animated_sprite_2d.flip_h = true  # Face Left
+	elif dir_x > 0: 
+		animated_sprite_2d.flip_h = false # Face Right
 
 # --- COMBAT LOGIC ---
 func take_damage(amount: int, source_pos: Vector2 = Vector2.ZERO, is_critical: bool = false, is_fire_damage: bool = false):
@@ -132,24 +141,18 @@ func take_damage(amount: int, source_pos: Vector2 = Vector2.ZERO, is_critical: b
 	vfx.frame = 0
 	
 	if is_fire_damage:
-		# LOGIC: This damage came from the fire tick
 		vfx.play("fire") 
 		vfx.rotation = randf_range(0, 6.28) 
 	else:
-		# LOGIC: This damage came from a physical hit (Sword/Arrow)
-		# Even if they are burning, we play the slash because a sword just hit them!
 		vfx.play("slash") 
 		vfx.rotation = 0
 
 	# --- 2. KNOCKBACK ---
-	# We ONLY apply knockback if it is NOT fire damage.
-	# Physical hits get knockback. Fire ticks do not.
 	if source_pos != Vector2.ZERO and not is_fire_damage:
 		var knockback_dir = (global_position - source_pos).normalized()
 		var power = knockback_power * 1.5 if is_critical else knockback_power
 		knockback_velocity = knockback_dir * power
 		
-		# Rotate particles to face away from the hit
 		if hit_particles: 
 			hit_particles.rotation = knockback_dir.angle()
 			hit_particles.restart()
@@ -166,49 +169,61 @@ func take_damage(amount: int, source_pos: Vector2 = Vector2.ZERO, is_critical: b
 	var tween = create_tween()
 	tween.tween_property(self, "modulate", Color.WHITE, 0.2)
 	
-	# Debugging
 	var source = "Burn" if is_fire_damage else "Attack"
 	print("%s took %s damage from %s. HP: %s" % [name, amount, source, hp])
 
 	if hp <= 0:
 		die()
 
-func start_attack_sequence():
+func start_attack_sequence(target_node = null):
 	can_attack = false
-	#play_anim("attack")
+	
+	# 1. Face the player before attacking
+	if target_node:
+		var dir_to_target = global_position.direction_to(target_node.global_position)
+		face_direction(dir_to_target.x)
+	
+	# 2. Play Attack Animation
+	play_anim("attack")
+	
+	# 3. Deal Damage
+	if hp > 0:
+		var bodies = hitbox.get_overlapping_bodies()
+		for body in bodies:
+			if body.is_in_group("player") and body.has_method("take_damage"):
+				body.take_damage(damage, global_position)
+	
+	# 4. Wait for Windup (Time until the hit actually lands)
 	await get_tree().create_timer(attack_windup_time).timeout
 	
-	var bodies = hitbox.get_overlapping_bodies()
-	for body in bodies:
-		if body.is_in_group("player") and body.has_method("take_damage"):
-			body.take_damage(damage, global_position)
+	# Only wait for the animation to finish IF it is still playing.
+	# If the windup was longer than the animation, this skips the wait entirely.
+	if animated_sprite_2d.animation == "attack" and animated_sprite_2d.is_playing():
+		await animated_sprite_2d.animation_finished
 	
-	#await animated_sprite_2d.animation_finished
-	#play_anim("idle")
+	# 5. Return to Idle and start Cooldown
+	play_anim("idle")
 	await get_tree().create_timer(attack_cooldown).timeout
 	can_attack = true
 
 func die():
-	# Prevent code from running twice if hit quickly while dying
 	if not is_physics_processing():
 		return
 
 	# 1. STOP GAMEPLAY LOGIC
-	set_physics_process(false) # Stop movement and attacks
+	set_physics_process(false)
 	can_attack = false
 	velocity = Vector2.ZERO
 	
 	# 2. HIDE ALIVE VISUALS
 	animated_sprite_2d.visible = false 
-	vfx.visible = false # Stop showing fire/slashes
+	vfx.visible = false
 	if hit_particles: hit_particles.emitting = false
 
 	# 3. PLAY DEATH ANIMATION
 	if death:
 		death.visible = true
 		death.play("default")
-		
-		# Wait for it to finish
 		await death.animation_finished
 	
 	# 4. DELETE OBJECT
@@ -222,6 +237,10 @@ func get_active_player() -> Node2D:
 	return null
 
 func play_anim(anim_name: String):
+	# Prevents restarting the animation if it's already playing
+	if animated_sprite_2d.animation == anim_name and animated_sprite_2d.is_playing():
+		return
+		
 	if animated_sprite_2d.sprite_frames.has_animation(anim_name):
 		animated_sprite_2d.play(anim_name)
 
@@ -236,8 +255,6 @@ func apply_burn(dmg_per_tick: int, duration: float):
 	burn_damage_per_tick = dmg_per_tick
 	burn_duration = duration
 	burn_tick_timer = 0.0
-	
-	# Visual feedback: Turn Orange
 	modulate = Color(1.5, 0.5, 0)
 
 func _process_burn(delta: float):

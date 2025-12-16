@@ -224,13 +224,13 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_7p1mj"]
-radius = 15.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c4w8v"]
+radius = 13.0
+height = 26.0
 
 [node name="Enemy" type="CharacterBody2D" groups=["enemy"]]
 position = Vector2(34, 17)
 collision_layer = 2
-collision_mask = 3
 script = ExtResource("1_7p1mj")
 
 [node name="vfx" type="AnimatedSprite2D" parent="."]
@@ -271,6 +271,6 @@ collision_mask = 15
 debug_color = Color(0.5323095, 0.46933287, 0.8476676, 0.41960785)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_7p1mj")
+shape = SubResource("CapsuleShape2D_c4w8v")
 
 [connection signal="body_entered" from="hitbox" to="." method="_on_hitbox_body_entered"]
