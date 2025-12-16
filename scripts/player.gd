@@ -252,3 +252,19 @@ func receive_heal(amount: int):
 			vfx.play("heal")
 		else:
 			vfx.play("default") # Fallback
+
+func reset_visuals():
+	# 1. Hide damage VFX
+	if vfx:
+		vfx.visible = false
+		vfx.stop()
+	
+	# 2. Reset color (in case they were flashing red/green)
+	modulate = Color.WHITE
+	
+	# 3. Stop particles
+	if particles:
+		particles.emitting = false
+	
+	# 4. Reset Knockback (optional, prevents sliding when swapping in)
+	knockback_velocity = Vector2.ZERO

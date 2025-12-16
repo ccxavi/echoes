@@ -153,8 +153,8 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8y1yf"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_uuhhj"]
-radius = 21.0
-height = 56.0
+radius = 15.0
+height = 38.0
 
 [node name="Enemy" instance=ExtResource("1_jfs36")]
 script = ExtResource("2_5e5n7")
@@ -163,13 +163,13 @@ script = ExtResource("2_5e5n7")
 scale = Vector2(0.71875, 0.71875)
 
 [node name="AnimatedSprite2D" parent="." index="3"]
-scale = Vector2(0.8645833, 0.86458343)
+scale = Vector2(0.65625006, 0.6562502)
 sprite_frames = SubResource("SpriteFrames_jv8dc")
 animation = &"run"
 autoplay = "idle"
 
 [node name="CollisionShape2D" parent="hitbox" index="0"]
-position = Vector2(27, -3)
+position = Vector2(26, 0)
 shape = SubResource("RectangleShape2D_8y1yf")
 
 [node name="CollisionShape2D" parent="." index="5"]

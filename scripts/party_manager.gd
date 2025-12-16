@@ -142,8 +142,11 @@ func play_vfx(pos: Vector2):
 	switch_vfx.frame = 0 
 
 func activate_character(char_node):
-	# Don't activate if dead (Sanity check)
 	if char_node.is_dead: return
+	
+	# --- NEW: RESET VISUALS ---
+	if char_node.has_method("reset_visuals"):
+		char_node.reset_visuals()
 	
 	char_node.visible = true
 	if char_node.has_node("main_sprite"):
@@ -155,6 +158,9 @@ func activate_character(char_node):
 	if camera: camera.target = char_node
 
 func deactivate_character(char_node):
+	if char_node.has_method("reset_visuals"):
+		char_node.reset_visuals()
+
 	char_node.visible = false
 	char_node.set_process_unhandled_input(false)
 	char_node.set_physics_process(false)
