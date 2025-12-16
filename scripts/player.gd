@@ -127,14 +127,14 @@ func take_damage(amount: int, source_pos: Vector2):
 	shake_camera()
 	start_invulnerability()
 
-func start_invulnerability():
+func start_invulnerability(blink = true):
 	is_invulnerable = true
 	
 	# Create a blinking effect
 	var blink_timer = 0.0
 	var duration = invulnerability_time
 	
-	while blink_timer < duration:
+	while blink_timer < duration and blink:
 		# Toggle visibility every 0.1 seconds
 		animated_sprite_2d.visible = !animated_sprite_2d.visible
 		await get_tree().create_timer(0.1).timeout

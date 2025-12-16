@@ -104,6 +104,9 @@ func perform_switch(target_index: int):
 	deactivate_character(old_char)
 	activate_character(new_char)
 	
+	if new_char.has_method("start_invulnerability"):
+		new_char.start_invulnerability(false)
+	
 	# 5. Apply Slow Speed
 	var original_speed = new_char.speed
 	new_char.speed = original_speed * onCharacterSwitchSpeed
