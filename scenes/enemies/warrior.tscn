@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://cdimmxll0i1dh"]
+[gd_scene load_steps=26 format=3 uid="uid://cdimmxll0i1dh"]
 
 [ext_resource type="PackedScene" uid="uid://ubd6545ym8aw" path="res://scenes/enemy.tscn" id="1_jfs36"]
 [ext_resource type="Texture2D" uid="uid://llvh801i4b7s" path="res://assets/enemies/warrior/Warrior_Idle.png" id="2_8y1yf"]
@@ -151,6 +151,10 @@ animations = [{
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8y1yf"]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_uuhhj"]
+radius = 21.0
+height = 56.0
+
 [node name="Enemy" instance=ExtResource("1_jfs36")]
 
 [node name="death" parent="." index="2"]
@@ -159,9 +163,12 @@ scale = Vector2(0.71875, 0.71875)
 [node name="AnimatedSprite2D" parent="." index="3"]
 scale = Vector2(0.8645833, 0.86458343)
 sprite_frames = SubResource("SpriteFrames_jv8dc")
-animation = &"attack"
+animation = &"run"
 autoplay = "idle"
 
 [node name="CollisionShape2D" parent="hitbox" index="0"]
 position = Vector2(27, -3)
 shape = SubResource("RectangleShape2D_8y1yf")
+
+[node name="CollisionShape2D" parent="." index="5"]
+shape = SubResource("CapsuleShape2D_uuhhj")
