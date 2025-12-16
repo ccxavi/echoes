@@ -76,7 +76,7 @@ func spawn_dash_ghost():
 	ghost.global_position = global_position
 	ghost.flip_h = animated_sprite_2d.flip_h
 	ghost.modulate = Color(18.892, 10.667, 11.092, 0.384) # Transparent Cyan
-	ghost.z_index = -1 # Render BEHIND the player
+	ghost.z_index = 5 # Render BEHIND the player
 	
 	# 2. Add to scene (Root of the scene, not the player, so it doesn't move with us)
 	get_tree().current_scene.add_child(ghost)

@@ -250,13 +250,13 @@ size = Vector2(53.75, 26.5)
 
 [node name="character" instance=ExtResource("1_oi8ld")]
 
-[node name="main_sprite" parent="." index="0"]
+[node name="main_sprite" parent="." index="2"]
 sprite_frames = SubResource("SpriteFrames_4kxua")
 animation = &"attack_side"
 frame = 5
 frame_progress = 1.0
 
-[node name="CollisionShape2D" parent="." index="1"]
+[node name="CollisionShape2D" parent="." index="3"]
 shape = SubResource("CapsuleShape2D_5oo6o")
 
 [node name="CollisionShape2D" parent="WeaponPivot/AttackArea" index="0"]
