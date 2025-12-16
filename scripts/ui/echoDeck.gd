@@ -13,14 +13,12 @@ signal stats_requested
 	$MarginContainer/VBoxContainer/HBoxContainer4/PanelContainer4
 ]
 
-@onready var skill_button = $AbilityContainer/SkillButton
-@onready var cooldown_overlay = $AbilityContainer/SkillButton/CooldownOverlay
-@onready var pause_button = $MainMenu/Pause 
+@onready var pause_button = $MainMenu 
 @onready var pause_menu_layer = get_node("../pauseMenu")
 
 # --- STATS MODAL REFERENCES ---
 @onready var stats_modal = $StatsModal
-@onready var stats_tab_btn = $Tab/Stats 
+@onready var stats_tab_btn = $Tab
 @onready var stats_exit_btn = $StatsModal/StatsPanel/Exit 
 
 @onready var stat_columns = [
@@ -33,28 +31,16 @@ signal stats_requested
 func _ready():
 	# 1. FORCE HIDDEN STATES
 	if stats_modal: stats_modal.visible = false
-	
-	if skill_button:
-		skill_button.visible = false 
-		skill_button.disabled = true
 
 	# 2. CONNECT SIGNALS
 	for i in range(cards.size()):
 		cards[i].gui_input.connect(_on_card_input.bind(i))
 	
-	if skill_button: skill_button.pressed.connect(_on_skill_button_pressed)
 	if pause_button: pause_button.pressed.connect(_on_pause_pressed)
 	if stats_tab_btn: stats_tab_btn.pressed.connect(_on_request_stats)
 	if stats_exit_btn: stats_exit_btn.pressed.connect(_on_close_stats)
 
 	set_process(true)
-
-func _process(delta):
-	if cooldown_overlay and cooldown_overlay.value > 0:
-		cooldown_overlay.value -= delta
-		skill_button.disabled = true
-	elif skill_button.visible:
-		skill_button.disabled = false
 
 func _input(event):
 	# 1. Switching
@@ -153,27 +139,3 @@ func update_character_health(index: int, current_hp: int, max_hp: int):
 		else:
 			# For standard ProgressBar, we tint the whole node (easiest method)
 			progress_bar.modulate = health_color
-
-func update_skill_button(ability_name: String, time_left: float, max_duration: float):
-	if not skill_button or not cooldown_overlay: return
-	
-	if ability_name == "None" or ability_name == "":
-		skill_button.visible = false 
-		skill_button.disabled = true
-		return 
-
-	skill_button.visible = true
-	
-	if ability_name == "Dash": skill_button.modulate = Color(0.2, 1, 0.2)
-	elif ability_name == "Heal": skill_button.modulate = Color(0.2, 0.8, 1)
-	else: skill_button.modulate = Color.WHITE
-
-	cooldown_overlay.max_value = max_duration
-	cooldown_overlay.value = time_left
-	skill_button.disabled = (time_left > 0)
-
-func trigger_cooldown_animation(duration: float):
-	if cooldown_overlay:
-		cooldown_overlay.max_value = duration
-		cooldown_overlay.value = duration
-		skill_button.disabled = true

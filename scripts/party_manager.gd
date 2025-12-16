@@ -154,8 +154,7 @@ func perform_switch(target_index: int):
 
 func update_ui_button_state(char_node):
 	if echo_deck_ui and char_node.has_method("get_cooldown_status"):
-		var status = char_node.get_cooldown_status() 
-		echo_deck_ui.update_skill_button(char_node.ability_name, status[0], status[1])
+		var _status = char_node.get_cooldown_status() 
 
 func _on_character_died(_dead_char_node):
 	var next_alive_index = -1
