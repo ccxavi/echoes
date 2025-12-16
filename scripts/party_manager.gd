@@ -8,6 +8,8 @@ var can_switch = true
 const SWITCH_COOLDOWN = 1
 const onCharacterSwitchSpeed = 0.3
 
+var queued_heal_amount: int = 0 # Stores the heal from the monk
+
 @onready var camera: Camera2D = %Camera2D
 @onready var switch_vfx: AnimatedSprite2D = $switch_vfx
 
@@ -116,6 +118,16 @@ func perform_switch(target_index: int):
 	new_char.speed = original_speed
 	switch_vfx.visible = false
 	
+	# --- APPLY QUEUED HEAL ---
+	if queued_heal_amount > 0:
+		# We wait a tiny bit so the character is visible before healing
+		await get_tree().create_timer(0.1).timeout
+		if new_char.has_method("receive_heal"):
+			new_char.receive_heal(queued_heal_amount)
+		
+		# Reset the bank
+		queued_heal_amount = 0
+	
 	is_switching = false
 	
 	await get_tree().create_timer(SWITCH_COOLDOWN).timeout
@@ -145,3 +157,8 @@ func deactivate_character(char_node):
 	char_node.set_process_unhandled_input(false)
 	char_node.set_physics_process(false)
 	char_node.process_mode = Node.PROCESS_MODE_DISABLED
+
+# The Monk calls this function
+func queue_heal_for_next_switch(amount: int):
+	queued_heal_amount = amount
+	print("Heal queued! Switch to another character to receive it.")

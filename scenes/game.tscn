@@ -124,17 +124,17 @@ z_index = 5
 position = Vector2(1, 0)
 
 [node name="bird" parent="enemies" instance=ExtResource("8_kvpfn")]
-position = Vector2(214, -45)
+position = Vector2(-84, -285)
 scale = Vector2(1.5199994, 1.5199994)
 collision_mask = 1
 
 [node name="pig" parent="enemies" instance=ExtResource("9_dinhu")]
-position = Vector2(375.00003, -42.000004)
+position = Vector2(77.00003, -282)
 scale = Vector2(1.5199994, 1.5199994)
 collision_mask = 1
 
 [node name="ghost" parent="enemies" instance=ExtResource("8_0tnpc")]
-position = Vector2(298.00003, -42.000004)
+position = Vector2(3.0517578e-05, -282)
 scale = Vector2(1.5199994, 1.5199994)
 collision_mask = 1
 

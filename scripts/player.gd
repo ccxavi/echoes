@@ -100,7 +100,6 @@ func take_damage(amount: int, source_pos: Vector2):
 		vfx.visible = true
 		vfx.frame = 0
 		vfx.play("slash")
-		vfx.rotation = randf_range(0, 6.28)
 	
 	if hp <= 0:
 		die()
@@ -226,3 +225,25 @@ func die():
 	# Disable weapon hitbox so the ghost doesn't accidentally kill people
 	if collision_shape_2d_attack:
 		collision_shape_2d_attack.set_deferred("disabled", true)
+
+func receive_heal(amount: int):
+	# 1. Apply Health Math
+	hp = min(hp + amount, max_hp)
+	print("%s was healed for %d! HP: %d" % [name, amount, hp])
+	
+	# 2. Visuals
+	# Flash Green
+	modulate = Color(0, 1, 0) 
+	var tween = create_tween()
+	tween.tween_property(self, "modulate", Color.WHITE, 0.5)
+	
+	# 3. Play the VFX requested
+	if vfx:
+		vfx.visible = true
+		vfx.frame = 0
+		# You mentioned the animation is called "play" or you want to play it.
+		# Ideally this animation is named "heal", but here is "play" as requested:
+		if vfx.sprite_frames.has_animation("heal"): 
+			vfx.play("heal")
+		else:
+			vfx.play("default") # Fallback
