@@ -1,6 +1,7 @@
-[gd_scene load_steps=23 format=3 uid="uid://d1v642dhddsy5"]
+[gd_scene load_steps=24 format=3 uid="uid://d1v642dhddsy5"]
 
 [ext_resource type="PackedScene" uid="uid://ubd6545ym8aw" path="res://scenes/enemy.tscn" id="1_j62we"]
+[ext_resource type="Script" uid="uid://dbudyw114nnh" path="res://scripts/pawn_hammer.gd" id="2_7tnnc"]
 [ext_resource type="Texture2D" uid="uid://bx5b6d4jee1d8" path="res://assets/enemies/pawn.png" id="2_jo11t"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jd86q"]
@@ -151,6 +152,7 @@ animations = [{
 size = Vector2(16, 16)
 
 [node name="Enemy" instance=ExtResource("1_j62we")]
+script = ExtResource("2_7tnnc")
 
 [node name="AnimatedSprite2D" parent="." index="3"]
 scale = Vector2(0.6041666, 0.60416675)
