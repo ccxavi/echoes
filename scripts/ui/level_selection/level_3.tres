@@ -6,8 +6,7 @@
 [resource]
 script = ExtResource("1_jjebl")
 level_id = 3
-level_name = "Level 3"
-scene_path = "res://levels/level_3.tscn"
-locked = true
+level_name = "Island 2"
+scene_path = "res://scenes/levels/island2.tscn"
 texture = ExtResource("2_4bc7s")
 metadata/_custom_type_script = "uid://n0pqhlkmq3uw"

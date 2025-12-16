@@ -17,17 +17,18 @@ func setup(data: LevelData):
 	level_data = data
 	
 	# Set text
-	level_num_lbl.text = str(data.level_id).pad_zeros(2) # Makes "1" into "01"
+	level_num_lbl.text = str(data.level_id).pad_zeros(2) 
 	level_title_lbl.text = data.level_name
 	
 	if data.texture:
 		preview_image.texture = data.texture
+		# Ensure we start with a slight dim so white text pops, or pure white if you prefer
+		preview_image.modulate = Color(0.8, 0.8, 0.8) 
 	
 	# Handle Locked Status
 	if data.locked:
 		disabled = true
 		lock_icon.visible = true
-		# Dim the whole button including image and text
 		modulate = Color(0.5, 0.5, 0.5, 1.0) 
 	else:
 		disabled = false
@@ -47,7 +48,22 @@ func _on_pressed():
 func _on_hover():
 	if disabled: return
 	
+	# 1. Scale Button Up
+	var tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.set_parallel(true) # Run these tweens at the same time
+	tween.tween_property(self, "scale", Vector2(1.02, 1.02), 0.2)
+	
+	# 2. Darken the Image (Dim it to 40% brightness)
+	tween.tween_property(preview_image, "modulate", Color(0.6, 0.6, 0.6), 0.2)
+
 func _on_exit():
 	if disabled: return
+	
 	var tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.set_parallel(true)
+	
+	# 1. Scale Back Down
 	tween.tween_property(self, "scale", Vector2(1.0, 1.0), 0.2)
+	
+	# 2. Restore Image Brightness (Back to default 0.8 or 1.0)
+	tween.tween_property(preview_image, "modulate", Color(0.8, 0.8, 0.8), 0.2)

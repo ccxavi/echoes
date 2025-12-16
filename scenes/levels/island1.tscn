@@ -52,7 +52,7 @@
 [sub_resource type="GDScript" id="GDScript_vlrmi"]
 script/source = "extends Node2D
 
-const LEVEL_DIALOGUE = preload(\"res://dialogue/level2.dialogue\")
+const LEVEL_DIALOGUE = preload(\"res://dialogue/level1.dialogue\")
 
 
 signal level_cleared
@@ -8793,6 +8793,12 @@ animations = [{
 [node name="Island1" type="Node2D"]
 script = SubResource("GDScript_vlrmi")
 
+[node name="Camera2D" type="Camera2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(3, -7)
+rotation = -1.5707964
+script = ExtResource("48_vlrmi")
+
 [node name="TileMap" type="TileMap" parent="."]
 position = Vector2(4, 21)
 tile_set = SubResource("TileSet_388hl")
@@ -8877,9 +8883,3 @@ position = Vector2(581, -614)
 
 [node name="warrior2" parent="enemies" instance=ExtResource("47_dpsiv")]
 position = Vector2(604, -469)
-
-[node name="Camera2D" type="Camera2D" parent="."]
-unique_name_in_owner = true
-position = Vector2(3, -7)
-rotation = -1.5707964
-script = ExtResource("48_vlrmi")

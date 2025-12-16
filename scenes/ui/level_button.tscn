@@ -1,54 +1,17 @@
-[gd_scene load_steps=8 format=3 uid="uid://cog4bc2ovp2w4"]
+[gd_scene load_steps=4 format=3 uid="uid://cog4bc2ovp2w4"]
 
 [ext_resource type="Script" uid="uid://dta76wg3o45wk" path="res://scripts/ui/level_selection/level_button.gd" id="1_d4lgq"]
 [ext_resource type="Texture2D" uid="uid://dmv52o1j2pm8j" path="res://assets/UI/Icons/Regular_10.png" id="2_0pgek"]
 [ext_resource type="FontFile" uid="uid://cv1b15ooyc2bc" path="res://assets/UI/fonts/PatrickHand-Regular.ttf" id="2_7ldk7"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ldk7"]
-bg_color = Color(0, 0, 0, 0)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4h6sh"]
-bg_color = Color(0, 0, 0, 0)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yaxlp"]
-bg_color = Color(0, 0, 0, 0)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(1.1638972, 1.1638972, 1.1638972, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y1ihy"]
-bg_color = Color(0, 0, 0, 0.19607843)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-
 [node name="LevelButton" type="Button"]
 custom_minimum_size = Vector2(200, 200)
 offset_right = 150.0
 offset_bottom = 150.0
-theme_override_styles/normal = SubResource("StyleBoxFlat_7ldk7")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_4h6sh")
-theme_override_styles/hover = SubResource("StyleBoxFlat_yaxlp")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_y1ihy")
 script = ExtResource("1_d4lgq")
 
 [node name="PreviewImage" type="TextureRect" parent="."]
-modulate = Color(0.3137255, 0.3137255, 0.3137255, 1)
+modulate = Color(0.78431374, 0.78431374, 0.78431374, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
