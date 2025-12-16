@@ -4,8 +4,10 @@ class_name Character extends CharacterBody2D
 @export var max_hp = 100
 @export var speed = 300.0
 @export var damage = 1 
+@export var defense = 0
 @export var crit_chance = 0.2
 @export var crit_multiplier = 2.0
+@export var recoil_strength = 300.0
 
 @export_group("Combat Response")
 @export var knockback_strength = 600.0 # How hard we get pushed
@@ -88,13 +90,21 @@ func _physics_process(delta):
 
 	move_and_slide()
 
-func take_damage(amount: int, source_pos: Vector2):
+func take_damage(amount: int, source_pos: Vector2, attacker: Node = null):
 	# A. CHECK INVULNERABILITY
 	if is_invulnerable:
 		return
 
-	hp -= amount
-	print("%s hp: %s" % [name, hp])
+	# --- NEW: FRIENDLY FIRE CHECK ---
+	# If the attacker exists and is in the 'player' group, ignore the damage
+	if attacker and attacker.is_in_group("player"):
+		return
+
+	# --- DEFENSE CALCULATION ---
+	var reduced_damage = max(1, amount - defense)
+	
+	hp -= reduced_damage
+	print("%s took %d damage (Mitigated %d). HP: %s" % [name, reduced_damage, amount - reduced_damage, hp])
 	
 	if vfx:
 		vfx.visible = true
@@ -105,30 +115,26 @@ func take_damage(amount: int, source_pos: Vector2):
 		die()
 		return
 
-	# B. APPLY KNOCKBACK
 	if source_pos != Vector2.ZERO:
 		var knockback_dir = (global_position - source_pos).normalized()
 		knockback_velocity = knockback_dir * knockback_strength
 		
-		# --- TRIGGER GROUND SMOKE ---
 		if particles:
-			particles.rotation = knockback_dir.angle() + PI # PI radians = 180 degrees flip
-			
+			particles.rotation = knockback_dir.angle() + PI 
 			particles.emitting = true
 
-	# C. TRIGGER EFFECTS
 	flash_hurt_effect()
 	shake_camera()
 	start_invulnerability()
 
-func start_invulnerability():
+func start_invulnerability(blink = true):
 	is_invulnerable = true
 	
 	# Create a blinking effect
 	var blink_timer = 0.0
 	var duration = invulnerability_time
 	
-	while blink_timer < duration:
+	while blink_timer < duration and blink:
 		# Toggle visibility every 0.1 seconds
 		animated_sprite_2d.visible = !animated_sprite_2d.visible
 		await get_tree().create_timer(0.1).timeout
@@ -159,11 +165,22 @@ func shake_camera():
 # --- CORE ATTACK LOGIC ---
 func start_attack():
 	is_attacking = true
-	velocity = Vector2.ZERO
+	
+	# 1. Calculate Direction
 	var mouse_pos = get_global_mouse_position()
-	var diff = mouse_pos - global_position
+	var attack_vector = (mouse_pos - global_position)
+	var attack_dir = attack_vector.normalized()
+	
+	# 2. Apply Recoil (Kickback)
+	# We push the player in the OPPOSITE direction of the attack
+	knockback_velocity = -attack_dir * recoil_strength
+	
+	# _physics_process automatically sets velocity = knockback_velocity while is_attacking is true.
+
+	# 3. Visuals & Hitbox
 	weapon_pivot.look_at(mouse_pos)
-	play_attack_animation(diff)
+	play_attack_animation(attack_vector)
+	
 	await get_tree().create_timer(0.2).timeout
 	
 	var bodies = attack_area.get_overlapping_bodies()
@@ -247,3 +264,19 @@ func receive_heal(amount: int):
 			vfx.play("heal")
 		else:
 			vfx.play("default") # Fallback
+
+func reset_visuals():
+	# 1. Hide damage VFX
+	if vfx:
+		vfx.visible = false
+		vfx.stop()
+	
+	# 2. Reset color (in case they were flashing red/green)
+	modulate = Color.WHITE
+	
+	# 3. Stop particles
+	if particles:
+		particles.emitting = false
+	
+	# 4. Reset Knockback (optional, prevents sliding when swapping in)
+	knockback_velocity = Vector2.ZERO

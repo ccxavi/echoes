@@ -191,7 +191,7 @@ func start_attack_sequence(target_node = null):
 		var bodies = hitbox.get_overlapping_bodies()
 		for body in bodies:
 			if body.is_in_group("player") and body.has_method("take_damage"):
-				body.take_damage(damage, global_position)
+				body.take_damage(damage, global_position, self)
 	
 	# 4. Wait for Windup (Time until the hit actually lands)
 	await get_tree().create_timer(attack_windup_time).timeout

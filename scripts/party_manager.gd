@@ -104,6 +104,8 @@ func perform_switch(target_index: int):
 	deactivate_character(old_char)
 	activate_character(new_char)
 	
+	new_char.start_invulnerability(false)
+	
 	# 5. Apply Slow Speed
 	var original_speed = new_char.speed
 	new_char.speed = original_speed * onCharacterSwitchSpeed
@@ -111,7 +113,7 @@ func perform_switch(target_index: int):
 	# 6. Hide New Sprite & Wait
 	if new_char.has_node("main_sprite"):
 		new_char.get_node("main_sprite").visible = false
-		await get_tree().create_timer(duration * 0.5).timeout
+		await get_tree().create_timer(duration * 0.8).timeout
 		new_char.get_node("main_sprite").visible = true
 	
 	# 7. Restore Speed & Cleanup
@@ -140,8 +142,11 @@ func play_vfx(pos: Vector2):
 	switch_vfx.frame = 0 
 
 func activate_character(char_node):
-	# Don't activate if dead (Sanity check)
 	if char_node.is_dead: return
+	
+	# --- NEW: RESET VISUALS ---
+	if char_node.has_method("reset_visuals"):
+		char_node.reset_visuals()
 	
 	char_node.visible = true
 	if char_node.has_node("main_sprite"):
@@ -153,6 +158,9 @@ func activate_character(char_node):
 	if camera: camera.target = char_node
 
 func deactivate_character(char_node):
+	if char_node.has_method("reset_visuals"):
+		char_node.reset_visuals()
+
 	char_node.visible = false
 	char_node.set_process_unhandled_input(false)
 	char_node.set_physics_process(false)

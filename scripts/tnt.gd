@@ -7,12 +7,13 @@ class_name BombThrower
 @export var throw_distance = 350.0   # The ideal range to stop and throw
 
 func _ready():
-	# 1. Initialize Base Enemy Logic (VFX, Hitboxes, etc)
 	super._ready()
 	
-	# 2. Override the Base stats for Ranged behavior
 	stop_distance = throw_distance
-	speed = 80.0 # Slightly slower than melee units usually
+	speed = 80.0
+	max_hp = 30
+	
+	hp = max_hp
 
 # We must override this to add the "Run Away" logic
 func _physics_process(delta: float) -> void:

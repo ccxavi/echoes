@@ -5,6 +5,18 @@ extends Character
 
 var can_heal = true
 
+func _ready():
+	super._ready()
+	
+	# override default stats
+	speed = 400.0
+	max_hp = 100
+	defense = 1
+	crit_chance = 0.0
+	damage = 0
+	
+	hp = max_hp
+
 func start_attack():
 	# If we are cooling down or already attacking, stop.
 	if not can_heal or is_attacking:

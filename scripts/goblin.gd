@@ -9,10 +9,21 @@ extends Character
 @export var fire_damage = 2
 @export var damage_time = 4.0 # do fire_damage every 4 seconds
 
-
 # --- STATE ---
 var is_dashing = false
 var can_dash = true
+
+func _ready():
+	super._ready()
+	
+	# override default stats
+	speed = 400.0
+	max_hp = 100
+	defense = 3
+	crit_chance = 0.5
+	damage = 0
+	
+	hp = max_hp
 
 func _physics_process(delta: float) -> void:
 	# 1. DASH BEHAVIOR (Override Normal Movement)

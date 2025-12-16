@@ -126,8 +126,8 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qmkdi"]
-radius = 46.0
-height = 92.0
+radius = 74.0
+height = 148.0
 
 [node name="Bomb" type="Area2D"]
 script = ExtResource("1_fsxe1")
