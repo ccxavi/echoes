@@ -9,6 +9,8 @@ extends CanvasLayer
 @onready var grid: GridContainer = $ScrollContainer/GridContainer
 
 func _ready():
+	AudioManager.play_music("menu_theme")
+	
 	# Clear any dummy children used for testing
 	for child in grid.get_children():
 		child.queue_free()
@@ -23,5 +25,5 @@ func _ready():
 	back_button.pressed.connect(_on_back_pressed)
 
 func _on_back_pressed():
-	AudioManager.play_sfx("ui_click")
+	AudioManager.play_sfx("click")
 	get_tree().change_scene_to_file(main_menu_path)

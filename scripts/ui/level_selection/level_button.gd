@@ -3,7 +3,6 @@ extends Button
 @onready var level_num_lbl = $MarginContainer/VBoxContainer/LevelNumber
 @onready var level_title_lbl = $MarginContainer/VBoxContainer/LevelTitle
 @onready var lock_icon = $LockIcon
-# --- NEW ---
 @onready var preview_image = $PreviewImage
 
 var level_data: LevelData
@@ -21,10 +20,8 @@ func setup(data: LevelData):
 	level_num_lbl.text = str(data.level_id).pad_zeros(2) # Makes "1" into "01"
 	level_title_lbl.text = data.level_name
 	
-	# --- NEW: Set Image ---
 	if data.texture:
 		preview_image.texture = data.texture
-	# Optional: Else set a default placeholder texture
 	
 	# Handle Locked Status
 	if data.locked:
@@ -37,13 +34,10 @@ func setup(data: LevelData):
 		lock_icon.visible = false
 		modulate = Color.WHITE
 
-# ... (Rest of the functions: _on_pressed, _on_hover, _on_exit remain the same)
-
 func _on_pressed():
 	if level_data and not disabled:
-		AudioManager.play_sfx("ui_click") # Assuming you have this
+		AudioManager.play_sfx("click")
 		
-		# Optional: Small squash effect before changing scene
 		var tween = create_tween()
 		tween.tween_property(self, "scale", Vector2(0.95, 0.95), 0.1)
 		await tween.finished
@@ -53,8 +47,6 @@ func _on_pressed():
 func _on_hover():
 	if disabled: return
 	
-	#AudioManager.play_sfx("ui_hover", 0.1)
-
 func _on_exit():
 	if disabled: return
 	var tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
