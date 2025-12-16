@@ -46,6 +46,7 @@ var burn_tick_timer: float = 0.0
 @onready var vfx: AnimatedSprite2D = $vfx
 @onready var hit_particles: CPUParticles2D = $HitParticles 
 @onready var death: AnimatedSprite2D = $death
+@onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 
 func _ready():
 	hp = max_hp
@@ -285,20 +286,33 @@ func start_attack_sequence(target_node = null):
 func die():
 	if not is_physics_processing(): return
 
+	# 1. STOP GAMEPLAY LOGIC
 	set_physics_process(false)
 	can_attack = false
 	velocity = Vector2.ZERO
 	
+	# 2. KILL COLLISIONS
+	if collision_shape_2d:
+		collision_shape_2d.set_deferred("disabled", true)
+	
+	# Disable Hitbox (So they don't take more damage or deal damage)
+	if hitbox:
+		hitbox.set_deferred("monitoring", false)
+		hitbox.set_deferred("monitorable", false)
+	
+	# 3. HIDE ALIVE VISUALS
 	animated_sprite_2d.visible = false 
 	vfx.visible = false
 	if hit_particles: hit_particles.emitting = false
 
+	# 4. PLAY DEATH ANIMATION
 	if death:
 		death.visible = true
 		death.play("default")
 		AudioManager.play_sfx("enemy_death", 0.1)
 		await death.animation_finished
 	
+	# 5. DELETE OBJECT
 	queue_free()
 
 func get_active_player() -> Node2D:

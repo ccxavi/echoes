@@ -13,7 +13,6 @@ func _ready():
 	stop_distance = throw_distance
 	speed = 80.0
 	max_hp = 30
-	hp = max_hp
 	
 	# Set inherited detection range if needed, or keep base default
 	# detection_range = 500.0 
