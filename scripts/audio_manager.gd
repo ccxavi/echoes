@@ -1,5 +1,7 @@
 extends Node
 
+@onready var music_player: AudioStreamPlayer2D = $MusicPlayer
+
 # Create a dictionary to hold your sounds for easy access
 var sounds = {
 	"switch": preload("res://assets/audio/switch.wav"),
@@ -17,6 +19,11 @@ var sounds = {
 	"tnt_throw": preload("res://assets/audio/tnt_throw.wav"),
 	"tnt_explode": preload("res://assets/audio/tnt_explode.wav"),
 	"exclamation": preload("res://assets/audio/exclamation.wav"),
+	"click": preload("res://assets/audio/ui/click.mp3"),
+}
+
+var music_tracks = {
+	"menu_theme": preload("res://assets/audio/bgm/main_menu.ogg"),
 }
 
 const POOL_SIZE = 8
@@ -57,3 +64,22 @@ func _get_available_player() -> AudioStreamPlayer:
 	# If all 8 are busy, interrupt the very first one (oldest sound)
 	# This keeps the game from crashing or staying silent during chaos
 	return players[0]
+
+func play_music(track_name: String, volume_db: float = -10.0):
+	if not music_tracks.has(track_name):
+		print("Music track not found: ", track_name)
+		return
+	
+	var stream = music_tracks[track_name]
+	
+	# LOGIC: If the requested song is ALREADY playing, do nothing.
+	# This prevents the music from restarting when you go from Main Menu -> Level Select
+	if music_player.stream == stream and music_player.playing:
+		return
+	
+	music_player.stream = stream
+	music_player.volume_db = volume_db
+	music_player.play()
+
+func stop_music():
+	music_player.stop()

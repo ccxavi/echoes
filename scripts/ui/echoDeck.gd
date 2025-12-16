@@ -7,10 +7,10 @@ signal stats_requested
 
 # --- REFERENCES ---
 @onready var cards = [
-	$MarginContainer/VBoxContainer/PanelContainer1, 
-	$MarginContainer/VBoxContainer/PanelContainer2, 
-	$MarginContainer/VBoxContainer/PanelContainer3, 
-	$MarginContainer/VBoxContainer/PanelContainer4
+	$MarginContainer/VBoxContainer/HBoxContainer1/PanelContainer1, 
+	$MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2, 
+	$MarginContainer/VBoxContainer/HBoxContainer3/PanelContainer3, 
+	$MarginContainer/VBoxContainer/HBoxContainer4/PanelContainer4
 ]
 
 @onready var skill_button = $AbilityContainer/SkillButton
@@ -31,7 +31,7 @@ signal stats_requested
 ]
 
 func _ready():
-	# 1. FORCE HIDDEN STATES (Fixes "Visible at start" bug)
+	# 1. FORCE HIDDEN STATES
 	if stats_modal: stats_modal.visible = false
 	
 	if skill_button:
@@ -68,8 +68,6 @@ func _input(event):
 		_on_request_stats() 
 	elif event.is_action_released("show_stats"):
 		_on_close_stats()   
-
-	# NOTE: "ui_cancel" (Esc) removed so pauseMenu.gd can handle it without conflict.
 
 # --- PAUSE LOGIC ---
 func _on_pause_pressed():
@@ -109,9 +107,15 @@ func show_stats_screen(characters_data: Array):
 func _on_card_input(event: InputEvent, index: int):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			# --- THE FIX IS HERE ---
+			# This tells Godot: "The UI ate this click. Don't send it to the Player."
+			get_viewport().set_input_as_handled()
+			
 			emit_signal("switch_requested", index)
 
 func _on_skill_button_pressed():
+	# Mark this handled too, just in case
+	get_viewport().set_input_as_handled()
 	emit_signal("skill_button_pressed")
 
 func highlight_card(active_index):
@@ -124,11 +128,31 @@ func update_character_health(index: int, current_hp: int, max_hp: int):
 	var progress_bar = card.find_child("ProgressBar", true, false)
 	if not progress_bar: progress_bar = card.find_child("TextureProgressBar", true, false)
 	
-	# FIX: Ensure Max Value is set first, and Min Value is 0
 	if progress_bar:
+		# 1. Update Values
 		progress_bar.min_value = 0
 		progress_bar.max_value = max_hp
 		progress_bar.value = current_hp
+		
+		# 2. Calculate Percentage
+		# We convert to float to get a decimal (e.g., 0.5 for 50%)
+		var percent = float(current_hp) / float(max_hp)
+		
+		# 3. Determine Color
+		var health_color = Color.GREEN # Default (Healthy)
+		
+		if percent <= 0.25:
+			health_color = Color.RED    # Critical (< 25%)
+		elif percent <= 0.5:
+			health_color = Color.YELLOW # Injured (< 50%)
+			
+		# 4. Apply Color
+		if progress_bar is TextureProgressBar:
+			# For TextureProgressBar, we tint ONLY the fill bar
+			progress_bar.tint_progress = health_color
+		else:
+			# For standard ProgressBar, we tint the whole node (easiest method)
+			progress_bar.modulate = health_color
 
 func update_skill_button(ability_name: String, time_left: float, max_duration: float):
 	if not skill_button or not cooldown_overlay: return
