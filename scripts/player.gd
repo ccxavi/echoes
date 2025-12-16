@@ -7,6 +7,7 @@ class_name Character extends CharacterBody2D
 @export var defense = 0
 @export var crit_chance = 0.2
 @export var crit_multiplier = 2.0
+@export var recoil_strength = 300.0
 
 @export_group("Combat Response")
 @export var knockback_strength = 600.0 # How hard we get pushed
@@ -164,11 +165,22 @@ func shake_camera():
 # --- CORE ATTACK LOGIC ---
 func start_attack():
 	is_attacking = true
-	velocity = Vector2.ZERO
+	
+	# 1. Calculate Direction
 	var mouse_pos = get_global_mouse_position()
-	var diff = mouse_pos - global_position
+	var attack_vector = (mouse_pos - global_position)
+	var attack_dir = attack_vector.normalized()
+	
+	# 2. Apply Recoil (Kickback)
+	# We push the player in the OPPOSITE direction of the attack
+	knockback_velocity = -attack_dir * recoil_strength
+	
+	# _physics_process automatically sets velocity = knockback_velocity while is_attacking is true.
+
+	# 3. Visuals & Hitbox
 	weapon_pivot.look_at(mouse_pos)
-	play_attack_animation(diff)
+	play_attack_animation(attack_vector)
+	
 	await get_tree().create_timer(0.2).timeout
 	
 	var bodies = attack_area.get_overlapping_bodies()
