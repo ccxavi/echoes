@@ -1,0 +1,119 @@
+[gd_scene load_steps=9 format=3 uid="uid://dbc7sn5ricmnh"]
+
+[ext_resource type="Script" uid="uid://3naygbe77fe6" path="res://scripts/mainMenu.gd" id="3_0ei6b"]
+[ext_resource type="Texture2D" uid="uid://h8lgb1y1phux" path="res://assets/UI/Buttons/Button_Blue_3Slides_Pressed.png" id="4_l7wge"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_l7wge"]
+content_margin_top = 15.0
+content_margin_bottom = 20.0
+texture = ExtResource("4_l7wge")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3d1i7"]
+content_margin_top = 15.0
+content_margin_bottom = 20.0
+texture = ExtResource("4_l7wge")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_48ign"]
+content_margin_top = 15.0
+content_margin_bottom = 20.0
+texture = ExtResource("4_l7wge")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ibotj"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.29334205, 0.6780694, 0.59625375, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+expand_margin_left = 30.0
+expand_margin_top = 10.0
+expand_margin_right = 30.0
+expand_margin_bottom = 10.0
+
+[sub_resource type="Theme" id="Theme_fyqef"]
+Button/font_sizes/font_size = 30
+Button/styles/disabled = null
+Button/styles/focus = SubResource("StyleBoxTexture_l7wge")
+Button/styles/hover = SubResource("StyleBoxTexture_3d1i7")
+Button/styles/normal = null
+Button/styles/pressed = SubResource("StyleBoxTexture_48ign")
+CheckButton/font_sizes/font_size = 30
+CheckButton/styles/normal = SubResource("StyleBoxFlat_ibotj")
+Label/font_sizes/font_size = 60
+VBoxContainer/constants/separation = 20
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7nrmo"]
+content_margin_top = 15.0
+content_margin_bottom = 20.0
+texture = ExtResource("4_l7wge")
+region_rect = Rect2(6, 3.75, 181, 54)
+
+[node name="mainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_fyqef")
+script = ExtResource("3_0ei6b")
+
+[node name="Menu" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+region_rect = Rect2(11.06501, 11.6164875, 42.411045, 42.86103)
+
+[node name="Label" type="Label" parent="Menu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -215.5
+offset_top = -288.5
+offset_right = 215.5
+offset_bottom = -43.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 180
+text = "echoes"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Menu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -137.0
+offset_top = -5.0
+offset_right = 137.0
+offset_bottom = 169.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Play" type="Button" parent="Menu/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_7nrmo")
+text = "Play"
+
+[node name="Quit" type="Button" parent="Menu/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_7nrmo")
+text = "Quit
+"
+
+[connection signal="pressed" from="Menu/VBoxContainer/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="Menu/VBoxContainer/Quit" to="." method="_on_quit_pressed"]

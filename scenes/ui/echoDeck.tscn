@@ -1,0 +1,493 @@
+[gd_scene load_steps=21 format=3 uid="uid://du6scg0nqprkx"]
+
+[ext_resource type="Script" uid="uid://mqufxor6c8py" path="res://scripts/echoDeck.gd" id="1_5yc16"]
+[ext_resource type="Texture2D" uid="uid://1swawdw2lfju" path="res://assets/UI/Buttons/Button_Blue_3Slides.png" id="2_0rcyc"]
+[ext_resource type="Texture2D" uid="uid://ccuskvidtdhe2" path="res://assets/echoDeck/warrior.png" id="2_2p0xq"]
+[ext_resource type="Texture2D" uid="uid://bajwgr45km7xi" path="res://assets/echoDeck/monk.png" id="3_slrej"]
+[ext_resource type="Texture2D" uid="uid://bllpf2n2o44tk" path="res://assets/echoDeck/lancer.png" id="4_0rcyc"]
+[ext_resource type="Texture2D" uid="uid://bdq7ya6j1l145" path="res://assets/UI/Buttons/Button_Blue.png" id="4_a561q"]
+[ext_resource type="Texture2D" uid="uid://hjpbg638lltf" path="res://assets/echoDeck/pauseButton.png" id="5_0rcyc"]
+[ext_resource type="Texture2D" uid="uid://bas5p868k7gkg" path="res://assets/echoDeck/goblin.png" id="5_4mf3d"]
+[ext_resource type="Texture2D" uid="uid://dwms7p4vpfhfi" path="res://assets/UI/Banners/Carved_9Slides.png" id="9_orrom"]
+[ext_resource type="Texture2D" uid="uid://cxbt2ks1na5bn" path="res://assets/echoDeck/warrior1.png" id="10_ihr7g"]
+[ext_resource type="Texture2D" uid="uid://c06y7icm2jm17" path="res://assets/echoDeck/x-button.png" id="10_tttnm"]
+[ext_resource type="Texture2D" uid="uid://dggaq1obm4u3c" path="res://assets/echoDeck/monk1.png" id="11_wapqf"]
+[ext_resource type="Texture2D" uid="uid://dvlsltbwtrovo" path="res://assets/echoDeck/lancer1.png" id="12_08s4m"]
+[ext_resource type="Texture2D" uid="uid://bholg2afaoh5h" path="res://assets/echoDeck/goblin1.png" id="13_y3e3m"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4mf3d"]
+texture = ExtResource("2_0rcyc")
+texture_margin_left = 20.0
+texture_margin_top = 15.0
+texture_margin_right = 20.0
+texture_margin_bottom = 25.0
+region_rect = Rect2(6.5, 0.375, 181, 56.875)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_orrom"]
+bg_color = Color(0.54901963, 0.7647059, 0.76862746, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.54901963, 0.7647059, 0.76862746, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tttnm"]
+bg_color = Color(0.88235295, 0.83137256, 0.7411765, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.88235295, 0.83137256, 0.7411765, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="Gradient" id="Gradient_a561q"]
+offsets = PackedFloat32Array(0.16143498, 0.42152467)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_slrej"]
+gradient = SubResource("Gradient_a561q")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3sd85"]
+texture = ExtResource("9_orrom")
+
+[node name="echoDeck" type="CanvasLayer"]
+layer = 2
+script = ExtResource("1_5yc16")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_vertical = 4
+theme_override_constants/margin_right = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 15
+
+[node name="PanelContainer1" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_4mf3d")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer1"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer1/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("2_2p0xq")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer1/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer1/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "[1] Warrior"
+vertical_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/PanelContainer1/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_orrom")
+theme_override_styles/fill = SubResource("StyleBoxFlat_tttnm")
+
+[node name="PanelContainer2" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_4mf3d")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer2"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer2/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("3_slrej")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer2/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer2/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "[2] Monk"
+vertical_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/PanelContainer2/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_orrom")
+theme_override_styles/fill = SubResource("StyleBoxFlat_tttnm")
+
+[node name="PanelContainer3" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_4mf3d")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer3"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer3/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("4_0rcyc")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer3/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer3/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "[3] Lancer"
+vertical_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/PanelContainer3/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_orrom")
+theme_override_styles/fill = SubResource("StyleBoxFlat_tttnm")
+
+[node name="PanelContainer4" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_4mf3d")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer4"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer4/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("5_4mf3d")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer4/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer4/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "[4] Goblin"
+vertical_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/PanelContainer4/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_orrom")
+theme_override_styles/fill = SubResource("StyleBoxFlat_tttnm")
+
+[node name="AbilityContainer" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = -60.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="SkillButton" type="TextureButton" parent="AbilityContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 0
+grow_vertical = 0
+action_mode = 0
+texture_normal = ExtResource("4_a561q")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="CooldownOverlay" type="TextureProgressBar" parent="AbilityContainer/SkillButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+max_value = 3.0
+fill_mode = 5
+texture_progress = SubResource("GradientTexture2D_slrej")
+tint_progress = Color(0, 0, 0, 0.5882353)
+
+[node name="MainMenu" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 80.0
+offset_bottom = 80.0
+mouse_filter = 2
+
+[node name="Pause" type="TextureButton" parent="MainMenu"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -79.0
+offset_top = -68.0
+offset_right = 21.0
+grow_horizontal = 0
+grow_vertical = 0
+action_mode = 0
+texture_normal = ExtResource("5_0rcyc")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Tab" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -60.0
+offset_top = 40.0
+offset_right = -10.0
+offset_bottom = 90.0
+grow_horizontal = 0
+mouse_filter = 2
+
+[node name="Stats" type="TextureButton" parent="Tab"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 0
+offset_left = -145.0
+offset_top = -33.0
+offset_right = 50.0
+offset_bottom = 50.0
+action_mode = 0
+texture_normal = ExtResource("2_0rcyc")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Tab/Stats"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -7.0
+offset_bottom = -23.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "STATS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StatsModal" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dimmer" type="ColorRect" parent="StatsModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5882353)
+
+[node name="StatsPanel" type="Panel" parent="StatsModal"]
+custom_minimum_size = Vector2(600, 400)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_3sd85")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="StatsModal/StatsPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 50
+
+[node name="Column1" type="VBoxContainer" parent="StatsModal/StatsPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="StatsModal/StatsPanel/HBoxContainer/Column1"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture = ExtResource("10_ihr7g")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column1"]
+layout_mode = 2
+text = "Warrior"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column1"]
+layout_mode = 2
+text = "HP"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column1"]
+layout_mode = 2
+text = "Atk"
+horizontal_alignment = 1
+
+[node name="Column2" type="VBoxContainer" parent="StatsModal/StatsPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="StatsModal/StatsPanel/HBoxContainer/Column2"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture = ExtResource("11_wapqf")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column2"]
+layout_mode = 2
+text = "Monk"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column2"]
+layout_mode = 2
+text = "HP"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column2"]
+layout_mode = 2
+text = "Atk"
+horizontal_alignment = 1
+
+[node name="Column3" type="VBoxContainer" parent="StatsModal/StatsPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="StatsModal/StatsPanel/HBoxContainer/Column3"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture = ExtResource("12_08s4m")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column3"]
+layout_mode = 2
+text = "Lancer"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column3"]
+layout_mode = 2
+text = "HP"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column3"]
+layout_mode = 2
+text = "Atk"
+horizontal_alignment = 1
+
+[node name="Column4" type="VBoxContainer" parent="StatsModal/StatsPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="StatsModal/StatsPanel/HBoxContainer/Column4"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture = ExtResource("13_y3e3m")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column4"]
+layout_mode = 2
+text = "Goblin"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column4"]
+layout_mode = 2
+text = "HP"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column4"]
+layout_mode = 2
+text = "Atk"
+horizontal_alignment = 1
+
+[node name="Exit" type="TextureButton" parent="StatsModal/StatsPanel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+texture_normal = ExtResource("10_tttnm")
+ignore_texture_size = true
+stretch_mode = 5
