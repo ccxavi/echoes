@@ -15,6 +15,10 @@ run/main_scene="uid://dn0fviuxjiqgp"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+AudioManager="*res://scenes/audio_manager.tscn"
+
 [input]
 
 move_up={

@@ -21,6 +21,8 @@ func start_attack():
 	# If we are cooling down or already attacking, stop.
 	if not can_heal or is_attacking:
 		return
+	
+	AudioManager.play_sfx("heal", 0.1, -15)
 
 	is_attacking = true
 	velocity = Vector2.ZERO

@@ -85,7 +85,7 @@ func run_away_from_target(target: Node2D):
 	# Option B: Face the player while backing up (looks like strafing)
 	# face_direction(-direction.x) 
 
-# --- ATTACK LOGIC (UNCHANGED) ---
+# --- ATTACK LOGIC ---
 func start_attack_sequence(target_node = null):
 	can_attack = false
 	
@@ -104,6 +104,8 @@ func start_attack_sequence(target_node = null):
 		get_tree().current_scene.add_child(bomb)
 		var spawn_pos = global_position + (target_node.global_position - global_position).normalized() * 20
 		bomb.start(spawn_pos, target_node.global_position)
+		AudioManager.play_sfx("tnt_throw", 0.1)
+		
 	
 	# Prevent Animation Freeze Logic
 	if animated_sprite_2d.animation == "attack" and animated_sprite_2d.is_playing():
