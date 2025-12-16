@@ -159,7 +159,7 @@ func take_damage(amount: int, source_pos: Vector2 = Vector2.ZERO, is_critical: b
 	if is_fire_damage:
 		modulate = Color(2, 0.5, 0) # Orange Flash
 	elif is_critical:
-		modulate = Color(3, 0, 0)   # Red Flash
+		modulate = Color(0.6, 0, 0)   # Red Flash
 	else:
 		modulate = Color(10, 10, 10) # White Flash
 	

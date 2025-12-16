@@ -140,7 +140,7 @@ func start_invulnerability():
 
 func flash_hurt_effect():
 	# Flash pure Red/White
-	modulate = Color(1, 0, 0)
+	modulate = Color(0.7, 0, 0)
 	var tween = create_tween()
 	tween.tween_property(self, "modulate", Color.WHITE, invulnerability_time/2)
 
