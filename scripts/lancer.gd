@@ -1,5 +1,17 @@
 extends Character
 
+func _ready():
+	super._ready()
+	
+	# override default stats
+	speed = 300.0
+	max_hp = 100
+	defense = 3
+	crit_chance = 0.5
+	damage = 7
+	
+	hp = max_hp
+
 # Override the base function to use 8-Directional Logic
 func play_attack_animation(diff: Vector2):
 	var angle = diff.angle()

@@ -265,10 +265,10 @@ dash_cooldown = 1.0
 fire_damage = 2
 damage_time = 4.0
 
-[node name="main_sprite" parent="." index="0"]
+[node name="main_sprite" parent="." index="2"]
 sprite_frames = SubResource("SpriteFrames_4kp7v")
 
-[node name="CollisionShape2D" parent="." index="1"]
+[node name="CollisionShape2D" parent="." index="3"]
 shape = SubResource("CapsuleShape2D_55yry")
 
 [node name="CollisionShape2D" parent="WeaponPivot/AttackArea" index="0"]

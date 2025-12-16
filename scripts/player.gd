@@ -94,7 +94,7 @@ func take_damage(amount: int, source_pos: Vector2):
 	if is_invulnerable:
 		return
 
-	# --- DEFENSE CALCULATION ---
+	# --- NEW: DEFENSE CALCULATION ---
 	# Formula: Incoming Damage - Defense
 	# We use max(1, ...) to ensure the player always takes at least 1 chip damage
 	# so they know they were hit.

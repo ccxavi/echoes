@@ -1,7 +1,8 @@
-[gd_scene load_steps=36 format=3 uid="uid://b0h0b2cpm8gto"]
+[gd_scene load_steps=37 format=3 uid="uid://b0h0b2cpm8gto"]
 
 [ext_resource type="PackedScene" uid="uid://dy3t6hvcil60e" path="res://scenes/character.tscn" id="1_oi8ld"]
 [ext_resource type="Texture2D" uid="uid://dlfjgvfmjjt54" path="res://assets/characters/Warrior/Warrior_Yellow.png" id="2_buhye"]
+[ext_resource type="Script" uid="uid://djwd0mkpfanv4" path="res://scripts/warrior.gd" id="2_xljey"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wdpql"]
 atlas = ExtResource("2_buhye")
@@ -249,6 +250,7 @@ height = 74.0
 size = Vector2(53.75, 26.5)
 
 [node name="character" instance=ExtResource("1_oi8ld")]
+script = ExtResource("2_xljey")
 
 [node name="main_sprite" parent="." index="2"]
 sprite_frames = SubResource("SpriteFrames_4kxua")
