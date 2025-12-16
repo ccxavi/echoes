@@ -8,7 +8,7 @@
 [ext_resource type="Resource" uid="uid://diqgjkj2keqry" path="res://scripts/ui/level_selection/level_3.tres" id="6_iwede"]
 [ext_resource type="Resource" uid="uid://clb38ulg31by8" path="res://scripts/ui/level_selection/level_4.tres" id="7_tjon8"]
 [ext_resource type="Resource" uid="uid://bvy041yvv52i0" path="res://scripts/ui/level_selection/level_5.tres" id="8_bxy7t"]
-[ext_resource type="Texture2D" uid="uid://7pyn6d08rxju" path="res://assets/UI/level_previews/1.png" id="9_tjon8"]
+[ext_resource type="PackedScene" uid="uid://cawr06uafyh47" path="res://scenes/levels/island1.tscn" id="9_bxy7t"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iwede"]
 bg_color = Color(0, 0, 0, 0.39215687)
@@ -37,14 +37,10 @@ script = ExtResource("1_r4y5g")
 level_button_scene = ExtResource("2_hvilc")
 levels = Array[ExtResource("2_48dmm")]([ExtResource("3_hvilc"), ExtResource("5_yssoo"), ExtResource("6_iwede"), ExtResource("7_tjon8"), ExtResource("8_bxy7t")])
 
-[node name="TextureRect" type="TextureRect" parent="."]
-modulate = Color(0.5882353, 0.5882353, 0.5882353, 1)
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("9_tjon8")
+[node name="Island1" parent="." instance=ExtResource("9_bxy7t")]
+modulate = Color(0.78431374, 0.78431374, 0.78431374, 1)
+position = Vector2(583, 513)
+scale = Vector2(0.4, 0.4)
 
 [node name="Label" type="Label" parent="."]
 offset_right = 40.0
@@ -69,6 +65,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_bxy7t")
 text = "< Back"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
+z_index = 4096
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5

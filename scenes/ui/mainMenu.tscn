@@ -1,7 +1,7 @@
 [gd_scene load_steps=13 format=3 uid="uid://dbc7sn5ricmnh"]
 
 [ext_resource type="Script" uid="uid://dkesipnvum50t" path="res://scripts/ui/mainMenu.gd" id="3_0ei6b"]
-[ext_resource type="Texture2D" uid="uid://7pyn6d08rxju" path="res://assets/UI/level_previews/1.png" id="3_c8enf"]
+[ext_resource type="PackedScene" uid="uid://cawr06uafyh47" path="res://scenes/levels/island1.tscn" id="3_c8enf"]
 [ext_resource type="Texture2D" uid="uid://h8lgb1y1phux" path="res://assets/UI/Buttons/Button_Blue_3Slides_Pressed.png" id="4_l7wge"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_l7wge"]
@@ -100,17 +100,14 @@ grow_vertical = 2
 theme = SubResource("Theme_fyqef")
 script = ExtResource("3_0ei6b")
 
-[node name="TextureRect" type="TextureRect" parent="."]
-modulate = Color(0.5882353, 0.5882353, 0.5882353, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_c8enf")
+[node name="Island1" parent="." instance=ExtResource("3_c8enf")]
+modulate = Color(0.78431374, 0.78431374, 0.78431374, 1)
+z_index = -100
+position = Vector2(583, 513)
+scale = Vector2(0.4, 0.4)
 
 [node name="Menu" type="NinePatchRect" parent="."]
+z_index = 999
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
