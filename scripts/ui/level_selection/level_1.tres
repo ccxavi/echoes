@@ -5,6 +5,6 @@
 
 [resource]
 script = ExtResource("1_ywqxg")
-scene_path = "res://scenes/levels/island1.tscn"
+scene_path = "res://scenes/game.tscn"
 texture = ExtResource("2_lb0ib")
 metadata/_custom_type_script = "uid://n0pqhlkmq3uw"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://epqqhjr3w3dk"]
+[gd_scene load_steps=13 format=3 uid="uid://epqqhjr3w3dk"]
 
 [ext_resource type="Script" uid="uid://b7n5fpj4u6eyb" path="res://scripts/ui/level_selection/level_select.gd" id="1_r4y5g"]
 [ext_resource type="Script" uid="uid://n0pqhlkmq3uw" path="res://scripts/ui/level_selection/level_data.gd" id="2_48dmm"]
@@ -8,6 +8,7 @@
 [ext_resource type="Resource" uid="uid://diqgjkj2keqry" path="res://scripts/ui/level_selection/level_3.tres" id="6_iwede"]
 [ext_resource type="Resource" uid="uid://clb38ulg31by8" path="res://scripts/ui/level_selection/level_4.tres" id="7_tjon8"]
 [ext_resource type="Resource" uid="uid://bvy041yvv52i0" path="res://scripts/ui/level_selection/level_5.tres" id="8_bxy7t"]
+[ext_resource type="Texture2D" uid="uid://7pyn6d08rxju" path="res://assets/UI/level_previews/1.png" id="9_tjon8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iwede"]
 bg_color = Color(0, 0, 0, 0.39215687)
@@ -35,6 +36,15 @@ corner_radius_bottom_left = 8
 script = ExtResource("1_r4y5g")
 level_button_scene = ExtResource("2_hvilc")
 levels = Array[ExtResource("2_48dmm")]([ExtResource("3_hvilc"), ExtResource("5_yssoo"), ExtResource("6_iwede"), ExtResource("7_tjon8"), ExtResource("8_bxy7t")])
+
+[node name="TextureRect" type="TextureRect" parent="."]
+modulate = Color(0.5882353, 0.5882353, 0.5882353, 1)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_tjon8")
 
 [node name="Label" type="Label" parent="."]
 offset_right = 40.0
