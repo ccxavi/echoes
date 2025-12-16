@@ -60,7 +60,7 @@ func explode():
 		if dist <= blast_radius:
 			if body.has_method("take_damage"):
 				# Pass global_position as source for correct knockback direction
-				body.take_damage(damage, global_position)
+				body.take_damage(damage, global_position, self)
 				print("Bomb hit player!")
 
 	# 3. Cleanup: Wait for explosion animation to finish

@@ -104,8 +104,7 @@ func perform_switch(target_index: int):
 	deactivate_character(old_char)
 	activate_character(new_char)
 	
-	if new_char.has_method("start_invulnerability"):
-		new_char.start_invulnerability(false)
+	new_char.start_invulnerability(false)
 	
 	# 5. Apply Slow Speed
 	var original_speed = new_char.speed
@@ -114,7 +113,7 @@ func perform_switch(target_index: int):
 	# 6. Hide New Sprite & Wait
 	if new_char.has_node("main_sprite"):
 		new_char.get_node("main_sprite").visible = false
-		await get_tree().create_timer(duration * 0.5).timeout
+		await get_tree().create_timer(duration * 0.8).timeout
 		new_char.get_node("main_sprite").visible = true
 	
 	# 7. Restore Speed & Cleanup

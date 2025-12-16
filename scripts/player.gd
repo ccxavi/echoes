@@ -89,21 +89,22 @@ func _physics_process(delta):
 
 	move_and_slide()
 
-func take_damage(amount: int, source_pos: Vector2):
+func take_damage(amount: int, source_pos: Vector2, attacker: Node = null):
 	# A. CHECK INVULNERABILITY
 	if is_invulnerable:
 		return
 
-	# --- NEW: DEFENSE CALCULATION ---
-	# Formula: Incoming Damage - Defense
-	# We use max(1, ...) to ensure the player always takes at least 1 chip damage
-	# so they know they were hit.
+	# --- NEW: FRIENDLY FIRE CHECK ---
+	# If the attacker exists and is in the 'player' group, ignore the damage
+	if attacker and attacker.is_in_group("player"):
+		return
+
+	# --- DEFENSE CALCULATION ---
 	var reduced_damage = max(1, amount - defense)
 	
 	hp -= reduced_damage
 	print("%s took %d damage (Mitigated %d). HP: %s" % [name, reduced_damage, amount - reduced_damage, hp])
 	
-	# Visual: Play slash effect
 	if vfx:
 		vfx.visible = true
 		vfx.frame = 0
@@ -113,7 +114,6 @@ func take_damage(amount: int, source_pos: Vector2):
 		die()
 		return
 
-	# B. APPLY KNOCKBACK (Unchanged)
 	if source_pos != Vector2.ZERO:
 		var knockback_dir = (global_position - source_pos).normalized()
 		knockback_velocity = knockback_dir * knockback_strength
@@ -122,7 +122,6 @@ func take_damage(amount: int, source_pos: Vector2):
 			particles.rotation = knockback_dir.angle() + PI 
 			particles.emitting = true
 
-	# C. TRIGGER EFFECTS (Unchanged)
 	flash_hurt_effect()
 	shake_camera()
 	start_invulnerability()
