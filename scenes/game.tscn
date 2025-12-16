@@ -7,8 +7,15 @@
 [ext_resource type="PackedScene" uid="uid://crptpm7brbr5u" path="res://scenes/characters/monk.tscn" id="5_p57ef"]
 [ext_resource type="PackedScene" uid="uid://d0buro6mkrfpt" path="res://scenes/characters/lancer.tscn" id="6_u5sy4"]
 [ext_resource type="PackedScene" uid="uid://f8a0hr62euxq" path="res://scenes/characters/goblin.tscn" id="7_gee14"]
+<<<<<<< Updated upstream
 [ext_resource type="PackedScene" uid="uid://dr8df60xkxb82" path="res://scenes/enemies/tnt.tscn" id="11_kvuet"]
 [ext_resource type="PackedScene" uid="uid://cawr06uafyh47" path="res://scenes/levels/island1.tscn" id="12_dinhu"]
+=======
+[ext_resource type="PackedScene" uid="uid://cwpobefk08538" path="res://scenes/enemies/pawn_axe.tscn" id="9_vtaks"]
+[ext_resource type="PackedScene" uid="uid://d1v642dhddsy5" path="res://scenes/enemies/pawn_hammer.tscn" id="10_kvpfn"]
+[ext_resource type="PackedScene" uid="uid://cdimmxll0i1dh" path="res://scenes/enemies/warrior.tscn" id="11_dinhu"]
+[ext_resource type="PackedScene" uid="uid://cawr06uafyh47" path="res://scenes/levels/island1.tscn" id="11_kvpfn"]
+>>>>>>> Stashed changes
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dinhu"]
 atlas = ExtResource("3_dinhu")
@@ -59,7 +66,6 @@ animations = [{
 unique_name_in_owner = true
 position = Vector2(3, -7)
 rotation = -1.5707964
-zoom = Vector2(2, 2)
 script = ExtResource("1_lnu2h")
 
 [node name="party_manager" type="Node2D" parent="."]
@@ -88,4 +94,4 @@ position = Vector2(1, 0)
 
 [node name="tnt" parent="enemies" instance=ExtResource("11_kvuet")]
 
-[node name="Island1" parent="." instance=ExtResource("12_dinhu")]
+[node name="Island1" parent="." instance=ExtResource("11_kvpfn")]
