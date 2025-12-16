@@ -80,6 +80,8 @@ func perform_switch(target_index: int):
 	
 	var old_char = characters[active_character_index]
 	
+	AudioManager.play_sfx("switch", 0.1)
+	
 	# 1. Play VFX (at old char position - works even if they just died)
 	play_vfx(old_char.global_position)
 	

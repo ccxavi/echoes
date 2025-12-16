@@ -29,6 +29,9 @@ var is_attacking = false
 
 const SLIDE_THRESHOLD = 50.0
 
+var footstep_timer: float = 0.0
+const FOOTSTEP_INTERVAL: float = 0.35 # Lower this number to play sounds faster
+
 signal character_died(character_node) # Tells the manager we died
 var is_dead = false
 
@@ -46,7 +49,6 @@ func _on_vfx_finished():
 	vfx.visible = false
 
 func _physics_process(delta):
-	# 1. HANDLE KNOCKBACK DECAY
 	if knockback_velocity != Vector2.ZERO:
 		knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, knockback_decay * delta)
 
@@ -55,36 +57,36 @@ func _physics_process(delta):
 		move_and_slide()
 		return
 
-	# 2. MOVEMENT
 	var direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = (direction * speed) + knockback_velocity
-
-	# 3. FACING
+	
 	var mouse_pos = get_global_mouse_position()
-	if mouse_pos.x < global_position.x:
-		animated_sprite_2d.flip_h = true
-	else:
-		animated_sprite_2d.flip_h = false
+	animated_sprite_2d.flip_h = (mouse_pos.x < global_position.x)
 
-	# 4. ANIMATION & VFX MANAGEMENT
+	# 4. ANIMATION, VFX & SOUND
 	var current_speed = velocity.length()
+	
+	# Handle Footstep Timer
+	if footstep_timer > 0:
+		footstep_timer -= delta
 	
 	# If sliding fast due to knockback
 	if current_speed > SLIDE_THRESHOLD and knockback_velocity.length() > SLIDE_THRESHOLD:
-		# Ensure smoke is emitting
 		if particles and not particles.emitting:
 			particles.emitting = true
 	else:
-		# Stop smoke if we slowed down or are just walking normally
 		if particles and particles.emitting:
 			particles.emitting = false
 			
 		if direction != Vector2.ZERO:
 			play_anim("run")
+			
+			if footstep_timer <= 0:
+				AudioManager.play_sfx("grass", 0.1, -5.0) 
+				footstep_timer = FOOTSTEP_INTERVAL
 		else:
 			play_anim("idle")
 		
-	# 5. ATTACK
 	if Input.is_action_just_pressed("attack"):
 		start_attack()
 
@@ -104,6 +106,7 @@ func take_damage(amount: int, source_pos: Vector2, attacker: Node = null):
 	var reduced_damage = max(1, amount - defense)
 	
 	hp -= reduced_damage
+	AudioManager.play_sfx("hurt", 0.1)
 	print("%s took %d damage (Mitigated %d). HP: %s" % [name, reduced_damage, amount - reduced_damage, hp])
 	
 	if vfx:
@@ -156,7 +159,7 @@ func shake_camera():
 	if camera:
 		# Simple random offset shake
 		var original_offset = camera.offset
-		var shake_strength = 5.0
+		var shake_strength = 10.0
 		for i in range(10):
 			camera.offset = original_offset + Vector2(randf_range(-shake_strength, shake_strength), randf_range(-shake_strength, shake_strength))
 			await get_tree().create_timer(0.02).timeout
@@ -165,6 +168,8 @@ func shake_camera():
 # --- CORE ATTACK LOGIC ---
 func start_attack():
 	is_attacking = true
+	
+	AudioManager.play_sfx("woosh", 0.1)
 	
 	# 1. Calculate Direction
 	var mouse_pos = get_global_mouse_position()
@@ -195,9 +200,11 @@ func start_attack():
 			hit_count += 1
 	
 	if is_critical and hit_count > 0:
-		freeze_frame(0.05, 0.15)
+		freeze_frame(0.01, 0.15)
+		AudioManager.play_sfx("crit", 0.1)
 	elif hit_count > 1:
-		freeze_frame(0.1, 0.1)
+		freeze_frame(0.001, 0.1)
+		AudioManager.play_sfx("crit", 0.1)
 
 func freeze_frame(time_scale: float, duration: float):
 	Engine.time_scale = time_scale
@@ -247,6 +254,7 @@ func receive_heal(amount: int):
 	# 1. Apply Health Math
 	hp = min(hp + amount, max_hp)
 	print("%s was healed for %d! HP: %d" % [name, amount, hp])
+
 	
 	# 2. Visuals
 	# Flash Green
@@ -262,6 +270,7 @@ func receive_heal(amount: int):
 		# Ideally this animation is named "heal", but here is "play" as requested:
 		if vfx.sprite_frames.has_animation("heal"): 
 			vfx.play("heal")
+			AudioManager.play_sfx("healing", 0.1, -10)
 		else:
 			vfx.play("default") # Fallback
 

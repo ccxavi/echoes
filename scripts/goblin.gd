@@ -51,6 +51,8 @@ func start_dash():
 	var move_input = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var dash_dir = move_input
 	
+	AudioManager.play_sfx("dash", 0.1)
+	
 	if dash_dir == Vector2.ZERO:
 		# Fallback: Dash the way we are looking
 		dash_dir = Vector2.LEFT if animated_sprite_2d.flip_h else Vector2.RIGHT
@@ -101,6 +103,8 @@ func start_attack():
 	# 1. Setup State (Same as parent)
 	is_attacking = true
 	velocity = Vector2.ZERO 
+	
+	AudioManager.play_sfx("torch", 0.1)
 	
 	var mouse_pos = get_global_mouse_position()
 	var diff = mouse_pos - global_position

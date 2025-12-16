@@ -22,6 +22,10 @@ var hp = max_hp
 var can_attack = true
 var knockback_velocity = Vector2.ZERO 
 
+# --- AUDIO VARIABLES ---
+var footstep_timer: float = 0.0
+const FOOTSTEP_INTERVAL: float = 0.35 # Adjust speed of footsteps
+
 # --- BURN STATE ---
 var is_burning: bool = false
 var burn_duration: float = 0.0
@@ -55,6 +59,10 @@ func _ready():
 		hit_particles.emitting = false
 
 func _physics_process(delta: float) -> void:
+	# Update timers
+	if footstep_timer > 0:
+		footstep_timer -= delta
+
 	# 1. KNOCKBACK PHYSICS
 	if knockback_velocity != Vector2.ZERO:
 		knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, knockback_friction * delta)
@@ -108,6 +116,12 @@ func chase_target(target: Node2D):
 	# Play Run Animation
 	play_anim("run")
 	
+	# --- FOOTSTEP SFX ---
+	if footstep_timer <= 0:
+		# Play grass sound, slightly quieter for enemies (-10db)
+		AudioManager.play_sfx("grass", 0.1, -20.0)
+		footstep_timer = FOOTSTEP_INTERVAL
+	
 	# Flip sprite based on movement direction
 	face_direction(direction.x)
 
@@ -146,7 +160,7 @@ func take_damage(amount: int, source_pos: Vector2 = Vector2.ZERO, is_critical: b
 	else:
 		vfx.play("slash") 
 		vfx.rotation = 0
-
+		
 	# --- 2. KNOCKBACK ---
 	if source_pos != Vector2.ZERO and not is_fire_damage:
 		var knockback_dir = (global_position - source_pos).normalized()
@@ -161,10 +175,13 @@ func take_damage(amount: int, source_pos: Vector2 = Vector2.ZERO, is_critical: b
 	# --- 3. FLASH COLOR ---
 	if is_fire_damage:
 		modulate = Color(2, 0.5, 0) # Orange Flash
+		AudioManager.play_sfx("fire", 0.1, -20)
 	elif is_critical:
 		modulate = Color(0.6, 0, 0)   # Red Flash
+		AudioManager.play_sfx("crit", 0.1)
 	else:
 		modulate = Color(10, 10, 10) # White Flash
+		AudioManager.play_sfx("hit", 0.1)
 	
 	var tween = create_tween()
 	tween.tween_property(self, "modulate", Color.WHITE, 0.2)
@@ -183,8 +200,11 @@ func start_attack_sequence(target_node = null):
 		var dir_to_target = global_position.direction_to(target_node.global_position)
 		face_direction(dir_to_target.x)
 	
-	# 2. Play Attack Animation
+	# 2. Play Attack Animation & SFX
 	play_anim("attack")
+	
+	# --- ATTACK SFX ---
+	AudioManager.play_sfx("woosh", 0.1, -10)
 	
 	# 3. Deal Damage
 	if hp > 0:
@@ -224,10 +244,13 @@ func die():
 	if death:
 		death.visible = true
 		death.play("default")
+		AudioManager.play_sfx("enemy_death", 0.1)
 		await death.animation_finished
 	
 	# 4. DELETE OBJECT
 	queue_free()
+
+# ... (Helpers remain unchanged)
 
 # --- HELPERS ---
 func get_active_player() -> Node2D:

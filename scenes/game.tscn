@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dn0fviuxjiqgp"]
+[gd_scene load_steps=16 format=3 uid="uid://dn0fviuxjiqgp"]
 
 [ext_resource type="Script" uid="uid://c31hciya3r48y" path="res://scripts/camera.gd" id="1_lnu2h"]
 [ext_resource type="Script" uid="uid://xv1nackckx0h" path="res://scripts/party_manager.gd" id="2_lbhrr"]
@@ -7,8 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://crptpm7brbr5u" path="res://scenes/characters/monk.tscn" id="5_p57ef"]
 [ext_resource type="PackedScene" uid="uid://d0buro6mkrfpt" path="res://scenes/characters/lancer.tscn" id="6_u5sy4"]
 [ext_resource type="PackedScene" uid="uid://f8a0hr62euxq" path="res://scenes/characters/goblin.tscn" id="7_gee14"]
-[ext_resource type="PackedScene" uid="uid://cwpobefk08538" path="res://scenes/enemies/pawn_axe.tscn" id="9_vtaks"]
-[ext_resource type="PackedScene" uid="uid://d1v642dhddsy5" path="res://scenes/enemies/pawn_hammer.tscn" id="10_kvpfn"]
 [ext_resource type="PackedScene" uid="uid://cdimmxll0i1dh" path="res://scenes/enemies/warrior.tscn" id="11_dinhu"]
 [ext_resource type="PackedScene" uid="uid://cawr06uafyh47" path="res://scenes/levels/island1.tscn" id="12_dinhu"]
 
@@ -90,11 +88,5 @@ position = Vector2(1, 0)
 
 [node name="warrior" parent="enemies" instance=ExtResource("11_dinhu")]
 position = Vector2(-312, -330)
-
-[node name="pawn_axe2" parent="enemies" instance=ExtResource("9_vtaks")]
-position = Vector2(42, -301)
-
-[node name="pawn_hammer2" parent="enemies" instance=ExtResource("10_kvpfn")]
-position = Vector2(64, -194)
 
 [node name="Island1" parent="." instance=ExtResource("12_dinhu")]
