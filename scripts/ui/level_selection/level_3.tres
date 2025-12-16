@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LevelData" load_steps=3 format=3 uid="uid://diqgjkj2keqry"]
+
+[ext_resource type="Script" uid="uid://n0pqhlkmq3uw" path="res://scripts/ui/level_selection/level_data.gd" id="1_jjebl"]
+[ext_resource type="Texture2D" uid="uid://cbkc3lvaobkjs" path="res://assets/UI/level_previews/3.png" id="2_4bc7s"]
+
+[resource]
+script = ExtResource("1_jjebl")
+level_id = 3
+level_name = "Level 3"
+scene_path = "res://levels/level_3.tscn"
+locked = true
+texture = ExtResource("2_4bc7s")
+metadata/_custom_type_script = "uid://n0pqhlkmq3uw"

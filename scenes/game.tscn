@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dn0fviuxjiqgp"]
+[gd_scene load_steps=19 format=3 uid="uid://dn0fviuxjiqgp"]
 
 [ext_resource type="Script" uid="uid://c31hciya3r48y" path="res://scripts/camera.gd" id="1_lnu2h"]
 [ext_resource type="Script" uid="uid://xv1nackckx0h" path="res://scripts/party_manager.gd" id="2_lbhrr"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://crptpm7brbr5u" path="res://scenes/characters/monk.tscn" id="5_p57ef"]
 [ext_resource type="PackedScene" uid="uid://d0buro6mkrfpt" path="res://scenes/characters/lancer.tscn" id="6_u5sy4"]
 [ext_resource type="PackedScene" uid="uid://f8a0hr62euxq" path="res://scenes/characters/goblin.tscn" id="7_gee14"]
+[ext_resource type="PackedScene" uid="uid://cdimmxll0i1dh" path="res://scenes/enemies/warrior.tscn" id="9_dinhu"]
 [ext_resource type="PackedScene" uid="uid://dbvl1xbqu22qb" path="res://scenes/ui/pauseMenu.tscn" id="10_kvpfn"]
 [ext_resource type="PackedScene" uid="uid://du6scg0nqprkx" path="res://scenes/ui/echoDeck.tscn" id="11_dinhu"]
 [ext_resource type="PackedScene" uid="uid://cawr06uafyh47" path="res://scenes/levels/island1.tscn" id="11_kvpfn"]
@@ -89,6 +90,8 @@ z_index = 5
 position = Vector2(1, 0)
 
 [node name="tnt" parent="enemies" instance=ExtResource("11_kvuet")]
+
+[node name="Enemy" parent="enemies" instance=ExtResource("9_dinhu")]
 
 [node name="Island1" parent="." instance=ExtResource("11_kvpfn")]
 
