@@ -1,0 +1,15 @@
+~ start
+Warrior: This must be one of their outposts…
+Warrior: It's time for battle!
+-- ENTER BATTLE --
+=> END
+
+~ finish
+Warrior: What is this…
+Warrior:  [shake rate=20 level=10]W-what…[/shake]
+-- YOU HAVE OBTAINED ECHO OF THE 'MONK' ! --
+Warrior: I feel...[wave amp=25 freq=5]divine power…[/wave]
+-- *healed by the strange power* --
+Warrior: I feel better...strange...
+- sail to the next island
+=> END

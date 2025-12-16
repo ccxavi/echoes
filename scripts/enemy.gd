@@ -1,5 +1,6 @@
 class_name Enemy extends CharacterBody2D
 
+signal enemy_died
 # --- CONFIGURATION ---
 @export_group("Movement")
 @export var speed = 100.0            
@@ -313,6 +314,7 @@ func die():
 		await death.animation_finished
 	
 	# 5. DELETE OBJECT
+	emit_signal("enemy_died")
 	queue_free()
 
 func get_active_player() -> Node2D:

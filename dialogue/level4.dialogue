@@ -1,0 +1,19 @@
+~ start
+-- Entering the enclosed arena --
+Warrior: It seems I'm getting closer. Their base is just an island away...
+-- SPOTTED BY AN ENEMY --
+Warrior: I'll make use of the echoes of past heroes to vanquish my enemies!
+-- ENTER BATTLE --
+=> END
+
+~ finish
+-- the warrior sees a lit torch, abandoned on the ground --
+Warrior: It seems fate has brought me these powers. Then, I shall gladly accept.
+- pick up torch
+	-- YOU HAVE OBTAINED ECHO OF THE 'GOBLIN' ! --
+Warrior: WHAT? I’ve become a goblin?!
+Warrior: Strange… is this how it feels to be short?
+-- the power receeds --
+Warrior: It's time.
+- sail to the enemy stronghold
+=> END

@@ -1,5 +1,6 @@
-[gd_scene load_steps=99 format=4 uid="uid://bc6psoa7d3ndn"]
+[gd_scene load_steps=117 format=4 uid="uid://bc6psoa7d3ndn"]
 
+[ext_resource type="Script" uid="uid://c31hciya3r48y" path="res://scripts/camera.gd" id="1_vcyrc"]
 [ext_resource type="Texture2D" uid="uid://cpaudifcfs7f3" path="res://assets/Terrain/Tileset/Tilemap_color1.png" id="2_qq8ng"]
 [ext_resource type="Texture2D" uid="uid://dvon5wg6uov6g" path="res://assets/Terrain/Tileset/Water Background color.png" id="3_6gxf0"]
 [ext_resource type="Texture2D" uid="uid://dwtfgsdi8q84c" path="res://assets/Buildings/Red Buildings/Monastery.png" id="3_388hl"]
@@ -36,6 +37,73 @@
 [ext_resource type="Texture2D" uid="uid://b2qy8vvxh7lx8" path="res://assets/Terrain/Resources/Wood/Trees/Tree2.png" id="29_mq57s"]
 [ext_resource type="Texture2D" uid="uid://crfrl66arv8hj" path="res://assets/Terrain/Resources/Wood/Trees/Tree3.png" id="30_vcyrc"]
 [ext_resource type="Texture2D" uid="uid://ddeotchuyc7h3" path="res://assets/Terrain/Resources/Wood/Trees/Tree4.png" id="31_7fa4l"]
+[ext_resource type="Script" uid="uid://xv1nackckx0h" path="res://scripts/party_manager.gd" id="38_7fa4l"]
+[ext_resource type="Texture2D" uid="uid://g80hw0d41i8c" path="res://assets/effects/spark.png" id="39_hxsdp"]
+[ext_resource type="PackedScene" uid="uid://b0h0b2cpm8gto" path="res://scenes/characters/warrior.tscn" id="40_oq762"]
+[ext_resource type="PackedScene" uid="uid://crptpm7brbr5u" path="res://scenes/characters/monk.tscn" id="41_a40xn"]
+[ext_resource type="PackedScene" uid="uid://d0buro6mkrfpt" path="res://scenes/characters/lancer.tscn" id="42_1tr8i"]
+[ext_resource type="PackedScene" uid="uid://f8a0hr62euxq" path="res://scenes/characters/goblin.tscn" id="43_v702u"]
+[ext_resource type="PackedScene" uid="uid://dr8df60xkxb82" path="res://scenes/enemies/tnt.tscn" id="44_a40xn"]
+[ext_resource type="PackedScene" uid="uid://cwpobefk08538" path="res://scenes/enemies/pawn_axe.tscn" id="45_1tr8i"]
+[ext_resource type="PackedScene" uid="uid://d1v642dhddsy5" path="res://scenes/enemies/pawn_hammer.tscn" id="46_v702u"]
+[ext_resource type="PackedScene" uid="uid://cdimmxll0i1dh" path="res://scenes/enemies/warrior.tscn" id="47_pjul6"]
+
+[sub_resource type="GDScript" id="GDScript_a40xn"]
+script/source = "extends Node2D
+
+const LEVEL_DIALOGUE = preload(\"res://dialogue/level5.dialogue\")
+
+signal level_cleared
+
+@onready var enemies_container: Node2D = $enemies
+var enemy_count: int = 0
+
+func _ready():
+	# 1. Setup the enemy counter logic immediately
+	_initialize_enemies()
+
+	# 2. Play the Start Dialogue (Your existing logic)
+	get_tree().paused = true
+	DialogueManager.show_dialogue_balloon(LEVEL_DIALOGUE, \"start\")
+	await DialogueManager.dialogue_ended
+	get_tree().paused = false
+
+func _initialize_enemies():
+	# Loop through all children of the \"Enemies\" node
+	for child in enemies_container.get_children():
+		# Verify it is an Enemy script (so we don't count random nodes)
+		if child is Enemy:
+			enemy_count += 1
+			# Connect the signal we added to Enemy.gd
+			child.enemy_died.connect(_on_enemy_killed)
+	
+	print(\"Level started. Enemies to defeat: \", enemy_count)
+
+func _on_enemy_killed():
+	enemy_count -= 1
+	# print(\"Enemy died. Remaining: \", enemy_count)
+	
+	if enemy_count <= 0:
+		_play_ending_sequence()
+
+func _play_ending_sequence():
+	await get_tree().create_timer(4.0).timeout
+	# 1. Emit signal (useful for UI or achievements)
+	level_cleared.emit()
+	
+	# 2. Pause the game so enemies/player stop moving
+	get_tree().paused = true
+	
+	# 3. Play the 'end' title from your dialogue file
+	# Make sure your .dialogue file has a title like ~ end
+	DialogueManager.show_dialogue_balloon(LEVEL_DIALOGUE, \"finish\")
+	
+	await DialogueManager.dialogue_ended
+	
+	# 4. Logic after dialogue (e.g., Change Level)
+	# get_tree().paused = false # Only unpause if staying in this scene
+	# get_tree().change_scene_to_file(\"res://levels/level2.tscn\")
+"
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_uelme"]
 tile_data = PackedInt32Array(65536, 7, 1, 131072, 7, 2, 196608, 7, 3, 262144, 7, 4, 1, 65543, 0, 65537, 65543, 1, 131073, 65543, 2, 196609, 65543, 3, 262145, 65543, 4, 2, 131079, 0, 65538, 131079, 1, 131074, 131079, 2, 196610, 131079, 3, 262146, 131079, 4, 65539, 196615, 1, 131075, 196615, 2, 196611, 196615, 3, 262147, 196615, 4)
@@ -7801,7 +7869,57 @@ pattern_20 = SubResource("TileMapPattern_hlqtq")
 pattern_21 = SubResource("TileMapPattern_uslw7")
 pattern_22 = SubResource("TileMapPattern_bgws4")
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_dinhu"]
+atlas = ExtResource("39_hxsdp")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kvuet"]
+atlas = ExtResource("39_hxsdp")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_trtic"]
+atlas = ExtResource("39_hxsdp")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ir15t"]
+atlas = ExtResource("39_hxsdp")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ca42v"]
+atlas = ExtResource("39_hxsdp")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_pjul6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dinhu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kvuet")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_trtic")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ir15t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ca42v")
+}],
+"loop": false,
+"name": &"switch",
+"speed": 10.0
+}]
+
 [node name="Stronghold" type="Node2D"]
+script = SubResource("GDScript_a40xn")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(3, -7)
+rotation = -1.5707964
+script = ExtResource("1_vcyrc")
 
 [node name="TileMap" type="TileMap" parent="."]
 position = Vector2(4, 21)
@@ -7850,3 +7968,69 @@ use_parent_material = true
 position = Vector2(-5, -20)
 tile_map_data = PackedByteArray("AADd/+//DAAAAAEAAADd//D/DAAAAAIAAADd//H/DAAAAAMAAADd//L/DAAAAAQAAADd//P/DAAAAAUAAADd//T/DAAAAAYAAADe/+//DAABAAEAAADe//D/DAABAAIAAADe//H/DAABAAMAAADe//L/DAABAAQAAADe//P/DAABAAUAAADe//T/DAABAAYAAADe//X/DAABAAcAAADf/+//DAACAAEAAADf//D/DAACAAIAAADf//H/DAACAAMAAADf//L/DAACAAQAAADf//P/DAACAAUAAADf//T/DAACAAYAAADf//X/DAACAAcAAADg/+//DAADAAEAAADg//D/DAADAAIAAADg//H/DAADAAMAAADg//L/DAADAAQAAADg//P/DAADAAUAAADg//T/DAADAAYAAADg//X/DAADAAcAAADh/+//DAAEAAEAAADh//D/DAAEAAIAAADh//H/DAAEAAMAAADh//L/DAAEAAQAAADh//P/DAAEAAUAAADh//T/DAAEAAYAAADh//X/DAAEAAcAAADi/+//DAAFAAEAAADi//D/DAAFAAIAAADi//H/DAAFAAMAAADi//L/DAAFAAQAAADi//P/DAAFAAUAAADi//T/DAAFAAYAAADi//X/DAAFAAcAAADj/+//DAAGAAEAAADj//D/DAAGAAIAAADj//H/DAAGAAMAAADj//L/DAAGAAQAAADj//P/DAAGAAUAAADj//T/DAAGAAYAAADj//X/DAAGAAcAAADk/+//DAAHAAEAAADk//D/DAAHAAIAAADk//H/DAAHAAMAAADk//L/DAAHAAQAAADk//P/DAAHAAUAAADk//T/DAAHAAYAAADk//X/DAAHAAcAAADl/+//DAAIAAEAAADl//D/DAAIAAIAAADl//H/DAAIAAMAAADl//L/DAAIAAQAAADl//P/DAAIAAUAAADl//T/DAAIAAYAAADl//X/DAAIAAcAAADm/+//DAAJAAEAAADm//D/DAAJAAIAAADm//H/DAAJAAMAAADm//L/DAAJAAQAAADm//P/DAAJAAUAAADm//T/DAAJAAYAAADY//T/CwAAAAEAAADY//X/CwAAAAIAAADY//b/CwAAAAMAAADY//f/CwAAAAQAAADY//j/CwAAAAUAAADY//n/CwAAAAYAAADZ//T/CwABAAEAAADZ//X/CwABAAIAAADZ//b/CwABAAMAAADZ//f/CwABAAQAAADZ//j/CwABAAUAAADZ//n/CwABAAYAAADa//T/CwACAAEAAADa//X/CwACAAIAAADa//b/CwACAAMAAADa//f/CwACAAQAAADa//j/CwACAAUAAADa//n/CwACAAYAAADb//T/CwADAAEAAADb//X/CwADAAIAAADb//b/CwADAAMAAADb//f/CwADAAQAAADb//j/CwADAAUAAADb//n/CwADAAYAAADo//T/CwAAAAEAAADo//X/CwAAAAIAAADo//b/CwAAAAMAAADo//f/CwAAAAQAAADo//j/CwAAAAUAAADo//n/CwAAAAYAAADp//T/CwABAAEAAADp//X/CwABAAIAAADp//b/CwABAAMAAADp//f/CwABAAQAAADp//j/CwABAAUAAADp//n/CwABAAYAAADq//T/CwACAAEAAADq//X/CwACAAIAAADq//b/CwACAAMAAADq//f/CwACAAQAAADq//j/CwACAAUAAADq//n/CwACAAYAAADr//T/CwADAAEAAADr//X/CwADAAIAAADr//b/CwADAAMAAADr//f/CwADAAQAAADr//j/CwADAAUAAADr//n/CwADAAYAAADQ//X/CgAAAAQAAADQ//b/CgAAAAUAAADQ//f/CgAAAAYAAADQ//j/CgAAAAcAAADQ//n/CgAAAAgAAADQ//r/CgAAAAkAAADR//T/CgABAAMAAADR//X/CgABAAQAAADR//b/CgABAAUAAADR//f/CgABAAYAAADR//j/CgABAAcAAADR//n/CgABAAgAAADR//r/CgABAAkAAADS//L/CgACAAEAAADS//P/CgACAAIAAADS//T/CgACAAMAAADS//X/CgACAAQAAADS//b/CgACAAUAAADS//f/CgACAAYAAADS//j/CgACAAcAAADS//n/CgACAAgAAADS//r/CgACAAkAAADT//L/CgADAAEAAADT//P/CgADAAIAAADT//T/CgADAAMAAADT//X/CgADAAQAAADT//b/CgADAAUAAADT//f/CgADAAYAAADT//j/CgADAAcAAADT//n/CgADAAgAAADT//r/CgADAAkAAADU//T/EwAAAAAAAADU//X/CgAEAAQAAADU//b/CgAEAAUAAADU//f/CgAEAAYAAADU//j/CgAEAAcAAADU//n/CgAEAAgAAADU//r/CgAEAAkAAADV//X/CgAFAAQAAADV//b/CgAFAAUAAADV//f/CgAFAAYAAADV//j/CgAFAAcAAADV//n/CgAFAAgAAADV//r/CgAFAAkAAAD3//L/CwAAAAEAAAD3//P/CwAAAAIAAAD3//T/CwAAAAMAAAD3//X/CwAAAAQAAAD3//b/CwAAAAUAAAD3//f/CwAAAAYAAAD4//L/CwABAAEAAAD4//P/CwABAAIAAAD4//T/CwABAAMAAAD4//X/CwABAAQAAAD4//b/CwABAAUAAAD4//f/CwABAAYAAAD5//L/CwACAAEAAAD5//P/CwACAAIAAAD5//T/CwACAAMAAAD5//X/CwACAAQAAAD5//b/CwACAAUAAAD5//f/CwACAAYAAAD6//L/CwADAAEAAAD6//P/CwADAAIAAAD6//T/CwADAAMAAAD6//X/CwADAAQAAAD6//b/CwADAAUAAAD6//f/CwADAAYAAADu//P/BgAAAAAAAADu//T/DQAAAAIAAADu//X/DQAAAAMAAADu//b/DQAAAAQAAADu//f/DQAAAAUAAADu//j/DQAAAAYAAADu//n/DQAAAAcAAADv//P/DQABAAEAAADv//T/DQABAAIAAADv//X/DQABAAMAAADv//b/DQABAAQAAADv//f/DQABAAUAAADv//j/DQABAAYAAADv//n/DQABAAcAAADw//P/DQACAAEAAADw//T/DQACAAIAAADw//X/DQACAAMAAADw//b/DQACAAQAAADw//f/DQACAAUAAADw//j/DQACAAYAAADw//n/DQACAAcAAADx//P/DQADAAEAAADx//T/DQADAAIAAADx//X/DQADAAMAAADx//b/DQADAAQAAADx//f/DQADAAUAAADx//j/DQADAAYAAADx//n/DQADAAcAAADy//P/DQAEAAEAAADy//T/DQAEAAIAAADy//X/DQAEAAMAAADy//b/DQAEAAQAAADy//f/DQAEAAUAAADy//j/DQAEAAYAAADy//n/DQAEAAcAAADz//P/DQAFAAEAAADz//T/DQAFAAIAAADz//X/DQAFAAMAAADz//b/DQAFAAQAAADz//f/DQAFAAUAAADz//j/DQAFAAYAAADz//n/DQAFAAcAAAD8//b/BwAAAAEAAAD8//f/BwAAAAIAAAD8//j/BwAAAAMAAAD8//n/BwAAAAQAAAD9//X/BwABAAAAAAD9//b/BwABAAEAAAD9//f/BwABAAIAAAD9//j/BwABAAMAAAD9//n/BwABAAQAAAD+//X/BwACAAAAAAD+//b/BwACAAEAAAD+//f/BwACAAIAAAD+//j/BwACAAMAAAD+//n/BwACAAQAAAD///b/BwADAAEAAAD///f/BwADAAIAAAD///j/BwADAAMAAAD///n/BwADAAQAAADx////DwABAAEAAADS//3/DwABAAEAAAD1//3/EAABAAEAAAAFAPz/EAABAAEAAADe//j/EAABAAEAAADY//P/EAABAAEAAADP//3/EAABAAEAAADq//L/EQAAAAAAAAD5//n/EQAAAAAAAAD3//j/EgABAAEAAADe//b/EgABAAEAAADQ////JAADAAEAAAACAPv/JQAEAAMAAADP//r/BAAAAAAAAAADAPj/GAAAAAAAABDL//v/FwAAAAAAAADM//3/FgAAAAAAAADJ//z/FAAAAAAAAADR//H/FAAAAAAAAADp/+//FQAAAAAAAADu//D/FgAAAAAAAAACAPf/FAAAAAAAAAAFAPj/FQAAAAAAAADa////DgACAAUAAADn////EQAAAAAAAADp//7/EAABAAEAAADd//3/DgAFAAMAAADv/wEAJQABAAIAAADv/wIAJQABAAMAAADv/wMAJQABAAQAAADw/wAAJQACAAEAAADw/wEAJQACAAIAAADw/wIAJQACAAMAAADw/wMAJQACAAQAAADw/wQAJQACAAUAAADx/wAAJQADAAEAAADx/wEAJQADAAIAAADx/wIAJQADAAMAAADx/wMAJQADAAQAAADx/wQAJQADAAUAAADy/wEAJQAEAAIAAADy/wIAJQAEAAMAAADy/wMAJQAEAAQAAADO////JAABAAEAAADO/wAAJAABAAIAAADO/wEAJAABAAMAAADP//7/JAACAAAAAADP////JAACAAEAAADP/wAAJAACAAIAAADP/wEAJAACAAMAAADP/wIAJAACAAQAAADP/wMAJAACAAUAAADQ//7/JAADAAAAAADQ/wAAJAADAAIAAADQ/wEAJAADAAMAAADQ/wIAJAADAAQAAADQ/wMACAADAAAAABDR////JAAEAAEAAADR/wAAJAAEAAIAAADR/wEAJAAEAAMAAADY//D/JQABAAIAAADY//H/JQABAAMAAADY//L/JQABAAQAAADZ/+//JQACAAEAAADZ//D/JQACAAIAAADZ//H/JQACAAMAAADZ//L/JQACAAQAAADZ//P/JQACAAUAAADa/+//JQADAAEAAADa//D/JQADAAIAAADa//H/JQADAAMAAADa//L/JQADAAQAAADa//P/JQADAAUAAADb//D/JQAEAAIAAADb//H/JQAEAAMAAADb//L/JQAEAAQAAAD///r/JQABAAIAAAD///v/JQABAAMAAAD///z/JQABAAQAAAAAAPn/JQACAAEAAAAAAPr/JQACAAIAAAAAAPv/JQACAAMAAAAAAPz/JQACAAQAAAAAAP3/JQACAAUAAAABAPn/JQADAAEAAAABAPr/JQADAAIAAAABAPv/JQADAAMAAAABAPz/JQADAAQAAAABAP3/JQADAAUAAAACAPr/JQAEAAIAAAACAPz/JQAEAAQAAADb//z/DgADAAIAAADb//3/DgADAAMAAADb//7/DgADAAQAAADc//v/DgAEAAEAAADc//z/DgAEAAIAAADc//3/DgAEAAMAAADc//7/DgAEAAQAAADc////DgAEAAUAAADc/wAADgAEAAYAAADd//z/DgAFAAIAAADd//7/DgAFAAQAAADd////DgAFAAUAAADd/wAADgAFAAYAAADa/wMADwABAAEAAADc/wQAEAABAAEAAADW/wIAEQAAAAAAAADi/wMADwABAAEAAADq/wMAEAABAAEAAADk/wkACwAAAAIAAADl/wkACwABAAIAAADm/wkACwACAAIAAADn/wkACwADAAIAAADq/woACAADAAAAABDr/woACAACAAAAABDr/wsACAACAAEAABDs/wsACAABAAEAABDt/wsACAAAAAEAABD8/wwAJAACAAAAAAD8/w0AJAACAAEAAAD8/w8AJAACAAMAAAD9/wwAJAADAAAAAAD9/w0AJAADAAEAAADR/xQAFQAAAAAAAADU/xMAFAAAAAAAAADU/xUAFwAAAAAAAADa/xEAEwAAAAAAAADb/xIABAAAAAAAAADd/wsAEAABAAEAAADf/w4ADwABAAEAAADg/wsAEQAAAAAAAADh/w8AEgABAAEAAADk/woACwAAAAMAAADk/wsACwAAAAQAAADk/wwACwAAAAUAAADk/w0ACwAAAAYAAADl/woACwABAAMAAADl/wsACwABAAQAAADl/wwACwABAAUAAADl/w0ACwABAAYAAADl/xMAGAAAAAAAAADl/xUAFgAAAAAAAADm/woACwACAAMAAADm/wsACwACAAQAAADm/wwACwACAAUAAADm/w0ACwACAAYAAADn/woACwADAAMAAADn/wsACwADAAQAAADn/wwACwADAAUAAADn/w0ACwADAAYAAADn/xMAFwAAAAAAAADq/wsACAADAAEAABDq/wwACAADAAIAABDq/w0ACAADAAMAABDq/w4ACAADAAQAABDr/wwACAACAAIAABDr/w0ACAACAAMAABDr/w4ACAACAAQAABDr/w8ACAACAAUAABDs/wwACAABAAIAABDs/w0ACAABAAMAABDs/w4ACAABAAQAABDs/w8ACAABAAUAABDt/wwACAAAAAIAABDt/w0ACAAAAAMAABDt/w4ACAAAAAQAABDt/w8ACAAAAAUAABDz/wsABAAAAAAAAAD0/w4ADwABAAEAAAD2/wwAEAABAAEAAAD3/w8AEQAAAAAAAAD7/w0AJAABAAEAAAD7/w4AJAABAAIAAAD7/w8AJAABAAMAAAD8/w4AJAACAAIAAAD8/xAAJAACAAQAAAD8/xEAJAACAAUAAAD8/xMAFAAAAAAAABD9/w4AJAADAAIAAAD9/w8AJAADAAMAAAD9/xAAJAADAAQAAAD9/xEAJAADAAUAAAD+/w0AJAAEAAEAAAD+/w4AJAAEAAIAAAD+/w8AJAAEAAMAAAAAAAkAEgABAAEAAAACAAsADwABAAEAAAACAA4AFAAAAAAAAAAFAAkAEQAAAAAAAADk/wgACwAAAAEAAADl/wgACwABAAEAAADm/wgACwACAAEAAADn/wgACwADAAEAAADR/wMACAACAAAAABDT/wQACAAAAAEAABDS/wQACAABAAEAABDR/wQACAACAAEAABDQ/wQACAADAAEAABDT/wUACAAAAAIAABDS/wUACAABAAIAABDR/wUACAACAAIAABDQ/wUACAADAAIAABDT/wYACAAAAAMAABDS/wYACAABAAMAABDR/wYACAACAAMAABDQ/wYACAADAAMAABDT/wcACAAAAAQAABDS/wcACAABAAQAABDR/wcACAACAAQAABDQ/wcACAADAAQAABDT/wgACAAAAAUAABDS/wgACAABAAUAABDR/wgACAACAAUAABDY/wwAJQABAAIAAADY/w0AJQABAAMAAADY/w4AJQABAAQAAADZ/wwAJQACAAIAAADZ/w0AJQACAAMAAADZ/w4AJQACAAQAAADZ/wsAJQACAAEAAADZ/w8AJQACAAUAAADa/wsAJQADAAEAAADa/wwAJQADAAIAAADa/w0AJQADAAMAAADa/w4AJQADAAQAAADa/w8AJQADAAUAAADb/wwAJQAEAAIAAADb/w0AJQAEAAMAAADb/w4AJQAEAAQAAADT/woACQAAAAEAAADT/wsACQAAAAIAAADT/wwACQAAAAMAAADT/w0ACQAAAAQAAADT/w4ACQAAAAUAAADU/woACQABAAEAAADU/wsACQABAAIAAADU/wwACQABAAMAAADU/w0ACQABAAQAAADU/w4ACQABAAUAAADV/woACQACAAEAAADV/wsACQACAAIAAADV/wwACQACAAMAAADV/w0ACQACAAQAAADV/w4ACQACAAUAAADW/woACQADAAEAAADW/wsACQADAAIAAADW/wwACQADAAMAAADW/w0ACQADAAQAAADW/w4ACQADAAUAAADY//z/DgAAAAIAAADY//3/DgAAAAMAAADY//7/DgAAAAQAAADY////DgAAAAUAAADY/wAADgAAAAYAAADY/wEADgAAAAcAAADZ//z/DgABAAIAAADZ//3/DgABAAMAAADZ//7/DgABAAQAAADZ////DgABAAUAAADZ/wAADgABAAYAAADZ/wEADgABAAcAAADa//z/DgACAAIAAADa//3/DgACAAMAAADa//7/DgACAAQAAADa/wAADgACAAYAAADa/wEADgACAAcAAADb////DgADAAUAAADb/wAADgADAAYAAADb/wEADgADAAcAAADc/wEADgAEAAcAAADd/wEADgAFAAcAAAA=")
 tile_set = SubResource("TileSet_388hl")
+
+[node name="party_manager" type="Node2D" parent="."]
+z_index = 5
+script = ExtResource("38_7fa4l")
+
+[node name="switch_vfx" type="AnimatedSprite2D" parent="party_manager"]
+z_index = 100
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_pjul6")
+animation = &"switch"
+
+[node name="warrior" parent="party_manager" instance=ExtResource("40_oq762")]
+
+[node name="monk" parent="party_manager" instance=ExtResource("41_a40xn")]
+heal_amount = 30
+heal_cooldown_duration = 5.0
+
+[node name="laner" parent="party_manager" instance=ExtResource("42_1tr8i")]
+
+[node name="goblin" parent="party_manager" instance=ExtResource("43_v702u")]
+
+[node name="enemies" type="Node2D" parent="."]
+z_index = 5
+position = Vector2(-66, 1)
+
+[node name="warrior4" parent="enemies" instance=ExtResource("47_pjul6")]
+position = Vector2(-486, 41)
+
+[node name="tnt3" parent="enemies" instance=ExtResource("44_a40xn")]
+position = Vector2(-985, 104)
+
+[node name="pawn5" parent="enemies" instance=ExtResource("45_1tr8i")]
+position = Vector2(65, 42)
+
+[node name="pawn4" parent="enemies" instance=ExtResource("45_1tr8i")]
+position = Vector2(-752, -28)
+
+[node name="pawn3" parent="enemies" instance=ExtResource("46_v702u")]
+position = Vector2(-749, 66)
+
+[node name="tnt" parent="enemies" instance=ExtResource("44_a40xn")]
+position = Vector2(-863, 97)
+
+[node name="pawn1" parent="enemies" instance=ExtResource("45_1tr8i")]
+position = Vector2(-623, -44)
+
+[node name="pawn2" parent="enemies" instance=ExtResource("46_v702u")]
+position = Vector2(-738, 192)
+
+[node name="warrior1" parent="enemies" instance=ExtResource("47_pjul6")]
+position = Vector2(-485, -81)
+
+[node name="tnt2" parent="enemies" instance=ExtResource("44_a40xn")]
+position = Vector2(-855, 196)
+
+[node name="warrior2" parent="enemies" instance=ExtResource("47_pjul6")]
+position = Vector2(-611, 58)
+
+[node name="warrior3" parent="enemies" instance=ExtResource("47_pjul6")]
+position = Vector2(-482, 149)
+
+[node name="tnt4" parent="enemies" instance=ExtResource("44_a40xn")]
+position = Vector2(-859, -12)
+
+[node name="pawn6" parent="enemies" instance=ExtResource("46_v702u")]
+position = Vector2(-616, 182)

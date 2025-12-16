@@ -1,0 +1,21 @@
+~ start
+-- you finally arrive at your destination, the enemy stronghold --
+Warrior: I’ve arrived.
+-- SPOTTED BY AN ENEMY --
+Enemy: [shake rate=20 level=10]INTRUDER SPOTTED![/shake] [shake rate=20 level=10]INTRUDER SPOTTED! [/shake]
+Warrior: [shake rate=20 level=10]The time has come! For my fallen comrades! For my friends! My family! They push me to face you! Even echoes of past heroes have responded to my call for vengeance! Face me![/shake]
+-- ENTER BATTLE --
+=> END
+
+~ finish
+Warrior: I’ve succeeded…
+-- the warrior slumps down on the ground, tired --
+-- the echoes of past heroes leave the warriors body --
+Monk: [wave amp=25 freq=5]You have proved yourself worthy.[/wave]
+Lancer: [wave amp=25 freq=5]Your legend will be told for generations[/wave]
+Goblin: [wave amp=25 freq=5]krrk..krkrkkk..krkkk..krkk(Hero, of the current age, rise and return to your kingdom.)[/wave]
+-- YOU HAVE BEEN HEALED --
+Warrior: Thank you...
+-- the warrior rises to his feet, returning to his home and never looking back. --
+- THE END
+=> END
