@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dbc7sn5ricmnh"]
+[gd_scene load_steps=12 format=3 uid="uid://dbc7sn5ricmnh"]
 
 [ext_resource type="Script" uid="uid://dkesipnvum50t" path="res://scripts/ui/mainMenu.gd" id="3_0ei6b"]
 [ext_resource type="Texture2D" uid="uid://h8lgb1y1phux" path="res://assets/UI/Buttons/Button_Blue_3Slides_Pressed.png" id="4_l7wge"]
@@ -45,11 +45,49 @@ CheckButton/styles/normal = SubResource("StyleBoxFlat_ibotj")
 Label/font_sizes/font_size = 60
 VBoxContainer/constants/separation = 20
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7nrmo"]
-content_margin_top = 15.0
-content_margin_bottom = 20.0
-texture = ExtResource("4_l7wge")
-region_rect = Rect2(6, 3.75, 181, 54)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j3ryx"]
+content_margin_left = 4.0
+content_margin_top = 8.0
+content_margin_right = 4.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 0.39215687)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oxtcp"]
+content_margin_left = 4.0
+content_margin_top = 8.0
+content_margin_right = 4.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 0.39215687)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f0x07"]
+content_margin_left = 4.0
+content_margin_top = 8.0
+content_margin_right = 4.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 0.5882353)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6rc6a"]
+content_margin_left = 4.0
+content_margin_top = 8.0
+content_margin_right = 4.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 0.39215687)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="mainMenu" type="Control"]
 layout_mode = 3
@@ -105,15 +143,20 @@ grow_vertical = 2
 [node name="Play" type="Button" parent="Menu/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_7nrmo")
+theme_override_styles/normal = SubResource("StyleBoxFlat_j3ryx")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_oxtcp")
+theme_override_styles/hover = SubResource("StyleBoxFlat_f0x07")
+theme_override_styles/focus = SubResource("StyleBoxFlat_6rc6a")
 text = "Play"
 
 [node name="Quit" type="Button" parent="Menu/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_7nrmo")
-text = "Quit
-"
+theme_override_styles/normal = SubResource("StyleBoxFlat_j3ryx")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_oxtcp")
+theme_override_styles/hover = SubResource("StyleBoxFlat_f0x07")
+theme_override_styles/focus = SubResource("StyleBoxFlat_6rc6a")
+text = "Quit"
 
 [connection signal="pressed" from="Menu/VBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="Menu/VBoxContainer/Quit" to="." method="_on_quit_pressed"]

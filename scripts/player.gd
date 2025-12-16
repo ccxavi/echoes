@@ -3,13 +3,12 @@ class_name Character extends CharacterBody2D
 # --- SIGNALS ---
 signal health_changed(current_hp, max_hp)
 signal character_died(character_node)
-# This signal is kept for backend logic, even if you reimplement the UI later
 signal ability_used(current_cooldown, max_cooldown)
 
 @export_group("Stats")
-# --- ADDED FROM OLD CODE (Required for Stats Panel) ---
+# --- REQUIRED FOR STATS PANEL ---
 @export var portrait_img: Texture2D 
-# -----------------------------------------------------
+# --------------------------------
 @export var max_hp = 100
 @export var speed = 300.0
 @export var damage = 1 
@@ -18,17 +17,15 @@ signal ability_used(current_cooldown, max_cooldown)
 @export var crit_multiplier = 2.0
 @export var recoil_strength = 300.0
 
-# --- ADDED FROM OLD CODE (Required for Switching Logic) ---
 @export_group("Special Ability")
 @export var ability_cooldown_duration = 3.0
 # Set this to "Dash" or "Heal" in the Inspector!
 @export var ability_name = "None" 
-# ---------------------------------------------------------
 
 @export_group("Combat Response")
-@export var knockback_strength = 600.0 # How hard we get pushed
-@export var knockback_decay = 2000.0   # How fast we stop sliding
-@export var invulnerability_time = 1.0 # How long we are safe after hit
+@export var knockback_strength = 600.0 
+@export var knockback_decay = 2000.0   
+@export var invulnerability_time = 1.0 
 
 @onready var hp = max_hp
 @onready var animated_sprite_2d: AnimatedSprite2D = $main_sprite
@@ -45,70 +42,36 @@ var is_attacking = false
 var is_dead = false
 
 const SLIDE_THRESHOLD = 50.0
-
-# Footsteps
 var footstep_timer: float = 0.0
 const FOOTSTEP_INTERVAL: float = 0.35 
 
-# --- ADDED FROM OLD CODE (Required for Cooldowns) ---
 var ability_timer: Timer
 
 func _ready():
-	# --- ADDED FROM OLD CODE ---
 	ability_timer = Timer.new()
 	ability_timer.one_shot = true
 	ability_timer.wait_time = ability_cooldown_duration
 	add_child(ability_timer)
-	# ---------------------------
 
-	animated_sprite_2d.animation_finished.connect(_on_animation_finished)
+	if animated_sprite_2d.animation_finished.is_connected(_on_animation_finished) == false:
+		animated_sprite_2d.animation_finished.connect(_on_animation_finished)
 	
 	if vfx:
 		vfx.visible = false
-		vfx.animation_finished.connect(_on_vfx_finished)
+		if vfx.animation_finished.is_connected(_on_vfx_finished) == false:
+			vfx.animation_finished.connect(_on_vfx_finished)
 	
 	if particles:
 		particles.emitting = false
 
-# --- ABILITY LOGIC (Added from Old Code so Manager doesn't crash) ---
-func try_use_special_ability():
-	if is_dead: return
+# --- NEW: INPUT HANDLING FIX ---
+# This function only runs if the UI (EchoDeck) did NOT handle the input first.
+func _unhandled_input(event):
+	if is_attacking or is_dead: return
 	
-	if not ability_timer.is_stopped():
-		print("Ability on Cooldown!")
-		return
-
-	if ability_name == "Dash":
-		perform_dash()
-	elif ability_name == "Heal":
-		perform_heal_skill()
-	else:
-		print("No ability assigned to this character.")
-		return
-
-	ability_timer.start()
-	emit_signal("ability_used", ability_cooldown_duration, ability_cooldown_duration)
-
-func get_cooldown_status():
-	return [ability_timer.time_left, ability_timer.wait_time]
-
-func perform_dash():
-	print("Performing Dash!")
-	AudioManager.play_sfx("woosh", 0.1) # Added SFX
-	var dash_vector = velocity.normalized()
-	if dash_vector == Vector2.ZERO: 
-		dash_vector = Vector2(-1, 0) if animated_sprite_2d.flip_h else Vector2(1, 0)
-	knockback_velocity = dash_vector * (speed * 4.0) 
-	if particles: particles.emitting = true
-
-func perform_heal_skill():
-	print("Charging Heal!")
-	if get_parent().has_method("queue_heal_for_next_switch"):
-		get_parent().queue_heal_for_next_switch(50) 
-# ------------------------------------------------------------------
-
-func _on_vfx_finished():
-	vfx.visible = false
+	if event.is_action_pressed("attack"):
+		start_attack()
+# -------------------------------
 
 func _physics_process(delta):
 	if knockback_velocity != Vector2.ZERO:
@@ -125,7 +88,7 @@ func _physics_process(delta):
 	var mouse_pos = get_global_mouse_position()
 	animated_sprite_2d.flip_h = (mouse_pos.x < global_position.x)
 
-	# ANIMATION, VFX & SOUND
+	# ANIMATION & SOUND
 	var current_speed = velocity.length()
 	
 	if footstep_timer > 0:
@@ -146,25 +109,59 @@ func _physics_process(delta):
 		else:
 			play_anim("idle")
 		
-	if Input.is_action_just_pressed("attack"):
-		start_attack()
+	# REMOVED: "Input.is_action_just_pressed" block was here. 
+	# It is now handled in _unhandled_input above!
 
 	move_and_slide()
 
+# --- ABILITY LOGIC ---
+func try_use_special_ability():
+	if is_dead: return
+	if not ability_timer.is_stopped():
+		print("Ability on Cooldown!")
+		return
+
+	if ability_name == "Dash":
+		perform_dash()
+	elif ability_name == "Heal":
+		perform_heal_skill()
+	else:
+		print("No ability assigned.")
+		return
+
+	ability_timer.start()
+	emit_signal("ability_used", ability_cooldown_duration, ability_cooldown_duration)
+
+func get_cooldown_status():
+	return [ability_timer.time_left, ability_timer.wait_time]
+
+func perform_dash():
+	print("Performing Dash!")
+	AudioManager.play_sfx("woosh", 0.1)
+	var dash_vector = velocity.normalized()
+	if dash_vector == Vector2.ZERO: 
+		dash_vector = Vector2(-1, 0) if animated_sprite_2d.flip_h else Vector2(1, 0)
+	knockback_velocity = dash_vector * (speed * 4.0) 
+	if particles: particles.emitting = true
+
+func perform_heal_skill():
+	print("Charging Heal!")
+	if get_parent().has_method("queue_heal_for_next_switch"):
+		get_parent().queue_heal_for_next_switch(50) 
+
+func _on_vfx_finished():
+	vfx.visible = false
+
 func take_damage(amount: int, source_pos: Vector2, attacker: Node = null):
 	if is_invulnerable: return
-
-	# Friendly Fire Check
 	if attacker and attacker.is_in_group("player"): return
 
-	# Defense Calculation
 	var reduced_damage = max(1, amount - defense)
-	
 	hp -= reduced_damage
 	AudioManager.play_sfx("hurt", 0.1)
-	print("%s took %d damage (Mitigated %d). HP: %s" % [name, reduced_damage, amount - reduced_damage, hp])
+	print("%s took %d damage. HP: %s" % [name, reduced_damage, hp])
 	
-	health_changed.emit(hp, max_hp) # Ensure UI updates
+	health_changed.emit(hp, max_hp)
 	
 	if vfx:
 		vfx.visible = true
@@ -178,7 +175,6 @@ func take_damage(amount: int, source_pos: Vector2, attacker: Node = null):
 	if source_pos != Vector2.ZERO:
 		var knockback_dir = (global_position - source_pos).normalized()
 		knockback_velocity = knockback_dir * knockback_strength
-		
 		if particles:
 			particles.rotation = knockback_dir.angle() + PI 
 			particles.emitting = true
@@ -191,12 +187,10 @@ func start_invulnerability(blink = true):
 	is_invulnerable = true
 	var blink_timer = 0.0
 	var duration = invulnerability_time
-	
 	while blink_timer < duration and blink:
 		animated_sprite_2d.visible = !animated_sprite_2d.visible
 		await get_tree().create_timer(0.1).timeout
 		blink_timer += 0.1
-	
 	animated_sprite_2d.visible = true
 	is_invulnerable = false
 
@@ -222,8 +216,6 @@ func start_attack():
 	var mouse_pos = get_global_mouse_position()
 	var attack_vector = (mouse_pos - global_position)
 	var attack_dir = attack_vector.normalized()
-	
-	# Recoil Logic
 	knockback_velocity = -attack_dir * recoil_strength
 
 	weapon_pivot.look_at(mouse_pos)
@@ -288,7 +280,7 @@ func die():
 func receive_heal(amount: int):
 	hp = min(hp + amount, max_hp)
 	print("%s was healed for %d! HP: %d" % [name, amount, hp])
-	health_changed.emit(hp, max_hp) # Update UI
+	health_changed.emit(hp, max_hp)
 	
 	modulate = Color(0, 1, 0) 
 	var tween = create_tween()
