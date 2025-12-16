@@ -18,6 +18,8 @@ class_name Character extends CharacterBody2D
 @onready var attack_area: Area2D = $WeaponPivot/AttackArea
 @onready var vfx: AnimatedSprite2D = $vfx
 @onready var particles: CPUParticles2D = $particles
+@onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
+@onready var collision_shape_2d_attack: CollisionShape2D = $WeaponPivot/AttackArea/CollisionShape2D
 
 var knockback_velocity = Vector2.ZERO
 var is_invulnerable = false
@@ -25,11 +27,14 @@ var is_attacking = false
 
 const SLIDE_THRESHOLD = 50.0
 
+signal character_died(character_node) # Tells the manager we died
+var is_dead = false
+
 func _ready():
 	animated_sprite_2d.animation_finished.connect(_on_animation_finished)
 	
 	if vfx:
-		vfx.visible = false # Start hidden
+		vfx.visible = false
 		vfx.animation_finished.connect(_on_vfx_finished)
 	
 	if particles:
@@ -60,7 +65,6 @@ func _physics_process(delta):
 		animated_sprite_2d.flip_h = false
 
 	# 4. ANIMATION & VFX MANAGEMENT
-	# Check current speed length
 	var current_speed = velocity.length()
 	
 	# If sliding fast due to knockback
@@ -84,7 +88,6 @@ func _physics_process(delta):
 
 	move_and_slide()
 
-# --- IMPROVED DAMAGE LOGIC ---
 func take_damage(amount: int, source_pos: Vector2):
 	# A. CHECK INVULNERABILITY
 	if is_invulnerable:
@@ -105,17 +108,13 @@ func take_damage(amount: int, source_pos: Vector2):
 
 	# B. APPLY KNOCKBACK
 	if source_pos != Vector2.ZERO:
-		# Knockback direction is AWAY from source
 		var knockback_dir = (global_position - source_pos).normalized()
 		knockback_velocity = knockback_dir * knockback_strength
 		
 		# --- TRIGGER GROUND SMOKE ---
 		if particles:
-			# 1. Point the particle system backwards relative to movement
-			# By rotating the whole node, the particles shoot out the "back"
 			particles.rotation = knockback_dir.angle() + PI # PI radians = 180 degrees flip
 			
-			# 2. Start emitting immediately
 			particles.emitting = true
 
 	# C. TRIGGER EFFECTS
@@ -123,11 +122,10 @@ func take_damage(amount: int, source_pos: Vector2):
 	shake_camera()
 	start_invulnerability()
 
-# --- EFFECTS ---
 func start_invulnerability():
 	is_invulnerable = true
 	
-	# Create a blinking effect manually or using AnimationPlayer
+	# Create a blinking effect
 	var blink_timer = 0.0
 	var duration = invulnerability_time
 	
@@ -143,7 +141,7 @@ func start_invulnerability():
 
 func flash_hurt_effect():
 	# Flash pure Red/White
-	modulate = Color(1, 0, 0) # High intensity red
+	modulate = Color(1, 0, 0)
 	var tween = create_tween()
 	tween.tween_property(self, "modulate", Color.WHITE, invulnerability_time/2)
 
@@ -159,7 +157,7 @@ func shake_camera():
 			await get_tree().create_timer(0.02).timeout
 		camera.offset = original_offset
 
-# --- CORE ATTACK LOGIC (UNCHANGED) ---
+# --- CORE ATTACK LOGIC ---
 func start_attack():
 	is_attacking = true
 	velocity = Vector2.ZERO
@@ -207,5 +205,24 @@ func _on_animation_finished():
 		is_attacking = false
 
 func die():
+	if is_dead: return # Prevent double death
+	
 	print("%s Died!" % [name])
-	queue_free()
+	is_dead = true
+	
+	# Emit signal so PartyManager knows to switch
+	character_died.emit(self)
+	
+	# 1. VISUALS & INPUT
+	visible = false
+	set_physics_process(false)
+	set_process_unhandled_input(false)
+	
+	# 2. PHYSICS
+	# Disable body collision so enemies/players can walk through the dead spot
+	if collision_shape_2d:
+		collision_shape_2d.set_deferred("disabled", true)
+	
+	# Disable weapon hitbox so the ghost doesn't accidentally kill people
+	if collision_shape_2d_attack:
+		collision_shape_2d_attack.set_deferred("disabled", true)
