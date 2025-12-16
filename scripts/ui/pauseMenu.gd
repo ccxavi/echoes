@@ -25,4 +25,4 @@ func _on_restart_pressed() -> void:
 # 3. QUIT (To Main Menu): Unpause first, then switch scenes
 func _on_quit_pressed() -> void:
 	_toggle_pause_state() # Important: Unpause before leaving!
-	get_tree().change_scene_to_file("res://scenes/mainMenu.tscn")
+	get_tree().change_scene_to_file("res://scenes/ui/mainMenu.tscn")

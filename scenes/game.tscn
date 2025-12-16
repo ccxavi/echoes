@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://dn0fviuxjiqgp"]
+[gd_scene load_steps=18 format=3 uid="uid://dn0fviuxjiqgp"]
 
 [ext_resource type="Script" uid="uid://c31hciya3r48y" path="res://scripts/camera.gd" id="1_lnu2h"]
 [ext_resource type="Script" uid="uid://xv1nackckx0h" path="res://scripts/party_manager.gd" id="2_lbhrr"]
@@ -7,12 +7,10 @@
 [ext_resource type="PackedScene" uid="uid://crptpm7brbr5u" path="res://scenes/characters/monk.tscn" id="5_p57ef"]
 [ext_resource type="PackedScene" uid="uid://d0buro6mkrfpt" path="res://scenes/characters/lancer.tscn" id="6_u5sy4"]
 [ext_resource type="PackedScene" uid="uid://f8a0hr62euxq" path="res://scenes/characters/goblin.tscn" id="7_gee14"]
-[ext_resource type="PackedScene" uid="uid://dr8df60xkxb82" path="res://scenes/enemies/tnt.tscn" id="11_kvuet"]
-[ext_resource type="PackedScene" uid="uid://cawr06uafyh47" path="res://scenes/levels/island1.tscn" id="12_dinhu"]
-[ext_resource type="PackedScene" uid="uid://cwpobefk08538" path="res://scenes/enemies/pawn_axe.tscn" id="9_vtaks"]
-[ext_resource type="PackedScene" uid="uid://d1v642dhddsy5" path="res://scenes/enemies/pawn_hammer.tscn" id="10_kvpfn"]
-[ext_resource type="PackedScene" uid="uid://cdimmxll0i1dh" path="res://scenes/enemies/warrior.tscn" id="11_dinhu"]
+[ext_resource type="PackedScene" uid="uid://dbvl1xbqu22qb" path="res://scenes/ui/pauseMenu.tscn" id="10_kvpfn"]
+[ext_resource type="PackedScene" uid="uid://du6scg0nqprkx" path="res://scenes/ui/echoDeck.tscn" id="11_dinhu"]
 [ext_resource type="PackedScene" uid="uid://cawr06uafyh47" path="res://scenes/levels/island1.tscn" id="11_kvpfn"]
+[ext_resource type="PackedScene" uid="uid://dr8df60xkxb82" path="res://scenes/enemies/tnt.tscn" id="11_kvuet"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dinhu"]
 atlas = ExtResource("3_dinhu")
@@ -65,9 +63,10 @@ position = Vector2(3, -7)
 rotation = -1.5707964
 script = ExtResource("1_lnu2h")
 
-[node name="party_manager" type="Node2D" parent="."]
+[node name="party_manager" type="Node2D" parent="." node_paths=PackedStringArray("echo_deck_ui")]
 z_index = 5
 script = ExtResource("2_lbhrr")
+echo_deck_ui = NodePath("../echoDeck")
 
 [node name="switch_vfx" type="AnimatedSprite2D" parent="party_manager"]
 z_index = 100
@@ -92,3 +91,7 @@ position = Vector2(1, 0)
 [node name="tnt" parent="enemies" instance=ExtResource("11_kvuet")]
 
 [node name="Island1" parent="." instance=ExtResource("11_kvpfn")]
+
+[node name="pauseMenu" parent="." instance=ExtResource("10_kvpfn")]
+
+[node name="echoDeck" parent="." instance=ExtResource("11_dinhu")]

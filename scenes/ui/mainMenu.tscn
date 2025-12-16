@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://dbc7sn5ricmnh"]
 
-[ext_resource type="Script" uid="uid://3naygbe77fe6" path="res://scripts/mainMenu.gd" id="3_0ei6b"]
+[ext_resource type="Script" uid="uid://dkesipnvum50t" path="res://scripts/ui/mainMenu.gd" id="3_0ei6b"]
 [ext_resource type="Texture2D" uid="uid://h8lgb1y1phux" path="res://assets/UI/Buttons/Button_Blue_3Slides_Pressed.png" id="4_l7wge"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_l7wge"]
