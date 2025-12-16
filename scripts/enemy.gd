@@ -33,9 +33,13 @@ var burn_tick_timer: float = 0.0
 @onready var hitbox: Area2D = $hitbox
 @onready var vfx: AnimatedSprite2D = $vfx
 @onready var hit_particles: CPUParticles2D = $HitParticles 
+@onready var death: AnimatedSprite2D = $death
 
 func _ready():
 	hp = max_hp
+	
+	if death:
+		death.visible = false
 	
 	# 1. SETUP VFX
 	vfx.visible = false 
@@ -80,8 +84,9 @@ func _physics_process(delta: float) -> void:
 	# 5. Decide Action
 	if dist <= stop_distance:
 		velocity = Vector2.ZERO
-		play_anim("idle")
-		# start_attack_sequence() 
+		# If we are close enough, stop moving and ATTACK
+		if can_attack: 
+			start_attack_sequence()
 		
 	elif dist < detection_range:
 		chase_target(target)
@@ -170,7 +175,7 @@ func take_damage(amount: int, source_pos: Vector2 = Vector2.ZERO, is_critical: b
 
 func start_attack_sequence():
 	can_attack = false
-	play_anim("attack")
+	#play_anim("attack")
 	await get_tree().create_timer(attack_windup_time).timeout
 	
 	var bodies = hitbox.get_overlapping_bodies()
@@ -178,12 +183,35 @@ func start_attack_sequence():
 		if body.is_in_group("player") and body.has_method("take_damage"):
 			body.take_damage(damage, global_position)
 	
-	await animated_sprite_2d.animation_finished
-	play_anim("idle")
+	#await animated_sprite_2d.animation_finished
+	#play_anim("idle")
 	await get_tree().create_timer(attack_cooldown).timeout
 	can_attack = true
 
 func die():
+	# Prevent code from running twice if hit quickly while dying
+	if not is_physics_processing():
+		return
+
+	# 1. STOP GAMEPLAY LOGIC
+	set_physics_process(false) # Stop movement and attacks
+	can_attack = false
+	velocity = Vector2.ZERO
+	
+	# 2. HIDE ALIVE VISUALS
+	animated_sprite_2d.visible = false 
+	vfx.visible = false # Stop showing fire/slashes
+	if hit_particles: hit_particles.emitting = false
+
+	# 3. PLAY DEATH ANIMATION
+	if death:
+		death.visible = true
+		death.play("default")
+		
+		# Wait for it to finish
+		await death.animation_finished
+	
+	# 4. DELETE OBJECT
 	queue_free()
 
 # --- HELPERS ---
