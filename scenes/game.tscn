@@ -96,7 +96,7 @@ animations = [{
 unique_name_in_owner = true
 position = Vector2(3, -7)
 rotation = -1.5707964
-zoom = Vector2(3, 3)
+zoom = Vector2(2, 2)
 script = ExtResource("1_lnu2h")
 
 [node name="party_manager" type="Node2D" parent="."]
@@ -127,18 +127,6 @@ position = Vector2(1, 0)
 
 [node name="tnt" parent="enemies" instance=ExtResource("11_kvuet")]
 position = Vector2(291, -264)
-
-[node name="tnt2" parent="enemies" instance=ExtResource("11_kvuet")]
-position = Vector2(-389, -262)
-
-[node name="pawn_hammer" parent="enemies" instance=ExtResource("10_kvpfn")]
-position = Vector2(-232, -177)
-
-[node name="pawn_axe" parent="enemies" instance=ExtResource("9_vtaks")]
-position = Vector2(59, -359)
-
-[node name="warrior3" parent="enemies" instance=ExtResource("11_dinhu")]
-position = Vector2(13, -266)
 
 [node name="warrior2" parent="enemies" instance=ExtResource("11_dinhu")]
 position = Vector2(2, -341)

@@ -4,6 +4,7 @@ class_name Character extends CharacterBody2D
 @export var max_hp = 100
 @export var speed = 300.0
 @export var damage = 1 
+@export var defense = 0
 @export var crit_chance = 0.2
 @export var crit_multiplier = 2.0
 
@@ -93,9 +94,16 @@ func take_damage(amount: int, source_pos: Vector2):
 	if is_invulnerable:
 		return
 
-	hp -= amount
-	print("%s hp: %s" % [name, hp])
+	# --- DEFENSE CALCULATION ---
+	# Formula: Incoming Damage - Defense
+	# We use max(1, ...) to ensure the player always takes at least 1 chip damage
+	# so they know they were hit.
+	var reduced_damage = max(1, amount - defense)
 	
+	hp -= reduced_damage
+	print("%s took %d damage (Mitigated %d). HP: %s" % [name, reduced_damage, amount - reduced_damage, hp])
+	
+	# Visual: Play slash effect
 	if vfx:
 		vfx.visible = true
 		vfx.frame = 0
@@ -105,18 +113,16 @@ func take_damage(amount: int, source_pos: Vector2):
 		die()
 		return
 
-	# B. APPLY KNOCKBACK
+	# B. APPLY KNOCKBACK (Unchanged)
 	if source_pos != Vector2.ZERO:
 		var knockback_dir = (global_position - source_pos).normalized()
 		knockback_velocity = knockback_dir * knockback_strength
 		
-		# --- TRIGGER GROUND SMOKE ---
 		if particles:
-			particles.rotation = knockback_dir.angle() + PI # PI radians = 180 degrees flip
-			
+			particles.rotation = knockback_dir.angle() + PI 
 			particles.emitting = true
 
-	# C. TRIGGER EFFECTS
+	# C. TRIGGER EFFECTS (Unchanged)
 	flash_hurt_effect()
 	shake_camera()
 	start_invulnerability()
