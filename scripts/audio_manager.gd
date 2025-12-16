@@ -16,6 +16,7 @@ var sounds = {
 	"hurt": preload("res://assets/audio/hurt.wav"),
 	"tnt_throw": preload("res://assets/audio/tnt_throw.wav"),
 	"tnt_explode": preload("res://assets/audio/tnt_explode.wav"),
+	"exclamation": preload("res://assets/audio/exclamation.wav"),
 }
 
 const POOL_SIZE = 8
