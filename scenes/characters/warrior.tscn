@@ -244,7 +244,7 @@ animations = [{
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5oo6o"]
 radius = 37.0
-height = 74.0
+height = 104.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5oo6o"]
 size = Vector2(53.75, 26.5)
@@ -253,6 +253,7 @@ size = Vector2(53.75, 26.5)
 script = ExtResource("2_xljey")
 
 [node name="main_sprite" parent="." index="2"]
+scale = Vector2(1.3125, 1.3125)
 sprite_frames = SubResource("SpriteFrames_4kxua")
 animation = &"attack_side"
 frame = 5
