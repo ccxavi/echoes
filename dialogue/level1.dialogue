@@ -1,0 +1,16 @@
+~ start
+Soldier 1: The enemy is attacking!
+Solder 2: Make a defensive line!
+Warrior: [shake rate=20 level=10]Charge!!![/shake]
+-- ENTER BATTLE --
+=> END
+
+~ finish
+Warrior: How could they do this...! [shake rate=20 level=10]I’ll make them pay![/shake]
+Soldier 1: Hey, where are you going?!
+Warrior: [shake rate=20 level=10]To avenge our fallen![/shake]
+- sail to the next island
+=> END
+
+
+
