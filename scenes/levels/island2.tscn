@@ -56,18 +56,28 @@ script/source = "extends Node2D
 
 const LEVEL_DIALOGUE = preload(\"res://dialogue/level3.dialogue\")
 
-
 signal level_cleared
 
 @onready var enemies_container: Node2D = $enemies
 var enemy_count: int = 0
+@onready var fade_overlay: ColorRect = $CanvasLayer/FadeOverlay
 
 func _ready():
 	# 1. Setup the enemy counter logic immediately
 	_initialize_enemies()
-
+	
+	# --- 1. FADE IN START ---
+	# Force the screen to be black instantly
+	fade_overlay.color.a = 1.0 
+	
+	# Create an animation (Tween) to fade to transparent over 2 seconds
+	var tween = create_tween()
+	tween.tween_property(fade_overlay, \"color:a\", 0.0, 2.0)
+	# ------------------------
+	
 	# 2. Play the Start Dialogue (Your existing logic)
 	get_tree().paused = true
+	await get_tree().create_timer(3.0).timeout
 	DialogueManager.show_dialogue_balloon(LEVEL_DIALOGUE, \"start\")
 	await DialogueManager.dialogue_ended
 	get_tree().paused = false
@@ -105,8 +115,11 @@ func _play_ending_sequence():
 	await DialogueManager.dialogue_ended
 	
 	# 4. Logic after dialogue (e.g., Change Level)
-	# get_tree().paused = false # Only unpause if staying in this scene
-	# get_tree().change_scene_to_file(\"res://levels/level2.tscn\")
+	get_tree().paused = false # Only unpause if staying in this scene
+	var tween = create_tween()
+	tween.tween_property(fade_overlay, \"color:a\", 1.0, 1.5)
+	await tween.finished
+	get_tree().change_scene_to_file(\"res://scenes/levels/island3.tscn\")
 "
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_uelme"]
@@ -8962,3 +8975,14 @@ position = Vector2(1059, -398)
 
 [node name="pawn6" parent="enemies" instance=ExtResource("48_r587r")]
 position = Vector2(1267, -100)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="FadeOverlay" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
