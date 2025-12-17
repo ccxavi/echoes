@@ -1,4 +1,4 @@
-[gd_scene load_steps=126 format=4 uid="uid://cnshvgwfq2qvc"]
+[gd_scene load_steps=127 format=4 uid="uid://cnshvgwfq2qvc"]
 
 [ext_resource type="Texture2D" uid="uid://c16246fxx3t4x" path="res://assets/Terrain/Tileset/Shadow.png" id="1_28lgw"]
 [ext_resource type="Texture2D" uid="uid://cpaudifcfs7f3" path="res://assets/Terrain/Tileset/Tilemap_color1.png" id="2_qq8ng"]
@@ -52,6 +52,7 @@
 [ext_resource type="PackedScene" uid="uid://cwpobefk08538" path="res://scenes/enemies/pawn_axe.tscn" id="49_101f6"]
 [ext_resource type="PackedScene" uid="uid://d1v642dhddsy5" path="res://scenes/enemies/pawn_hammer.tscn" id="50_drm71"]
 [ext_resource type="PackedScene" uid="uid://cdimmxll0i1dh" path="res://scenes/enemies/warrior.tscn" id="51_hranj"]
+[ext_resource type="PackedScene" uid="uid://dbvl1xbqu22qb" path="res://scenes/ui/pauseMenu.tscn" id="53_drm71"]
 
 [sub_resource type="GDScript" id="GDScript_48wna"]
 script/source = "extends Node2D
@@ -63,21 +64,20 @@ signal level_cleared
 @onready var enemies_container: Node2D = $enemies
 var enemy_count: int = 0
 @onready var fade_overlay: ColorRect = $CanvasLayer/FadeOverlay
+var is_level_active: bool = true
 
 func _ready():
-	# 1. Setup the enemy counter logic immediately
 	_initialize_enemies()
-	
-	# --- 1. FADE IN START ---
+	is_level_active = true
+
 	# Force the screen to be black instantly
 	fade_overlay.color.a = 1.0 
 	
-	# Create an animation (Tween) to fade to transparent over 2 seconds
+	# Create an animation
 	var tween = create_tween()
 	tween.tween_property(fade_overlay, \"color:a\", 0.0, 2.0)
-	# ------------------------
 	
-	# 2. Play the Start Dialogue (Your existing logic)
+	# 2. Play the Start Dialogue 
 	get_tree().paused = true
 	await get_tree().create_timer(3.0).timeout
 	DialogueManager.show_dialogue_balloon(LEVEL_DIALOGUE, \"start\")
@@ -95,29 +95,29 @@ func _initialize_enemies():
 	
 	print(\"Level started. Enemies to defeat: \", enemy_count)
 
+func _exit_tree():
+	is_level_active = false
+
 func _on_enemy_killed():
 	enemy_count -= 1
 	# print(\"Enemy died. Remaining: \", enemy_count)
-	
+	if not is_level_active or not is_inside_tree():
+		return
+		
 	if enemy_count <= 0:
 		_play_ending_sequence()
 
 func _play_ending_sequence():
 	await get_tree().create_timer(4.0).timeout
-	# 1. Emit signal (useful for UI or achievements)
 	level_cleared.emit()
 	
-	# 2. Pause the game so enemies/player stop moving
 	get_tree().paused = true
 	
-	# 3. Play the 'end' title from your dialogue file
-	# Make sure your .dialogue file has a title like ~ end
 	DialogueManager.show_dialogue_balloon(LEVEL_DIALOGUE, \"finish\")
 	
 	await DialogueManager.dialogue_ended
 	
-	# 4. Logic after dialogue (e.g., Change Level)
-	get_tree().paused = false # Only unpause if staying in this scene
+	get_tree().paused = false 
 	var tween = create_tween()
 	tween.tween_property(fade_overlay, \"color:a\", 1.0, 1.5)
 	await tween.finished
@@ -8963,3 +8963,5 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
+
+[node name="pauseMenu" parent="." instance=ExtResource("53_drm71")]

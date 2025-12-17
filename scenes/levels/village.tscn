@@ -1,4 +1,4 @@
-[gd_scene load_steps=120 format=4 uid="uid://d1dh7ws0nub2h"]
+[gd_scene load_steps=121 format=4 uid="uid://d1dh7ws0nub2h"]
 
 [ext_resource type="Texture2D" uid="uid://cpaudifcfs7f3" path="res://assets/Terrain/Tileset/Tilemap_color1.png" id="2_qq8ng"]
 [ext_resource type="Texture2D" uid="uid://dvon5wg6uov6g" path="res://assets/Terrain/Tileset/Water Background color.png" id="3_6gxf0"]
@@ -44,6 +44,7 @@
 [ext_resource type="Texture2D" uid="uid://g80hw0d41i8c" path="res://assets/effects/spark.png" id="42_l2xnu"]
 [ext_resource type="PackedScene" uid="uid://bcwga5bcxj6cb" path="res://scenes/ui/lost.tscn" id="43_ljehu"]
 [ext_resource type="PackedScene" uid="uid://b0h0b2cpm8gto" path="res://scenes/characters/warrior.tscn" id="43_nxocu"]
+[ext_resource type="PackedScene" uid="uid://dbvl1xbqu22qb" path="res://scenes/ui/pauseMenu.tscn" id="48_ann8j"]
 [ext_resource type="Script" uid="uid://c31hciya3r48y" path="res://scripts/camera.gd" id="48_i8xei"]
 [ext_resource type="PackedScene" uid="uid://cwpobefk08538" path="res://scenes/enemies/pawn_axe.tscn" id="49_sqa46"]
 [ext_resource type="PackedScene" uid="uid://cdimmxll0i1dh" path="res://scenes/enemies/warrior.tscn" id="51_fun5k"]
@@ -58,21 +59,20 @@ signal level_cleared
 @onready var enemies_container: Node2D = $enemies
 var enemy_count: int = 0
 @onready var fade_overlay: ColorRect = $CanvasLayer/FadeOverlay
+var is_level_active: bool = true
 
 func _ready():
-	# 1. Setup the enemy counter logic immediately
 	_initialize_enemies()
-	
-	# --- 1. FADE IN START ---
+	is_level_active = true
+
 	# Force the screen to be black instantly
 	fade_overlay.color.a = 1.0 
 	
-	# Create an animation (Tween) to fade to transparent over 2 seconds
+	# Create an animation
 	var tween = create_tween()
 	tween.tween_property(fade_overlay, \"color:a\", 0.0, 2.0)
-	# ------------------------
 	
-	# 2. Play the Start Dialogue (Your existing logic)
+	# 2. Play the Start Dialogue 
 	get_tree().paused = true
 	await get_tree().create_timer(3.0).timeout
 	DialogueManager.show_dialogue_balloon(LEVEL_DIALOGUE, \"start\")
@@ -90,10 +90,15 @@ func _initialize_enemies():
 	
 	print(\"Level started. Enemies to defeat: \", enemy_count)
 
+func _exit_tree():
+	is_level_active = false
+
 func _on_enemy_killed():
 	enemy_count -= 1
 	# print(\"Enemy died. Remaining: \", enemy_count)
-	
+	if not is_level_active or not is_inside_tree():
+		return
+		
 	if enemy_count <= 0:
 		_play_ending_sequence()
 
@@ -8876,7 +8881,6 @@ position = Vector2(253, 15)
 position = Vector2(157, -1)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="FadeOverlay" type="ColorRect" parent="CanvasLayer"]
 anchors_preset = 15
@@ -8886,3 +8890,5 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
+
+[node name="pauseMenu" parent="." instance=ExtResource("48_ann8j")]
