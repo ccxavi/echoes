@@ -8869,7 +8869,14 @@ position = Vector2(253, -86)
 [node name="warrior3" parent="enemies" instance=ExtResource("51_fun5k")]
 position = Vector2(160, 89)
 
+[node name="pawn2" parent="enemies" instance=ExtResource("49_sqa46")]
+position = Vector2(253, 15)
+
+[node name="warrior4" parent="enemies" instance=ExtResource("51_fun5k")]
+position = Vector2(157, -1)
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="FadeOverlay" type="ColorRect" parent="CanvasLayer"]
 anchors_preset = 15

@@ -8901,18 +8901,6 @@ position = Vector2(581, -614)
 [node name="warrior2" parent="enemies" instance=ExtResource("47_dpsiv")]
 position = Vector2(604, -469)
 
-[node name="warrior3" parent="enemies" instance=ExtResource("47_dpsiv")]
-position = Vector2(-270, -460)
-
-[node name="warrior4" parent="enemies" instance=ExtResource("47_dpsiv")]
-position = Vector2(338, -443)
-
-[node name="pawn5" parent="enemies" instance=ExtResource("45_vlrmi")]
-position = Vector2(-36, -375)
-
-[node name="pawn6" parent="enemies" instance=ExtResource("45_vlrmi")]
-position = Vector2(116, -355)
-
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="FadeOverlay" type="ColorRect" parent="CanvasLayer"]
