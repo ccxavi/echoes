@@ -7913,6 +7913,7 @@ animations = [{
 }]
 
 [node name="Stronghold" type="Node2D"]
+position = Vector2(-1, 0)
 script = SubResource("GDScript_a40xn")
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -7982,8 +7983,6 @@ animation = &"switch"
 [node name="warrior" parent="party_manager" instance=ExtResource("40_oq762")]
 
 [node name="monk" parent="party_manager" instance=ExtResource("41_a40xn")]
-heal_amount = 30
-heal_cooldown_duration = 5.0
 
 [node name="laner" parent="party_manager" instance=ExtResource("42_1tr8i")]
 
@@ -7994,43 +7993,61 @@ z_index = 5
 position = Vector2(-66, 1)
 
 [node name="warrior4" parent="enemies" instance=ExtResource("47_pjul6")]
-position = Vector2(-486, 41)
+position = Vector2(-1004, 344)
 
 [node name="tnt3" parent="enemies" instance=ExtResource("44_a40xn")]
-position = Vector2(-985, 104)
+position = Vector2(-1038, -255)
 
 [node name="pawn5" parent="enemies" instance=ExtResource("45_1tr8i")]
 position = Vector2(65, 42)
 
 [node name="pawn4" parent="enemies" instance=ExtResource("45_1tr8i")]
-position = Vector2(-752, -28)
+position = Vector2(-827, -285)
 
 [node name="pawn3" parent="enemies" instance=ExtResource("46_v702u")]
-position = Vector2(-749, 66)
+position = Vector2(-938, -273)
 
 [node name="tnt" parent="enemies" instance=ExtResource("44_a40xn")]
-position = Vector2(-863, 97)
+position = Vector2(-1317, -105)
 
 [node name="pawn1" parent="enemies" instance=ExtResource("45_1tr8i")]
-position = Vector2(-623, -44)
+position = Vector2(-1374, 12)
 
 [node name="pawn2" parent="enemies" instance=ExtResource("46_v702u")]
-position = Vector2(-738, 192)
+position = Vector2(-1088, 421)
 
 [node name="warrior1" parent="enemies" instance=ExtResource("47_pjul6")]
-position = Vector2(-485, -81)
+position = Vector2(-244, -33)
 
 [node name="tnt2" parent="enemies" instance=ExtResource("44_a40xn")]
-position = Vector2(-855, 196)
+position = Vector2(-1035, 510)
 
 [node name="warrior2" parent="enemies" instance=ExtResource("47_pjul6")]
-position = Vector2(-611, 58)
+position = Vector2(-883, -222)
 
 [node name="warrior3" parent="enemies" instance=ExtResource("47_pjul6")]
-position = Vector2(-482, 149)
+position = Vector2(-1272, 3)
 
 [node name="tnt4" parent="enemies" instance=ExtResource("44_a40xn")]
-position = Vector2(-859, -12)
+position = Vector2(-746, -264)
 
 [node name="pawn6" parent="enemies" instance=ExtResource("46_v702u")]
-position = Vector2(-616, 182)
+position = Vector2(-940, 435)
+
+[node name="tnt5" parent="enemies" instance=ExtResource("44_a40xn")]
+position = Vector2(-282, 222)
+
+[node name="tnt6" parent="enemies" instance=ExtResource("44_a40xn")]
+position = Vector2(-264, -163)
+
+[node name="warrior5" parent="enemies" instance=ExtResource("47_pjul6")]
+position = Vector2(-252, 60)
+
+[node name="pawn7" parent="enemies" instance=ExtResource("46_v702u")]
+position = Vector2(-360, -72)
+
+[node name="pawn8" parent="enemies" instance=ExtResource("46_v702u")]
+position = Vector2(-364, 89)
+
+[node name="warrior6" parent="enemies" instance=ExtResource("47_pjul6")]
+position = Vector2(-320, 10)

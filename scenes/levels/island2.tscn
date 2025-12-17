@@ -8907,8 +8907,6 @@ position = Vector2(141, 99)
 
 [node name="monk" parent="party_manager" instance=ExtResource("45_8yndq")]
 position = Vector2(138, 95)
-heal_amount = 30
-heal_cooldown_duration = 5.0
 
 [node name="Camera2D" type="Camera2D" parent="."]
 unique_name_in_owner = true
@@ -8927,7 +8925,7 @@ position = Vector2(425, -19)
 position = Vector2(490, 94)
 
 [node name="tnt" parent="enemies" instance=ExtResource("49_adlhc")]
-position = Vector2(1087, 192)
+position = Vector2(905, 220)
 
 [node name="pawn1" parent="enemies" instance=ExtResource("47_nmmpy")]
 position = Vector2(1140, -323)
@@ -8936,10 +8934,31 @@ position = Vector2(1140, -323)
 position = Vector2(1220, -215)
 
 [node name="warrior1" parent="enemies" instance=ExtResource("50_qj60b")]
-position = Vector2(1009, -382)
+position = Vector2(971, -363)
 
 [node name="tnt2" parent="enemies" instance=ExtResource("49_adlhc")]
-position = Vector2(455, -545)
+position = Vector2(423, -410)
 
 [node name="warrior2" parent="enemies" instance=ExtResource("50_qj60b")]
 position = Vector2(1162, -96)
+
+[node name="tnt3" parent="enemies" instance=ExtResource("49_adlhc")]
+position = Vector2(1083, -240)
+
+[node name="warrior3" parent="enemies" instance=ExtResource("50_qj60b")]
+position = Vector2(798, 221)
+
+[node name="warrior4" parent="enemies" instance=ExtResource("50_qj60b")]
+position = Vector2(413, -320)
+
+[node name="tnt4" parent="enemies" instance=ExtResource("49_adlhc")]
+position = Vector2(421, -481)
+
+[node name="tnt5" parent="enemies" instance=ExtResource("49_adlhc")]
+position = Vector2(976, 262)
+
+[node name="pawn5" parent="enemies" instance=ExtResource("48_r587r")]
+position = Vector2(1059, -398)
+
+[node name="pawn6" parent="enemies" instance=ExtResource("48_r587r")]
+position = Vector2(1267, -100)

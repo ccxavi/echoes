@@ -289,11 +289,11 @@ size = Vector2(79, 25.75)
 [node name="character" instance=ExtResource("1_caj3b")]
 script = ExtResource("2_qvwsx")
 
-[node name="main_sprite" parent="." index="0"]
+[node name="main_sprite" parent="." index="2"]
 sprite_frames = SubResource("SpriteFrames_p7tjj")
 animation = &"attack_side"
 
-[node name="CollisionShape2D" parent="." index="1"]
+[node name="CollisionShape2D" parent="." index="3"]
 position = Vector2(10, 12)
 shape = SubResource("CapsuleShape2D_qvwsx")
 
