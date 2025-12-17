@@ -43,6 +43,7 @@
 [ext_resource type="Script" uid="uid://xv1nackckx0h" path="res://scripts/party_manager.gd" id="41_ann8j"]
 [ext_resource type="Texture2D" uid="uid://g80hw0d41i8c" path="res://assets/effects/spark.png" id="42_l2xnu"]
 [ext_resource type="PackedScene" uid="uid://b0h0b2cpm8gto" path="res://scenes/characters/warrior.tscn" id="43_nxocu"]
+[ext_resource type="PackedScene" uid="uid://dr8df60xkxb82" path="res://scenes/enemies/tnt.tscn" id="47_mfrj8"]
 [ext_resource type="Script" uid="uid://c31hciya3r48y" path="res://scripts/camera.gd" id="48_i8xei"]
 [ext_resource type="PackedScene" uid="uid://cwpobefk08538" path="res://scenes/enemies/pawn_axe.tscn" id="49_sqa46"]
 [ext_resource type="PackedScene" uid="uid://cdimmxll0i1dh" path="res://scenes/enemies/warrior.tscn" id="51_fun5k"]
@@ -8855,16 +8856,14 @@ animation = &"switch"
 z_index = 5
 position = Vector2(-66, 1)
 
+[node name="tnt" parent="enemies" instance=ExtResource("47_mfrj8")]
+position = Vector2(388, -85)
+
 [node name="pawn1" parent="enemies" instance=ExtResource("49_sqa46")]
 position = Vector2(263, 119)
 
 [node name="tnt2" parent="enemies" instance=ExtResource("47_mfrj8")]
 position = Vector2(382, 106)
-[node name="pawn2" parent="enemies" instance=ExtResource("50_l0twx")]
-position = Vector2(257, -113)
-
-[node name="warrior1" parent="enemies" instance=ExtResource("51_fun5k")]
-position = Vector2(163, 114)
 
 [node name="warrior2" parent="enemies" instance=ExtResource("51_fun5k")]
 position = Vector2(146, -102)
