@@ -8879,8 +8879,6 @@ position = Vector2(-27, 811)
 
 [node name="monk" parent="party_manager" instance=ExtResource("45_88wag")]
 position = Vector2(-35, 814)
-heal_amount = 30
-heal_cooldown_duration = 5.0
 
 [node name="laner" parent="party_manager" instance=ExtResource("46_48wna")]
 position = Vector2(-41, 819)
@@ -8902,22 +8900,22 @@ position = Vector2(65, -123)
 position = Vector2(65, 42)
 
 [node name="pawn4" parent="enemies" instance=ExtResource("49_101f6")]
-position = Vector2(-229, 161)
+position = Vector2(-268, 79)
 
 [node name="pawn3" parent="enemies" instance=ExtResource("50_drm71")]
-position = Vector2(308, 169)
+position = Vector2(385, 96)
 
 [node name="tnt" parent="enemies" instance=ExtResource("48_48wna")]
 position = Vector2(-305, -79)
 
 [node name="pawn1" parent="enemies" instance=ExtResource("49_101f6")]
-position = Vector2(-90, 100)
+position = Vector2(-88, 53)
 
 [node name="pawn2" parent="enemies" instance=ExtResource("50_drm71")]
-position = Vector2(192, 94)
+position = Vector2(236, 46)
 
 [node name="warrior1" parent="enemies" instance=ExtResource("51_hranj")]
-position = Vector2(135, 195)
+position = Vector2(121, 201)
 
 [node name="tnt2" parent="enemies" instance=ExtResource("48_48wna")]
 position = Vector2(415, -93)
@@ -8926,4 +8924,16 @@ position = Vector2(415, -93)
 position = Vector2(-12, 189)
 
 [node name="warrior3" parent="enemies" instance=ExtResource("51_hranj")]
-position = Vector2(56, 260)
+position = Vector2(72, 408)
+
+[node name="tnt4" parent="enemies" instance=ExtResource("48_48wna")]
+position = Vector2(-109, -110)
+
+[node name="tnt5" parent="enemies" instance=ExtResource("48_48wna")]
+position = Vector2(265, -118)
+
+[node name="warrior4" parent="enemies" instance=ExtResource("51_hranj")]
+position = Vector2(-29, 278)
+
+[node name="warrior5" parent="enemies" instance=ExtResource("51_hranj")]
+position = Vector2(148, 285)

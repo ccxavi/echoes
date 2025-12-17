@@ -6,7 +6,7 @@ func _ready():
 	
 	max_hp = 30
 	speed = 200
-	damage = 5
+	damage = 15
 	attack_cooldown = 1.0
 	
 	hp = max_hp

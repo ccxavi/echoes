@@ -1,7 +1,7 @@
 extends Area2D
 
 @export var speed = 300.0
-@export var damage = 15
+@export var damage = 20
 @export var blast_radius = 50.0
 
 # --- SHAKE SETTINGS ---

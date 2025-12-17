@@ -8845,13 +8845,28 @@ z_index = 5
 position = Vector2(-66, 1)
 
 [node name="tnt" parent="enemies" instance=ExtResource("47_mfrj8")]
-position = Vector2(343, 6)
+position = Vector2(388, -85)
 
 [node name="pawn1" parent="enemies" instance=ExtResource("49_sqa46")]
-position = Vector2(196, 121)
+position = Vector2(263, 119)
 
 [node name="pawn2" parent="enemies" instance=ExtResource("50_l0twx")]
-position = Vector2(220, -86)
+position = Vector2(257, -113)
 
 [node name="warrior1" parent="enemies" instance=ExtResource("51_fun5k")]
-position = Vector2(221, 15)
+position = Vector2(163, 114)
+
+[node name="tnt2" parent="enemies" instance=ExtResource("47_mfrj8")]
+position = Vector2(382, 106)
+
+[node name="warrior2" parent="enemies" instance=ExtResource("51_fun5k")]
+position = Vector2(146, -102)
+
+[node name="tnt3" parent="enemies" instance=ExtResource("47_mfrj8")]
+position = Vector2(390, 15)
+
+[node name="pawn3" parent="enemies" instance=ExtResource("49_sqa46")]
+position = Vector2(258, 4)
+
+[node name="warrior3" parent="enemies" instance=ExtResource("51_fun5k")]
+position = Vector2(165, -6)

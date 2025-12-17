@@ -177,10 +177,12 @@ height = 76.0
 
 [node name="character" instance=ExtResource("1_hgnqc")]
 script = ExtResource("2_o4mlt")
+heal_amount = 30
+heal_cooldown_duration = 5.0
 
-[node name="main_sprite" parent="." index="0"]
+[node name="main_sprite" parent="." index="2"]
 sprite_frames = SubResource("SpriteFrames_bwx0r")
 animation = &"heal"
 
-[node name="CollisionShape2D" parent="." index="1"]
+[node name="CollisionShape2D" parent="." index="3"]
 shape = SubResource("CapsuleShape2D_o4mlt")
