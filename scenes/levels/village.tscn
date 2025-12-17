@@ -45,7 +45,6 @@
 [ext_resource type="PackedScene" uid="uid://b0h0b2cpm8gto" path="res://scenes/characters/warrior.tscn" id="43_nxocu"]
 [ext_resource type="Script" uid="uid://c31hciya3r48y" path="res://scripts/camera.gd" id="48_i8xei"]
 [ext_resource type="PackedScene" uid="uid://cwpobefk08538" path="res://scenes/enemies/pawn_axe.tscn" id="49_sqa46"]
-[ext_resource type="PackedScene" uid="uid://d1v642dhddsy5" path="res://scenes/enemies/pawn_hammer.tscn" id="50_l0twx"]
 [ext_resource type="PackedScene" uid="uid://cdimmxll0i1dh" path="res://scenes/enemies/warrior.tscn" id="51_fun5k"]
 
 [sub_resource type="GDScript" id="GDScript_ann8j"]
@@ -55,16 +54,26 @@ const LEVEL_DIALOGUE = preload(\"res://dialogue/level1.dialogue\")
 
 signal level_cleared
 
-# Reference to the container holding your enemies
 @onready var enemies_container: Node2D = $enemies
 var enemy_count: int = 0
+@onready var fade_overlay: ColorRect = $CanvasLayer/FadeOverlay
 
 func _ready():
 	# 1. Setup the enemy counter logic immediately
 	_initialize_enemies()
-
+	
+	# --- 1. FADE IN START ---
+	# Force the screen to be black instantly
+	fade_overlay.color.a = 1.0 
+	
+	# Create an animation (Tween) to fade to transparent over 2 seconds
+	var tween = create_tween()
+	tween.tween_property(fade_overlay, \"color:a\", 0.0, 2.0)
+	# ------------------------
+	
 	# 2. Play the Start Dialogue (Your existing logic)
 	get_tree().paused = true
+	await get_tree().create_timer(3.0).timeout
 	DialogueManager.show_dialogue_balloon(LEVEL_DIALOGUE, \"start\")
 	await DialogueManager.dialogue_ended
 	get_tree().paused = false
@@ -102,8 +111,11 @@ func _play_ending_sequence():
 	await DialogueManager.dialogue_ended
 	
 	# 4. Logic after dialogue (e.g., Change Level)
-	# get_tree().paused = false # Only unpause if staying in this scene
-	# get_tree().change_scene_to_file(\"res://levels/level2.tscn\")
+	get_tree().paused = false # Only unpause if staying in this scene
+	var tween = create_tween()
+	tween.tween_property(fade_overlay, \"color:a\", 1.0, 1.5)
+	await tween.finished
+	get_tree().change_scene_to_file(\"res://scenes/levels/island1.tscn\")
 "
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_uelme"]
@@ -8846,6 +8858,8 @@ position = Vector2(-66, 1)
 [node name="pawn1" parent="enemies" instance=ExtResource("49_sqa46")]
 position = Vector2(263, 119)
 
+[node name="tnt2" parent="enemies" instance=ExtResource("47_mfrj8")]
+position = Vector2(382, 106)
 [node name="pawn2" parent="enemies" instance=ExtResource("50_l0twx")]
 position = Vector2(257, -113)
 
@@ -8856,7 +8870,18 @@ position = Vector2(163, 114)
 position = Vector2(146, -102)
 
 [node name="pawn3" parent="enemies" instance=ExtResource("49_sqa46")]
-position = Vector2(258, 4)
+position = Vector2(253, -86)
 
 [node name="warrior3" parent="enemies" instance=ExtResource("51_fun5k")]
-position = Vector2(165, -6)
+position = Vector2(160, 89)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="FadeOverlay" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
