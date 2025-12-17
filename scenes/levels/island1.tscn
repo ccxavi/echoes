@@ -8884,12 +8884,6 @@ position = Vector2(581, -614)
 [node name="warrior2" parent="enemies" instance=ExtResource("47_dpsiv")]
 position = Vector2(604, -469)
 
-[node name="tnt3" parent="enemies" instance=ExtResource("44_2usht")]
-position = Vector2(-138, -529)
-
-[node name="tnt4" parent="enemies" instance=ExtResource("44_2usht")]
-position = Vector2(190, -526)
-
 [node name="warrior3" parent="enemies" instance=ExtResource("47_dpsiv")]
 position = Vector2(-270, -460)
 
