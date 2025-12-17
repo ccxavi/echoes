@@ -12,6 +12,8 @@ var queued_heal_amount: int = 0
 @onready var switch_vfx: AnimatedSprite2D = $switch_vfx
 @export var echo_deck_ui: CanvasLayer 
 
+@export var game_over_scene: PackedScene
+
 func _ready():
 	switch_vfx.visible = false 
 	
@@ -168,7 +170,38 @@ func _on_character_died(_dead_char_node):
 		print("Switching to next survivor: ", characters[next_alive_index].name)
 		perform_switch(next_alive_index)
 	else:
-		print("GAME OVER")
+		trigger_game_over()
+
+func trigger_game_over():
+	print("GAME OVER")
+	
+	# 1. Slow down / Stop time
+	# Using 0.05 instead of 0 allows animations to settle without fully freezing input immediately
+	Engine.time_scale = 0.1 
+	
+	can_switch = false
+	
+	# 2. Wait a brief moment for impact
+	# We use create_timer with 'true' (ignore_time_scale) so the timer runs in real-time
+	# even though the game is in slow motion.
+	await get_tree().create_timer(1.0, true, false, true).timeout
+	
+	# 3. Freeze the game completely (optional, keeps background static)
+	get_tree().paused = true
+	
+	# 4. Instantiate the Game Over UI
+	if game_over_scene:
+		var game_over_instance = game_over_scene.instantiate()
+		
+		# Add it to the main tree root so it covers everything (even this level)
+		# adding it to 'get_tree().root' ensures it persists if you delete the level, 
+		# but adding it to 'self' or 'get_parent()' is safer for cleanup.
+		# Let's add it to the current scene root:
+		get_tree().current_scene.add_child(game_over_instance)
+		
+	else:
+		print("ERROR: No Game Over Scene assigned!")
+		get_tree().reload_current_scene()
 
 func play_vfx(pos):
 	switch_vfx.global_position = pos

@@ -1,5 +1,6 @@
-[gd_scene load_steps=15 format=3 uid="uid://bcwga5bcxj6cb"]
+[gd_scene load_steps=16 format=3 uid="uid://bcwga5bcxj6cb"]
 
+[ext_resource type="Script" uid="uid://bejdwmlwqmvm1" path="res://scripts/ui/lost.gd" id="1_ct5jb"]
 [ext_resource type="Texture2D" uid="uid://h8lgb1y1phux" path="res://assets/UI/Buttons/Button_Blue_3Slides_Pressed.png" id="1_ugjck"]
 [ext_resource type="Texture2D" uid="uid://1swawdw2lfju" path="res://assets/UI/Buttons/Button_Blue_3Slides.png" id="2_40nqn"]
 
@@ -117,6 +118,7 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
 [node name="lost" type="CanvasLayer"]
+script = ExtResource("1_ct5jb")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 anchors_preset = 15
@@ -177,11 +179,11 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_7p1qh")
 theme_override_styles/focus = SubResource("StyleBoxFlat_d7yj7")
 text = "RESTART"
 
-[node name="Quit" type="Button" parent="NinePatchRect/VBoxContainer"]
+[node name="Exit" type="Button" parent="NinePatchRect/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 25
 theme_override_styles/normal = SubResource("StyleBoxFlat_xwb74")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_s0wou")
 theme_override_styles/hover = SubResource("StyleBoxFlat_geqfl")
 theme_override_styles/focus = SubResource("StyleBoxFlat_yag10")
-text = "QUIT"
+text = "EXIT"

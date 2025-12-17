@@ -1,4 +1,4 @@
-[gd_scene load_steps=117 format=4 uid="uid://bc6psoa7d3ndn"]
+[gd_scene load_steps=118 format=4 uid="uid://bc6psoa7d3ndn"]
 
 [ext_resource type="Script" uid="uid://c31hciya3r48y" path="res://scripts/camera.gd" id="1_vcyrc"]
 [ext_resource type="Texture2D" uid="uid://cpaudifcfs7f3" path="res://assets/Terrain/Tileset/Tilemap_color1.png" id="2_qq8ng"]
@@ -38,6 +38,7 @@
 [ext_resource type="Texture2D" uid="uid://crfrl66arv8hj" path="res://assets/Terrain/Resources/Wood/Trees/Tree3.png" id="30_vcyrc"]
 [ext_resource type="Texture2D" uid="uid://ddeotchuyc7h3" path="res://assets/Terrain/Resources/Wood/Trees/Tree4.png" id="31_7fa4l"]
 [ext_resource type="Script" uid="uid://xv1nackckx0h" path="res://scripts/party_manager.gd" id="38_7fa4l"]
+[ext_resource type="PackedScene" uid="uid://bcwga5bcxj6cb" path="res://scenes/ui/lost.tscn" id="39_1tr8i"]
 [ext_resource type="Texture2D" uid="uid://g80hw0d41i8c" path="res://assets/effects/spark.png" id="39_hxsdp"]
 [ext_resource type="PackedScene" uid="uid://b0h0b2cpm8gto" path="res://scenes/characters/warrior.tscn" id="40_oq762"]
 [ext_resource type="PackedScene" uid="uid://crptpm7brbr5u" path="res://scenes/characters/monk.tscn" id="41_a40xn"]
@@ -7998,6 +7999,7 @@ tile_set = SubResource("TileSet_388hl")
 [node name="party_manager" type="Node2D" parent="."]
 z_index = 5
 script = ExtResource("38_7fa4l")
+game_over_scene = ExtResource("39_1tr8i")
 
 [node name="switch_vfx" type="AnimatedSprite2D" parent="party_manager"]
 z_index = 100
