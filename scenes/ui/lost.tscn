@@ -186,4 +186,4 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_xwb74")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_s0wou")
 theme_override_styles/hover = SubResource("StyleBoxFlat_geqfl")
 theme_override_styles/focus = SubResource("StyleBoxFlat_yag10")
-text = "EXIT"
+text = "MAIN MENU"

@@ -1,6 +1,7 @@
-[gd_scene load_steps=15 format=3 uid="uid://0txw3ckna4f4"]
+[gd_scene load_steps=12 format=3 uid="uid://0txw3ckna4f4"]
 
 [ext_resource type="Texture2D" uid="uid://h8lgb1y1phux" path="res://assets/UI/Buttons/Button_Blue_3Slides_Pressed.png" id="1_2goe5"]
+[ext_resource type="Script" uid="uid://b30segxxdio3o" path="res://scripts/ui/won.gd" id="1_adlx4"]
 [ext_resource type="Texture2D" uid="uid://1swawdw2lfju" path="res://assets/UI/Buttons/Button_Blue_3Slides.png" id="2_0lqna"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_adlx4"]
@@ -27,50 +28,6 @@ Button/styles/normal = SubResource("StyleBoxTexture_jsy1c")
 Label/font_sizes/font_size = 100
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_jduas")
 VBoxContainer/constants/separation = 20
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x4mqo"]
-content_margin_left = 4.0
-content_margin_top = 8.0
-content_margin_right = 4.0
-content_margin_bottom = 8.0
-bg_color = Color(0, 0, 0, 0.39215687)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1mq7k"]
-content_margin_left = 4.0
-content_margin_top = 8.0
-content_margin_right = 4.0
-content_margin_bottom = 8.0
-bg_color = Color(0, 0, 0, 0.39215687)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lidvt"]
-content_margin_left = 4.0
-content_margin_top = 8.0
-content_margin_right = 4.0
-content_margin_bottom = 8.0
-bg_color = Color(0, 0, 0, 0.39215687)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v6g3e"]
-content_margin_left = 4.0
-content_margin_top = 8.0
-content_margin_right = 4.0
-content_margin_bottom = 8.0
-bg_color = Color(0, 0, 0, 0.39215687)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lkl2y"]
 content_margin_left = 4.0
@@ -117,6 +74,7 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
 [node name="won" type="CanvasLayer"]
+script = ExtResource("1_adlx4")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 anchors_preset = 15
@@ -168,15 +126,6 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 6
 
-[node name="Restart" type="Button" parent="NinePatchRect/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 25
-theme_override_styles/normal = SubResource("StyleBoxFlat_x4mqo")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_1mq7k")
-theme_override_styles/hover = SubResource("StyleBoxFlat_lidvt")
-theme_override_styles/focus = SubResource("StyleBoxFlat_v6g3e")
-text = "RESTART"
-
 [node name="Quit" type="Button" parent="NinePatchRect/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 25
@@ -184,4 +133,4 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_lkl2y")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_e62wi")
 theme_override_styles/hover = SubResource("StyleBoxFlat_a3kqb")
 theme_override_styles/focus = SubResource("StyleBoxFlat_ue8d3")
-text = "QUIT"
+text = "MAIN MENU"

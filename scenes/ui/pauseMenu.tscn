@@ -241,7 +241,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_iba8h")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_ao88k")
 theme_override_styles/hover = SubResource("StyleBoxFlat_jt4wt")
 theme_override_styles/focus = SubResource("StyleBoxFlat_6jlih")
-text = "QUIT"
+text = "MAIN MENU"
 
 [connection signal="pressed" from="NinePatchRect/VBoxContainer/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="NinePatchRect/VBoxContainer/Restart" to="." method="_on_restart_pressed"]
