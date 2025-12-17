@@ -22,6 +22,7 @@ AudioManager="*res://scenes/audio_manager.tscn"
 [display]
 
 window/stretch/mode="canvas_items"
+window/main_scene="uid://dn0fviuxjiqgp"
 
 [gui]
 

@@ -8,20 +8,54 @@ const SWITCH_COOLDOWN = 1.0
 const onCharacterSwitchSpeed = 0.3
 var queued_heal_amount: int = 0 
 
+# Make sure to assign Echo Deck Ui in the Inspector!
+@export var echo_deck_ui: CanvasLayer 
 @onready var camera: Camera2D = %Camera2D
 @onready var switch_vfx: AnimatedSprite2D = $switch_vfx
-@export var echo_deck_ui: CanvasLayer 
 
 func _ready():
 	switch_vfx.visible = false 
 	
-	# 1. Setup Characters
+	# -----------------------------------------------------------
+	# 1. HARDCODED LEVEL PROGRESSION
+	# -----------------------------------------------------------
+	# We get the current scene filename (e.g., "village1", "island1")
+	var current_scene = get_tree().current_scene.name.to_lower()
+	var allowed_count = 1 # Default (Village1 = Warrior only)
+	
+	# Check string match for your level names
+	if "island1" in current_scene:
+		allowed_count = 2 # Warrior + Monk
+	elif "island2" in current_scene:
+		allowed_count = 3 # Warrior + Monk + Lancer
+	elif "island3" in current_scene:
+		allowed_count = 4 # Warrior + Monk + Lancer + Goblin
+	elif "stronghold" in current_scene:
+		allowed_count = 4 # Max Party
+	
+	# -----------------------------------------------------------
+	# 2. SETUP CHARACTERS (With Filtering)
+	# -----------------------------------------------------------
+	var found_count = 0
+	
+	# Loop through children nodes (Warrior, Monk, etc.)
 	for child in get_children():
 		if child is CharacterBody2D:
+			# If we have already reached the allowed count for this level, 
+			# REMOVE the extra characters from the game.
+			if found_count >= allowed_count:
+				child.queue_free()
+				continue
+				
 			characters.append(child)
+			found_count += 1
+			
 			if child.has_signal("character_died"):
 				child.character_died.connect(_on_character_died)
 	
+	# -----------------------------------------------------------
+	# 3. INITIALIZE REMAINING CHARACTERS
+	# -----------------------------------------------------------
 	for i in range(characters.size()):
 		var char_node = characters[i]
 		
@@ -40,8 +74,15 @@ func _ready():
 		if i == 0: activate_character(characters[i])
 		else: deactivate_character(characters[i])
 
-	# 2. Setup UI Connections
+	# -----------------------------------------------------------
+	# 4. SETUP UI CONNECTIONS & HIDE SLOTS
+	# -----------------------------------------------------------
 	if echo_deck_ui:
+		# FIXED: Use call_deferred so the UI has time to load its variables 
+		# before we try to access them.
+		if echo_deck_ui.has_method("setup_deck_slots"):
+			echo_deck_ui.call_deferred("setup_deck_slots", characters.size())
+			
 		echo_deck_ui.switch_requested.connect(_on_ui_switch_requested)
 		echo_deck_ui.skill_button_pressed.connect(_on_ui_skill_pressed)
 		
@@ -53,9 +94,8 @@ func _ready():
 		if characters.size() > 0:
 			update_ui_button_state(characters[0])
 
-# --- NEW: Handle Stats Request ---
+# --- Handle Stats Request ---
 func _on_ui_stats_requested():
-	# Send the character data array back to the UI
 	echo_deck_ui.show_stats_screen(characters)
 
 func _unhandled_input(event):
@@ -81,11 +121,9 @@ func _on_char_ability_used(_time, max_time):
 
 # --- SWITCHING LOGIC ---
 func try_switch_to_index(target_index: int):
-	# Gatekeeper: Cooldowns & Dead Checks
+	# Gatekeeper
 	if is_switching or not can_switch: return
 	if target_index >= characters.size(): return
-	
-	# NEW: Optimization to prevent switching to self
 	if target_index == active_character_index: return
 	
 	if characters[target_index].is_dead:
@@ -99,8 +137,7 @@ func perform_switch(target_index: int):
 	
 	var old_char = characters[active_character_index]
 	
-	# NEW: Audio (Wrapped in has_singleton check just in case, but usually called directly)
-	# Assuming you have an Autoload named AudioManager
+	# Audio
 	if has_node("/root/AudioManager"):
 		get_node("/root/AudioManager").play_sfx("switch", 0.1)
 	
@@ -110,7 +147,7 @@ func perform_switch(target_index: int):
 	active_character_index = target_index
 	var new_char = characters[active_character_index]
 	
-	# --- UPDATE UI ---
+	# Update UI
 	if echo_deck_ui:
 		echo_deck_ui.highlight_card(active_character_index)
 		update_ui_button_state(new_char)
@@ -120,9 +157,9 @@ func perform_switch(target_index: int):
 	deactivate_character(old_char)
 	activate_character(new_char)
 	
-	# NEW: Invulnerability Trigger on Switch
+	# Invulnerability
 	if new_char.has_method("start_invulnerability"):
-		new_char.start_invulnerability() # Removed 'false' arg to match likely existing method signature
+		new_char.start_invulnerability()
 	
 	# Visuals & Speed
 	var duration = 0.5 
@@ -178,8 +215,6 @@ func play_vfx(pos):
 
 func activate_character(char_node):
 	if char_node.is_dead: return
-	
-	# NEW: Reset Visuals check
 	if char_node.has_method("reset_visuals"):
 		char_node.reset_visuals()
 		
@@ -191,7 +226,6 @@ func activate_character(char_node):
 	if camera: camera.target = char_node
 
 func deactivate_character(char_node):
-	# NEW: Reset Visuals check
 	if char_node.has_method("reset_visuals"):
 		char_node.reset_visuals()
 

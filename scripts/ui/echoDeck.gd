@@ -6,6 +6,7 @@ signal skill_button_pressed
 signal stats_requested 
 
 # --- REFERENCES ---
+# These paths must match your Scene Tree exactly
 @onready var cards = [
 	$MarginContainer/VBoxContainer/HBoxContainer1/PanelContainer1, 
 	$MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2, 
@@ -14,7 +15,7 @@ signal stats_requested
 ]
 
 @onready var pause_button = $MainMenu 
-@onready var pause_menu_layer = get_node("../pauseMenu")
+@onready var pause_menu_layer = get_node_or_null("../pauseMenu") 
 
 # --- STATS MODAL REFERENCES ---
 @onready var stats_modal = $StatsModal
@@ -34,7 +35,8 @@ func _ready():
 
 	# 2. CONNECT SIGNALS
 	for i in range(cards.size()):
-		cards[i].gui_input.connect(_on_card_input.bind(i))
+		if not cards[i].gui_input.is_connected(_on_card_input.bind(i)):
+			cards[i].gui_input.connect(_on_card_input.bind(i))
 	
 	if pause_button: pause_button.pressed.connect(_on_pause_pressed)
 	if stats_tab_btn: stats_tab_btn.pressed.connect(_on_request_stats)
@@ -42,18 +44,34 @@ func _ready():
 
 	set_process(true)
 
+# --- NEW: HIDE PARENT CONTAINERS ---
+# This hides the HBoxContainer so the layout collapses and removes empty space
+func setup_deck_slots(active_count: int):
+	for i in range(cards.size()):
+		var slot_parent = cards[i].get_parent() # Gets the HBoxContainer
+		
+		if i < active_count:
+			# Show Card and its Container
+			cards[i].visible = true
+			cards[i].modulate = Color(1, 1, 1, 1)
+			if slot_parent is Control:
+				slot_parent.visible = true
+		else:
+			# Hide Card and its Container
+			cards[i].visible = false
+			if slot_parent is Control:
+				slot_parent.visible = false
+
 func _input(event):
-	# 1. Switching
+	# 1. Switching Shortcuts
 	if event.is_action_pressed("switch_1"): emit_signal("switch_requested", 0)
 	elif event.is_action_pressed("switch_2"): emit_signal("switch_requested", 1)
 	elif event.is_action_pressed("switch_3"): emit_signal("switch_requested", 2) 
 	elif event.is_action_pressed("switch_4"): emit_signal("switch_requested", 3)
 	
-	# 2. Stats (Tab)
-	if event.is_action_pressed("show_stats"):
-		_on_request_stats() 
-	elif event.is_action_released("show_stats"):
-		_on_close_stats()   
+	# 2. Stats Screen Shortcut
+	if event.is_action_pressed("show_stats"): _on_request_stats() 
+	elif event.is_action_released("show_stats"): _on_close_stats()   
 
 # --- PAUSE LOGIC ---
 func _on_pause_pressed():
@@ -72,8 +90,11 @@ func show_stats_screen(characters_data: Array):
 	stats_modal.visible = true
 	
 	for i in range(stat_columns.size()):
-		if i >= characters_data.size(): break
+		if i >= characters_data.size():
+			stat_columns[i].visible = false
+			continue
 		
+		stat_columns[i].visible = true
 		var column = stat_columns[i]
 		var char_node = characters_data[i]
 		
@@ -89,24 +110,22 @@ func show_stats_screen(characters_data: Array):
 		if spd_lbl and "speed" in char_node: spd_lbl.text = "SPD: %s" % char_node.speed
 		if portrait and "portrait_img" in char_node: portrait.texture = char_node.portrait_img
 
-# --- UI UPDATES ---
+# --- UI INTERACTION ---
 func _on_card_input(event: InputEvent, index: int):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			# --- THE FIX IS HERE ---
-			# This tells Godot: "The UI ate this click. Don't send it to the Player."
 			get_viewport().set_input_as_handled()
-			
 			emit_signal("switch_requested", index)
 
 func _on_skill_button_pressed():
-	# Mark this handled too, just in case
 	get_viewport().set_input_as_handled()
 	emit_signal("skill_button_pressed")
 
 func highlight_card(active_index):
 	for i in range(cards.size()):
-		cards[i].modulate = Color(1, 1, 1, 1) if i == active_index else Color(0.5, 0.5, 0.5, 0.8)
+		# Only check visible cards
+		if cards[i].visible:
+			cards[i].modulate = Color(1, 1, 1, 1) if i == active_index else Color(0.5, 0.5, 0.5, 0.8)
 
 func update_character_health(index: int, current_hp: int, max_hp: int):
 	if index < 0 or index >= cards.size(): return
@@ -115,27 +134,17 @@ func update_character_health(index: int, current_hp: int, max_hp: int):
 	if not progress_bar: progress_bar = card.find_child("TextureProgressBar", true, false)
 	
 	if progress_bar:
-		# 1. Update Values
 		progress_bar.min_value = 0
 		progress_bar.max_value = max_hp
 		progress_bar.value = current_hp
 		
-		# 2. Calculate Percentage
-		# We convert to float to get a decimal (e.g., 0.5 for 50%)
-		var percent = float(current_hp) / float(max_hp)
+		var percent = float(current_hp) / float(max_hp) if max_hp > 0 else 0.0
+		var health_color = Color.GREEN 
 		
-		# 3. Determine Color
-		var health_color = Color.GREEN # Default (Healthy)
-		
-		if percent <= 0.25:
-			health_color = Color.RED    # Critical (< 25%)
-		elif percent <= 0.5:
-			health_color = Color.YELLOW # Injured (< 50%)
+		if percent <= 0.25: health_color = Color.RED
+		elif percent <= 0.5: health_color = Color.YELLOW
 			
-		# 4. Apply Color
 		if progress_bar is TextureProgressBar:
-			# For TextureProgressBar, we tint ONLY the fill bar
 			progress_bar.tint_progress = health_color
 		else:
-			# For standard ProgressBar, we tint the whole node (easiest method)
 			progress_bar.modulate = health_color
