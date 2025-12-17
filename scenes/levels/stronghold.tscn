@@ -114,7 +114,7 @@ func _play_ending_sequence():
 	var tween = create_tween()
 	tween.tween_property(fade_overlay, \"color:a\", 1.0, 1.5)
 	await tween.finished
-	# get_tree().change_scene_to_file(\"res://levels/game.tcsn\")
+	get_tree().change_scene_to_file(\"res://scenes/ui/won.tscn\")
 "
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_uelme"]

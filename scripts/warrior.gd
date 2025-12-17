@@ -8,6 +8,6 @@ func _ready():
 	max_hp = 100
 	defense = 6
 	crit_chance = 0.3
-	damage = 7
+	damage = 100
 	
 	hp = max_hp
