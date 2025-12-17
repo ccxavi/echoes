@@ -14,7 +14,7 @@ signal enemy_died
 @export var knockback_power = 400.0    
 
 @export_group("AI")
-@export var detection_range = 200.0 
+@export var detection_range = 400.0 
 @export var stop_distance = 20.0    
 @export var attack_windup_time = 0.5
 @export var alert_duration = 0.6 

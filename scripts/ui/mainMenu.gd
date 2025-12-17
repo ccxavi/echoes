@@ -1,7 +1,7 @@
 extends Control
 
 func _ready() -> void:
-	AudioManager.play_music("menu_theme") 
+	AudioManager.play_music("menu_theme", -10.0, true)
 
 func _process(_delta: float) -> void:
 	pass

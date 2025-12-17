@@ -9,8 +9,6 @@ extends CanvasLayer
 @onready var grid: GridContainer = $ScrollContainer/GridContainer
 
 func _ready():
-	AudioManager.play_music("menu_theme")
-	
 	# Clear any dummy children used for testing
 	for child in grid.get_children():
 		child.queue_free()

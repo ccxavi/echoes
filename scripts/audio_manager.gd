@@ -65,18 +65,28 @@ func _get_available_player() -> AudioStreamPlayer:
 	# This keeps the game from crashing or staying silent during chaos
 	return players[0]
 
-func play_music(track_name: String, volume_db: float = -10.0):
+# --- NEW: MUSIC FUNCTION ---
+func play_music(track_name: String, volume_db: float = -10.0, loop: bool = true):
 	if not music_tracks.has(track_name):
 		print("Music track not found: ", track_name)
 		return
 	
 	var stream = music_tracks[track_name]
 	
-	# LOGIC: If the requested song is ALREADY playing, do nothing.
-	# This prevents the music from restarting when you go from Main Menu -> Level Select
+	# 1. APPLY LOOP SETTING
+	# We have to check the type of file because .wav uses a different property name than .ogg/.mp3
+	if stream is AudioStreamOggVorbis or stream is AudioStreamMP3:
+		stream.loop = loop
+	elif stream is AudioStreamWAV:
+		stream.loop_mode = AudioStreamWAV.LOOP_FORWARD if loop else AudioStreamWAV.LOOP_DISABLED
+	
+	# 2. CHECK IF ALREADY PLAYING
+	# If it's the same track and playing, we just update volume/loop state but don't restart
 	if music_player.stream == stream and music_player.playing:
+		music_player.volume_db = volume_db
 		return
 	
+	# 3. PLAY NEW TRACK
 	music_player.stream = stream
 	music_player.volume_db = volume_db
 	music_player.play()

@@ -1,14 +1,14 @@
-[gd_scene load_steps=21 format=3 uid="uid://du6scg0nqprkx"]
+[gd_scene load_steps=19 format=3 uid="uid://du6scg0nqprkx"]
 
 [ext_resource type="Script" uid="uid://b8jctukc2vsa4" path="res://scripts/ui/echoDeck.gd" id="1_5yc16"]
-[ext_resource type="Texture2D" uid="uid://1swawdw2lfju" path="res://assets/UI/Buttons/Button_Blue_3Slides.png" id="2_0rcyc"]
 [ext_resource type="Texture2D" uid="uid://ccuskvidtdhe2" path="res://assets/echoDeck/warrior.png" id="2_2p0xq"]
 [ext_resource type="Texture2D" uid="uid://bajwgr45km7xi" path="res://assets/echoDeck/monk.png" id="3_slrej"]
 [ext_resource type="Texture2D" uid="uid://bllpf2n2o44tk" path="res://assets/echoDeck/lancer.png" id="4_0rcyc"]
-[ext_resource type="Texture2D" uid="uid://bdq7ya6j1l145" path="res://assets/UI/Buttons/Button_Blue.png" id="4_a561q"]
 [ext_resource type="Texture2D" uid="uid://47t1jva5q6nx" path="res://assets/echoDeck/1.png" id="4_hjhig"]
-[ext_resource type="Texture2D" uid="uid://hjpbg638lltf" path="res://assets/echoDeck/pauseButton.png" id="5_0rcyc"]
 [ext_resource type="Texture2D" uid="uid://bas5p868k7gkg" path="res://assets/echoDeck/goblin.png" id="5_4mf3d"]
+[ext_resource type="Texture2D" uid="uid://dbv1vg8o17j8u" path="res://assets/echoDeck/2.png" id="6_gdm8m"]
+[ext_resource type="Texture2D" uid="uid://cpaqs4bag5bq" path="res://assets/echoDeck/3.png" id="7_p3o5f"]
+[ext_resource type="Texture2D" uid="uid://dv37k84ticca7" path="res://assets/echoDeck/4.png" id="8_vo2he"]
 [ext_resource type="Texture2D" uid="uid://cxbt2ks1na5bn" path="res://assets/echoDeck/warrior1.png" id="10_ihr7g"]
 [ext_resource type="Texture2D" uid="uid://bmwoquxd5r7d0" path="res://assets/echoDeck/monk1.png" id="11_wapqf"]
 [ext_resource type="Texture2D" uid="uid://dvlsltbwtrovo" path="res://assets/echoDeck/lancer1.png" id="12_08s4m"]
@@ -50,13 +50,6 @@ corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
-
-[sub_resource type="Gradient" id="Gradient_a561q"]
-offsets = PackedFloat32Array(0.16143498, 0.42152467)
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_slrej"]
-gradient = SubResource("Gradient_a561q")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m666p"]
 content_margin_left = 4.0
@@ -188,7 +181,7 @@ stretch_mode = 5
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 action_mode = 0
-texture_normal = ExtResource("4_hjhig")
+texture_normal = ExtResource("6_gdm8m")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -238,7 +231,7 @@ stretch_mode = 5
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 action_mode = 0
-texture_normal = ExtResource("4_hjhig")
+texture_normal = ExtResource("7_p3o5f")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -288,122 +281,34 @@ stretch_mode = 5
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 action_mode = 0
-texture_normal = ExtResource("4_hjhig")
+texture_normal = ExtResource("8_vo2he")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="AbilityContainer" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -60.0
-offset_top = -60.0
-offset_right = -10.0
-offset_bottom = -10.0
-grow_horizontal = 0
-grow_vertical = 0
-mouse_filter = 2
+[node name="MainMenu" type="MenuButton" parent="."]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 62.0
+offset_bottom = 60.0
+action_mode = 1
+text = "||"
+flat = false
 
-[node name="SkillButton" type="TextureButton" parent="AbilityContainer"]
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 0
-offset_right = 50.0
-offset_bottom = 50.0
-grow_horizontal = 0
-grow_vertical = 0
-action_mode = 0
-texture_normal = ExtResource("4_a561q")
-ignore_texture_size = true
-stretch_mode = 5
-
-[node name="CooldownOverlay" type="TextureProgressBar" parent="AbilityContainer/SkillButton"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -32.0
-offset_top = -32.0
-offset_right = 32.0
-offset_bottom = 32.0
-grow_horizontal = 2
-grow_vertical = 2
-max_value = 3.0
-fill_mode = 5
-texture_progress = SubResource("GradientTexture2D_slrej")
-tint_progress = Color(0, 0, 0, 0.5882353)
-
-[node name="MainMenu" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 40.0
-offset_top = 40.0
-offset_right = 80.0
-offset_bottom = 80.0
-mouse_filter = 2
-
-[node name="Pause" type="TextureButton" parent="MainMenu"]
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -79.0
-offset_top = -68.0
-offset_right = 21.0
-grow_horizontal = 0
-grow_vertical = 0
-action_mode = 0
-texture_normal = ExtResource("5_0rcyc")
-ignore_texture_size = true
-stretch_mode = 5
-
-[node name="Tab" type="Control" parent="."]
-layout_mode = 3
+[node name="Tab" type="MenuButton" parent="."]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -60.0
-offset_top = 40.0
-offset_right = -10.0
-offset_bottom = 90.0
+offset_left = -62.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 60.0
 grow_horizontal = 0
-mouse_filter = 2
-
-[node name="Stats" type="TextureButton" parent="Tab"]
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 0
-offset_left = -145.0
-offset_top = -33.0
-offset_right = 50.0
-offset_bottom = 50.0
-action_mode = 0
-texture_normal = ExtResource("2_0rcyc")
-ignore_texture_size = true
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="Tab/Stats"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 5.0
-offset_right = -7.0
-offset_bottom = -23.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "STATS"
-horizontal_alignment = 1
-vertical_alignment = 1
+action_mode = 1
+text = "="
+flat = false
 
 [node name="StatsModal" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
