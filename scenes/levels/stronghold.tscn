@@ -7935,6 +7935,7 @@ position = Vector2(-1, 0)
 script = SubResource("GDScript_a40xn")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 3
 
 [node name="FadeOverlay" type="ColorRect" parent="CanvasLayer"]
 anchors_preset = 15
@@ -8027,5 +8028,7 @@ position = Vector2(-66, 1)
 position = Vector2(-320, 10)
 
 [node name="pauseMenu" parent="." instance=ExtResource("46_oq762")]
+layer = 2
 
 [node name="echoDeck" parent="." instance=ExtResource("47_a40xn")]
+layer = 1

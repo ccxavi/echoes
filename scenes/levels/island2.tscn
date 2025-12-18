@@ -8986,6 +8986,7 @@ position = Vector2(1059, -398)
 position = Vector2(1267, -100)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 3
 
 [node name="FadeOverlay" type="ColorRect" parent="CanvasLayer"]
 anchors_preset = 15
@@ -8997,5 +8998,7 @@ mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
 [node name="pauseMenu" parent="." instance=ExtResource("52_r587r")]
+layer = 2
 
 [node name="echoDeck" parent="." instance=ExtResource("53_adlhc")]
+layer = 1

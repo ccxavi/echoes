@@ -159,3 +159,16 @@ func update_character_health(index: int, current_hp: int, max_hp: int):
 			progress_bar.tint_progress = health_color
 		else:
 			progress_bar.modulate = health_color
+
+func trigger_cooldown(duration: float):
+	# Set to Max Value immediately
+	cooldown_overlay.value = 100
+	cooldown_overlay.show()
+
+	# Tween from 100 (Max) down to 0 (Min)
+	var tween = create_tween()
+	tween.tween_property(cooldown_overlay, "value", 0, duration)
+
+	# Hide when finished
+	tween.finished.connect(func(): cooldown_overlay.hide())
+	
