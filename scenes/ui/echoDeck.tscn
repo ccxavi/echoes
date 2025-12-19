@@ -21,8 +21,8 @@ content_margin_right = 10.0
 content_margin_bottom = 10.0
 bg_color = Color(0, 0, 0, 0.39215687)
 corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
+corner_radius_top_right = 45
+corner_radius_bottom_right = 45
 corner_radius_bottom_left = 4
 
 [sub_resource type="Theme" id="Theme_hjhig"]
@@ -87,6 +87,8 @@ theme_override_constants/separation = 15
 
 [node name="HBoxContainer1" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
 
 [node name="PanelContainer1" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer1"]
 layout_mode = 2
@@ -119,13 +121,44 @@ theme_override_styles/background = SubResource("StyleBoxFlat_orrom")
 theme_override_styles/fill = SubResource("StyleBoxFlat_tttnm")
 show_percentage = false
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer1/PanelContainer1/HBoxContainer"]
-custom_minimum_size = Vector2(50, 50)
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer1/PanelContainer1/HBoxContainer"]
+custom_minimum_size = Vector2(50, 25)
 layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer1/PanelContainer1/HBoxContainer/Control"]
+z_index = 1
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 0
+offset_left = -22.0
+offset_top = -52.5
+offset_right = 86.0
+offset_bottom = 60.5
+size_flags_horizontal = 3
 mouse_filter = 2
 texture = ExtResource("2_2p0xq")
-expand_mode = 2
+expand_mode = 1
 stretch_mode = 5
+flip_h = true
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="MarginContainer/VBoxContainer/HBoxContainer1/PanelContainer1/HBoxContainer/Control"]
+custom_minimum_size = Vector2(108, 113)
+layout_mode = 0
+offset_left = -22.0
+offset_top = -52.5
+offset_right = 86.0
+offset_bottom = 60.5
+value = 100.0
+fill_mode = 4
+tint_progress = Color(0, 0, 0, 0.5882353)
+
+[node name="CountdownLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer1/PanelContainer1/HBoxContainer/Control"]
+layout_mode = 0
+offset_left = -22.0
+offset_top = -52.5
+offset_right = 86.0
+offset_bottom = 60.5
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="SkillButton" type="TextureButton" parent="MarginContainer/VBoxContainer/HBoxContainer1"]
 custom_minimum_size = Vector2(50, 50)
@@ -137,6 +170,8 @@ stretch_mode = 5
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
 
 [node name="PanelContainer2" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
@@ -169,13 +204,24 @@ theme_override_styles/background = SubResource("StyleBoxFlat_orrom")
 theme_override_styles/fill = SubResource("StyleBoxFlat_tttnm")
 show_percentage = false
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer"]
-custom_minimum_size = Vector2(50, 50)
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer"]
+custom_minimum_size = Vector2(50, 25)
 layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer/Control"]
+z_index = 1
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 0
+offset_left = -20.0
+offset_top = -53.5
+offset_right = 88.0
+offset_bottom = 59.5
+size_flags_horizontal = 3
 mouse_filter = 2
 texture = ExtResource("11_wapqf")
-expand_mode = 2
+expand_mode = 1
 stretch_mode = 5
+flip_h = true
 
 [node name="SkillButton" type="TextureButton" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(50, 50)
@@ -187,6 +233,8 @@ stretch_mode = 5
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
 
 [node name="PanelContainer3" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
@@ -219,13 +267,24 @@ theme_override_styles/background = SubResource("StyleBoxFlat_orrom")
 theme_override_styles/fill = SubResource("StyleBoxFlat_tttnm")
 show_percentage = false
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/PanelContainer3/HBoxContainer"]
-custom_minimum_size = Vector2(50, 50)
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer3/PanelContainer3/HBoxContainer"]
+custom_minimum_size = Vector2(50, 25)
 layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/PanelContainer3/HBoxContainer/Control"]
+z_index = 1
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 0
+offset_left = -24.0
+offset_top = -39.5
+offset_right = 100.0
+offset_bottom = 51.5
+size_flags_horizontal = 3
 mouse_filter = 2
 texture = ExtResource("4_0rcyc")
-expand_mode = 2
+expand_mode = 1
 stretch_mode = 5
+flip_h = true
 
 [node name="SkillButton" type="TextureButton" parent="MarginContainer/VBoxContainer/HBoxContainer3"]
 custom_minimum_size = Vector2(50, 50)
@@ -237,6 +296,8 @@ stretch_mode = 5
 
 [node name="HBoxContainer4" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
 
 [node name="PanelContainer4" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer4"]
 layout_mode = 2
@@ -269,13 +330,24 @@ theme_override_styles/background = SubResource("StyleBoxFlat_orrom")
 theme_override_styles/fill = SubResource("StyleBoxFlat_tttnm")
 show_percentage = false
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer4/PanelContainer4/HBoxContainer"]
-custom_minimum_size = Vector2(50, 50)
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer4/PanelContainer4/HBoxContainer"]
+custom_minimum_size = Vector2(50, 25)
 layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer4/PanelContainer4/HBoxContainer/Control"]
+z_index = 1
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 0
+offset_left = -13.0
+offset_top = -47.5
+offset_right = 89.0
+offset_bottom = 58.5
+size_flags_horizontal = 3
 mouse_filter = 2
 texture = ExtResource("5_4mf3d")
-expand_mode = 2
+expand_mode = 1
 stretch_mode = 5
+flip_h = true
 
 [node name="SkillButton" type="TextureButton" parent="MarginContainer/VBoxContainer/HBoxContainer4"]
 custom_minimum_size = Vector2(50, 50)

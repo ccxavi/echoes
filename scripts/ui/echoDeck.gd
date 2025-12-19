@@ -7,9 +7,16 @@ signal stats_requested
 
 # --- REFERENCES ---
 @onready var cards = [
+	$MarginContainer/VBoxContainer/HBoxContainer1/PanelContainer1, 
+	$MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2, 
+	$MarginContainer/VBoxContainer/HBoxContainer3/PanelContainer3,
+	$MarginContainer/VBoxContainer/HBoxContainer4/PanelContainer4
+]
+
+@onready var cardContainers = [
 	$MarginContainer/VBoxContainer/HBoxContainer1, 
 	$MarginContainer/VBoxContainer/HBoxContainer2, 
-	$MarginContainer/VBoxContainer/HBoxContainer3, 
+	$MarginContainer/VBoxContainer/HBoxContainer3,
 	$MarginContainer/VBoxContainer/HBoxContainer4
 ]
 
@@ -68,7 +75,7 @@ func refresh_party_ui():
 	for i in range(cards.size()):
 		if i < party_count:
 			# If character exists (e.g. 0 is always Warrior), show the UI row
-			cards[i].visible = true
+			cardContainers[i].visible = true
 			stat_columns[i].visible = true
 			
 			var member = party_members[i]
@@ -78,12 +85,12 @@ func refresh_party_ui():
 				update_character_health(i, member.hp, member.max_hp)
 			
 			# Update Portrait
-			var portrait = cards[i].find_child("Portrait", true, false)
+			var portrait = cardContainers[i].find_child("Portrait", true, false)
 			if portrait and "portrait_img" in member:
 				portrait.texture = member.portrait_img
 		else:
 			# If character doesn't exist (e.g. Monk in Village), hide the UI row
-			cards[i].visible = false
+			cardContainers[i].visible = false
 			stat_columns[i].visible = false
 
 # --- INPUT & LOGIC ---
@@ -160,15 +167,5 @@ func update_character_health(index: int, current_hp: int, max_hp: int):
 		else:
 			progress_bar.modulate = health_color
 
-func trigger_cooldown(duration: float):
-	# Set to Max Value immediately
-	cooldown_overlay.value = 100
-	cooldown_overlay.show()
 
-	# Tween from 100 (Max) down to 0 (Min)
-	var tween = create_tween()
-	tween.tween_property(cooldown_overlay, "value", 0, duration)
-
-	# Hide when finished
-	tween.finished.connect(func(): cooldown_overlay.hide())
 	
