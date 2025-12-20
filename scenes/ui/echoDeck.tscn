@@ -1,18 +1,18 @@
-[gd_scene load_steps=19 format=3 uid="uid://du6scg0nqprkx"]
+[gd_scene load_steps=18 format=3 uid="uid://du6scg0nqprkx"]
 
 [ext_resource type="Script" uid="uid://b8jctukc2vsa4" path="res://scripts/ui/echoDeck.gd" id="1_5yc16"]
 [ext_resource type="Texture2D" uid="uid://ccuskvidtdhe2" path="res://assets/echoDeck/warrior.png" id="2_2p0xq"]
-[ext_resource type="Texture2D" uid="uid://bajwgr45km7xi" path="res://assets/echoDeck/monk.png" id="3_slrej"]
 [ext_resource type="Texture2D" uid="uid://bllpf2n2o44tk" path="res://assets/echoDeck/lancer.png" id="4_0rcyc"]
 [ext_resource type="Texture2D" uid="uid://47t1jva5q6nx" path="res://assets/echoDeck/1.png" id="4_hjhig"]
 [ext_resource type="Texture2D" uid="uid://bas5p868k7gkg" path="res://assets/echoDeck/goblin.png" id="5_4mf3d"]
 [ext_resource type="Texture2D" uid="uid://dbv1vg8o17j8u" path="res://assets/echoDeck/2.png" id="6_gdm8m"]
 [ext_resource type="Texture2D" uid="uid://cpaqs4bag5bq" path="res://assets/echoDeck/3.png" id="7_p3o5f"]
 [ext_resource type="Texture2D" uid="uid://dv37k84ticca7" path="res://assets/echoDeck/4.png" id="8_vo2he"]
-[ext_resource type="Texture2D" uid="uid://cxbt2ks1na5bn" path="res://assets/echoDeck/warrior1.png" id="10_ihr7g"]
+[ext_resource type="Texture2D" uid="uid://hjpbg638lltf" path="res://assets/echoDeck/pauseButton.png" id="10_kje1l"]
+[ext_resource type="Texture2D" uid="uid://ct7kgld3ancvk" path="res://assets/echoDeck/pressedPause.png" id="11_p3o5f"]
 [ext_resource type="Texture2D" uid="uid://bmwoquxd5r7d0" path="res://assets/echoDeck/monk1.png" id="11_wapqf"]
-[ext_resource type="Texture2D" uid="uid://dvlsltbwtrovo" path="res://assets/echoDeck/lancer1.png" id="12_08s4m"]
-[ext_resource type="Texture2D" uid="uid://bholg2afaoh5h" path="res://assets/echoDeck/goblin1.png" id="13_y3e3m"]
+[ext_resource type="Texture2D" uid="uid://dj58v1uph4sim" path="res://assets/echoDeck/hoveredPause.png" id="12_vo2he"]
+[ext_resource type="Texture2D" uid="uid://cyinyoxi82b3d" path="res://assets/echoDeck/disabledPause.png" id="13_hgt7u"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kje1l"]
 content_margin_left = 10.0
@@ -50,17 +50,6 @@ corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m666p"]
-content_margin_left = 4.0
-content_margin_top = 8.0
-content_margin_right = 4.0
-content_margin_bottom = 8.0
-bg_color = Color(0, 0, 0, 0.39215687)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
 
 [node name="echoDeck" type="CanvasLayer"]
 layer = 2
@@ -357,188 +346,14 @@ texture_normal = ExtResource("8_vo2he")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="MainMenu" type="MenuButton" parent="."]
+[node name="MainMenu" type="TextureButton" parent="."]
 offset_left = 20.0
 offset_top = 20.0
-offset_right = 62.0
-offset_bottom = 60.0
-action_mode = 1
-text = "||"
-flat = false
-
-[node name="Tab" type="MenuButton" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -62.0
-offset_top = 20.0
-offset_right = -20.0
-offset_bottom = 60.0
-grow_horizontal = 0
-action_mode = 1
-text = "="
-flat = false
-
-[node name="StatsModal" type="Control" parent="."]
-visible = false
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Dimmer" type="ColorRect" parent="StatsModal"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 0.5882353)
-
-[node name="StatsPanel" type="Panel" parent="StatsModal"]
-custom_minimum_size = Vector2(600, 400)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_m666p")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="StatsModal/StatsPanel"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 50
-
-[node name="Column1" type="VBoxContainer" parent="StatsModal/StatsPanel/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="TextureRect" type="TextureRect" parent="StatsModal/StatsPanel/HBoxContainer/Column1"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("10_ihr7g")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column1"]
-layout_mode = 2
-text = "Warrior"
-horizontal_alignment = 1
-
-[node name="Label2" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column1"]
-layout_mode = 2
-text = "HP"
-horizontal_alignment = 1
-
-[node name="Label3" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column1"]
-layout_mode = 2
-text = "Atk"
-horizontal_alignment = 1
-
-[node name="Column2" type="VBoxContainer" parent="StatsModal/StatsPanel/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="TextureRect" type="TextureRect" parent="StatsModal/StatsPanel/HBoxContainer/Column2"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("3_slrej")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column2"]
-layout_mode = 2
-text = "Monk"
-horizontal_alignment = 1
-
-[node name="Label2" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column2"]
-layout_mode = 2
-text = "HP"
-horizontal_alignment = 1
-
-[node name="Label3" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column2"]
-layout_mode = 2
-text = "Atk"
-horizontal_alignment = 1
-
-[node name="Column3" type="VBoxContainer" parent="StatsModal/StatsPanel/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="TextureRect" type="TextureRect" parent="StatsModal/StatsPanel/HBoxContainer/Column3"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("12_08s4m")
-expand_mode = 2
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column3"]
-layout_mode = 2
-text = "Lancer"
-horizontal_alignment = 1
-
-[node name="Label2" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column3"]
-layout_mode = 2
-text = "HP"
-horizontal_alignment = 1
-
-[node name="Label3" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column3"]
-layout_mode = 2
-text = "Atk"
-horizontal_alignment = 1
-
-[node name="Column4" type="VBoxContainer" parent="StatsModal/StatsPanel/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="TextureRect" type="TextureRect" parent="StatsModal/StatsPanel/HBoxContainer/Column4"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("13_y3e3m")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column4"]
-layout_mode = 2
-text = "Goblin"
-horizontal_alignment = 1
-
-[node name="Label2" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column4"]
-layout_mode = 2
-text = "HP"
-horizontal_alignment = 1
-
-[node name="Label3" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column4"]
-layout_mode = 2
-text = "Atk"
-horizontal_alignment = 1
-
-[node name="Exit" type="TextureButton" parent="StatsModal/StatsPanel"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -40.0
-offset_bottom = 40.0
-grow_horizontal = 0
+offset_right = 70.0
+offset_bottom = 70.0
+texture_normal = ExtResource("10_kje1l")
+texture_pressed = ExtResource("11_p3o5f")
+texture_hover = ExtResource("12_vo2he")
+texture_disabled = ExtResource("13_hgt7u")
 ignore_texture_size = true
 stretch_mode = 5
