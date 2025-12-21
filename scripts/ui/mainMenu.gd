@@ -5,10 +5,11 @@ func _ready() -> void:
 
 # --- BUTTON HANDLERS ---
 
-func _on_play_pressed() -> void:
+func _on_story_pressed() -> void:
 	AudioManager.play_sfx("click")
 	get_tree().change_scene_to_file("res://scenes/ui/level_selection.tscn")
 
-func _on_quit_pressed() -> void:
+
+func _on_endless_pressed() -> void:
 	AudioManager.play_sfx("click")
-	get_tree().quit()
+	get_tree().change_scene_to_file("res://scenes/levels/infinite.tscn")
