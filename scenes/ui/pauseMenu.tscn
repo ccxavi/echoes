@@ -1,8 +1,13 @@
-[gd_scene load_steps=20 format=3 uid="uid://dbvl1xbqu22qb"]
+[gd_scene load_steps=26 format=3 uid="uid://dbvl1xbqu22qb"]
 
 [ext_resource type="Script" uid="uid://dgci00jo08343" path="res://scripts/ui/pauseMenu.gd" id="1_hfklj"]
 [ext_resource type="Texture2D" uid="uid://h8lgb1y1phux" path="res://assets/UI/Buttons/Button_Blue_3Slides_Pressed.png" id="2_r5qvj"]
 [ext_resource type="Texture2D" uid="uid://1swawdw2lfju" path="res://assets/UI/Buttons/Button_Blue_3Slides.png" id="3_bcaeg"]
+[ext_resource type="Texture2D" uid="uid://cxbt2ks1na5bn" path="res://assets/echoDeck/warrior1.png" id="4_4vmgj"]
+[ext_resource type="Texture2D" uid="uid://bajwgr45km7xi" path="res://assets/echoDeck/monk.png" id="5_g8he0"]
+[ext_resource type="Texture2D" uid="uid://dvlsltbwtrovo" path="res://assets/echoDeck/lancer1.png" id="6_li6sf"]
+[ext_resource type="Texture2D" uid="uid://bholg2afaoh5h" path="res://assets/echoDeck/goblin1.png" id="7_iba8h"]
+[ext_resource type="Texture2D" uid="uid://c06y7icm2jm17" path="res://assets/echoDeck/x-button.png" id="8_ao88k"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_si01v"]
 texture = ExtResource("2_r5qvj")
@@ -161,6 +166,17 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0ud01"]
+content_margin_left = 4.0
+content_margin_top = 8.0
+content_margin_right = 4.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 0.39215687)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [node name="pauseMenu" type="CanvasLayer"]
 process_mode = 3
 layer = 3
@@ -206,10 +222,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -50.25
-offset_top = -49.0
-offset_right = 50.25
-offset_bottom = 49.0
+offset_left = -150.0
+offset_top = -82.0
+offset_right = 150.0
+offset_bottom = 140.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
@@ -234,6 +250,15 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_g8he0")
 theme_override_styles/focus = SubResource("StyleBoxFlat_li6sf")
 text = "RESTART"
 
+[node name="Stats" type="Button" parent="NinePatchRect/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+theme_override_styles/normal = SubResource("StyleBoxFlat_0vc8j")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_4vmgj")
+theme_override_styles/hover = SubResource("StyleBoxFlat_g8he0")
+theme_override_styles/focus = SubResource("StyleBoxFlat_li6sf")
+text = "STATS"
+
 [node name="Quit" type="Button" parent="NinePatchRect/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 25
@@ -243,6 +268,172 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_jt4wt")
 theme_override_styles/focus = SubResource("StyleBoxFlat_6jlih")
 text = "MAIN MENU"
 
+[node name="StatsModal" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dimmer" type="ColorRect" parent="StatsModal"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5882353)
+
+[node name="StatsPanel" type="Panel" parent="StatsModal"]
+custom_minimum_size = Vector2(600, 400)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0ud01")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="StatsModal/StatsPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 50
+
+[node name="Column1" type="VBoxContainer" parent="StatsModal/StatsPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="StatsModal/StatsPanel/HBoxContainer/Column1"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture = ExtResource("4_4vmgj")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column1"]
+layout_mode = 2
+text = "Warrior"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column1"]
+layout_mode = 2
+text = "HP"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column1"]
+layout_mode = 2
+text = "Atk"
+horizontal_alignment = 1
+
+[node name="Column2" type="VBoxContainer" parent="StatsModal/StatsPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="StatsModal/StatsPanel/HBoxContainer/Column2"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture = ExtResource("5_g8he0")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column2"]
+layout_mode = 2
+text = "Monk"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column2"]
+layout_mode = 2
+text = "HP"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column2"]
+layout_mode = 2
+text = "Atk"
+horizontal_alignment = 1
+
+[node name="Column3" type="VBoxContainer" parent="StatsModal/StatsPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="StatsModal/StatsPanel/HBoxContainer/Column3"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture = ExtResource("6_li6sf")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column3"]
+layout_mode = 2
+text = "Lancer"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column3"]
+layout_mode = 2
+text = "HP"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column3"]
+layout_mode = 2
+text = "Atk"
+horizontal_alignment = 1
+
+[node name="Column4" type="VBoxContainer" parent="StatsModal/StatsPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="StatsModal/StatsPanel/HBoxContainer/Column4"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture = ExtResource("7_iba8h")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column4"]
+layout_mode = 2
+text = "Goblin"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column4"]
+layout_mode = 2
+text = "HP"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column4"]
+layout_mode = 2
+text = "Atk"
+horizontal_alignment = 1
+
+[node name="Exit" type="TextureButton" parent="StatsModal/StatsPanel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+texture_normal = ExtResource("8_ao88k")
+ignore_texture_size = true
+stretch_mode = 5
+
 [connection signal="pressed" from="NinePatchRect/VBoxContainer/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="NinePatchRect/VBoxContainer/Restart" to="." method="_on_restart_pressed"]
+[connection signal="pressed" from="NinePatchRect/VBoxContainer/Stats" to="." method="_on_stats_pressed"]
 [connection signal="pressed" from="NinePatchRect/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
