@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://du6scg0nqprkx"]
+[gd_scene load_steps=20 format=3 uid="uid://du6scg0nqprkx"]
 
 [ext_resource type="Script" uid="uid://b8jctukc2vsa4" path="res://scripts/ui/echoDeck.gd" id="1_5yc16"]
 [ext_resource type="Texture2D" uid="uid://ccuskvidtdhe2" path="res://assets/echoDeck/warrior.png" id="2_2p0xq"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://bmwoquxd5r7d0" path="res://assets/echoDeck/monk1.png" id="11_wapqf"]
 [ext_resource type="Texture2D" uid="uid://dj58v1uph4sim" path="res://assets/echoDeck/hoveredPause.png" id="12_vo2he"]
 [ext_resource type="Texture2D" uid="uid://cyinyoxi82b3d" path="res://assets/echoDeck/disabledPause.png" id="13_hgt7u"]
+[ext_resource type="Texture2D" uid="uid://1swawdw2lfju" path="res://assets/UI/Buttons/Button_Blue_3Slides.png" id="14_kje1l"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kje1l"]
 content_margin_left = 10.0
@@ -50,6 +51,14 @@ corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hjhig"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 28.0
+texture = ExtResource("14_kje1l")
+region_rect = Rect2(8, 0, 176, 55.5)
 
 [node name="echoDeck" type="CanvasLayer"]
 layer = 2
@@ -357,3 +366,31 @@ texture_hover = ExtResource("12_vo2he")
 texture_disabled = ExtResource("13_hgt7u")
 ignore_texture_size = true
 stretch_mode = 5
+
+[node name="MarginContainer2" type="MarginContainer" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="EnemyCount" type="PanelContainer" parent="MarginContainer2"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_hjhig")
+
+[node name="InternalPadding" type="MarginContainer" parent="MarginContainer2/EnemyCount"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer2/EnemyCount/InternalPadding"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer2/EnemyCount/InternalPadding/HBoxContainer"]
+layout_mode = 2
+text = "WAVE 1 | ENEMIES: 0"
+horizontal_alignment = 1
+vertical_alignment = 1

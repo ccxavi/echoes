@@ -6,6 +6,8 @@ signal skill_button_pressed
 signal stats_requested
 
 # --- REFERENCES ---
+@onready var count_label = $MarginContainer2/EnemyCount/InternalPadding/HBoxContainer/Label
+
 @onready var cardContainers = [
 	$MarginContainer/VBoxContainer/HBoxContainer1, 
 	$MarginContainer/VBoxContainer/HBoxContainer2, 
@@ -16,18 +18,20 @@ signal stats_requested
 @onready var cards = [
 	$MarginContainer/VBoxContainer/HBoxContainer1/PanelContainer1, 
 	$MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2, 
-	$MarginContainer/VBoxContainer/HBoxContainer3/PanelContainer3,
-	$MarginContainer/VBoxContainer/HBoxContainer4/PanelContainer4
+	$MarginContainer/VBoxContainer/HBoxContainer3,
+	$MarginContainer/VBoxContainer/HBoxContainer4
 ]
 
 @onready var pause_button = $MainMenu 
 @onready var pause_menu_layer = get_node_or_null("../pauseMenu")
 
 var party_manager_ref = null
+var wave_manager_ref = null
 
 func _ready():
-	# Find Party Manager
+	# Find Managers
 	party_manager_ref = get_tree().current_scene.find_child("party_manager", true, false)
+	wave_manager_ref = get_tree().current_scene.find_child("WaveManager", true, false)
 	
 	# Wait for levels to finish instantiating characters
 	await get_tree().process_frame
@@ -42,6 +46,19 @@ func _ready():
 
 	if party_manager_ref:
 		party_manager_ref.child_order_changed.connect(refresh_party_ui)
+
+func _process(_delta: float) -> void:
+	update_enemy_ui()
+
+# --- ENEMY & WAVE HUD LOGIC ---
+
+func update_enemy_ui():
+	if count_label and wave_manager_ref:
+		var count = wave_manager_ref.enemies_alive
+		var wave = wave_manager_ref.current_wave
+		count_label.text = "WAVE %d | ENEMIES: %d" % [wave, count]
+
+# --- PARTY UI LOGIC ---
 
 func get_actual_characters() -> Array:
 	var valid_members = []
@@ -78,12 +95,9 @@ func _input(event):
 	elif event.is_action_pressed("switch_2") and party_count >= 2: emit_signal("switch_requested", 1)
 	elif event.is_action_pressed("switch_3") and party_count >= 3: emit_signal("switch_requested", 2) 
 	elif event.is_action_pressed("switch_4") and party_count >= 4: emit_signal("switch_requested", 3)
-	
-	# Open Pause/Stats Menu
 
 func _on_pause_pressed():
 	if pause_menu_layer:
-		# Call the toggle function in the pause menu script
 		pause_menu_layer._toggle_pause_state()
 
 func _on_card_input(event: InputEvent, index: int):
