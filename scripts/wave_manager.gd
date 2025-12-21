@@ -99,14 +99,18 @@ func create_enemy(scene: PackedScene, pos: Vector2):
 	enemies_alive += 1
 
 func _on_enemy_died():
+	# If the game is closing, or this node isn't in the scene anymore,
+	# stop immediately. Do not try to access get_tree().
+	if not is_inside_tree():
+		return
+
 	enemies_alive -= 1
 	
-	# If everyone is dead AND we finished spawning...
 	if enemies_alive <= 0 and not is_spawning:
 		print("Wave Cleared!")
 		wave_completed.emit()
 		
-		# Wait for next wave
+		# Now it is safe to call get_tree() because of the check above
 		await get_tree().create_timer(time_between_waves).timeout
 		start_next_wave()
 
