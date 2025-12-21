@@ -19,6 +19,9 @@ signal enemy_died
 @export var attack_windup_time = 0.5
 @export var alert_duration = 0.6 
 @export var confusion_duration = 1.5 # How long to wait at last seen spot
+@export var wander_radius: float = 150.0 # How far from spawn they can roam
+@export var min_wander_wait: float = 1.0
+@export var max_wander_wait: float = 3.0
 
 # --- STATE VARIABLES ---
 var hp = max_hp
@@ -26,6 +29,9 @@ var can_attack = true
 var knockback_velocity = Vector2.ZERO 
 var is_alerted: bool = false 
 var is_reacting: bool = false 
+var home_position: Vector2 # Where they spawned (the center of their wander circle)
+var wander_target: Variant = null # Current random spot we are walking to
+var wander_timer: float = 0.0 # How long to stand still between walks
 
 # --- MEMORY VARIABLES ---
 var last_known_pos: Variant = null # Stores Vector2 or null
@@ -52,6 +58,8 @@ var burn_tick_timer: float = 0.0
 func _ready():
 	hp = max_hp
 	if death: death.visible = false
+	
+	home_position = global_position
 	
 	vfx.visible = false 
 	if not vfx.animation_finished.is_connected(_on_vfx_finished):
@@ -131,10 +139,14 @@ func _physics_process(delta: float) -> void:
 			# We arrived at the spot, but player is gone.
 			start_confusion_sequence()
 			
-	# CASE C: No target, no memory
+			# This makes them patrol the area where they last saw you
+			home_position = global_position
+			
+	# CASE C: No target, no memory -> WANDER
 	else:
 		if is_alerted: is_alerted = false
-		idle_behavior()
+		
+		wander_behavior(delta)
 
 # --- SEQUENCES ---
 
@@ -376,3 +388,58 @@ func can_see_target(target: Node2D) -> bool:
 	
 	# If we hit a wall or nothing, return false
 	return false
+
+func wander_behavior(delta: float):
+	# 1. If we are waiting, count down and stand still
+	if wander_timer > 0:
+		wander_timer -= delta
+		velocity = Vector2.ZERO
+		move_and_slide()
+		play_anim("idle")
+		return
+
+	# 2. If we don't have a target, pick a valid random one
+	if wander_target == null:
+		wander_target = get_random_wander_point()
+	
+	# 3. Move towards the wander target
+	move_to_position(wander_target)
+	
+	# --- NEW: WALL AVOIDANCE LOGIC ---
+	# We check if the move_and_slide() inside move_to_position() hit anything
+	if get_slide_collision_count() > 0:
+		var collision = get_slide_collision(0)
+		var collider = collision.get_collider()
+		
+		# Check if we hit something that IS NOT a Player or Enemy (so, a Wall/Prop)
+		# (We assume players/enemies are in groups "player" and "enemy")
+		if collider and not collider.is_in_group("player") and not collider.is_in_group("enemy"):
+			
+			# "Bonk!" - We hit a wall.
+			# 1. Clear the invalid target
+			wander_target = null
+			
+			# 2. Briefly pause to "think" before turning (makes it look natural)
+			wander_timer = randf_range(0.5, 1.0) 
+			
+			# 3. Stop moving immediately
+			velocity = Vector2.ZERO
+			play_anim("idle")
+			return
+
+	# 4. Check if we arrived at destination
+	var dist_to_target = global_position.distance_to(wander_target)
+	if dist_to_target < 10.0:
+		wander_target = null
+		wander_timer = randf_range(min_wander_wait, max_wander_wait)
+		velocity = Vector2.ZERO
+		play_anim("idle")
+
+func get_random_wander_point() -> Vector2:
+	# Pick a random angle and distance
+	var angle = randf() * 2.0 * PI
+	var dist = randf() * wander_radius
+	
+	# Calculate offset based on Home Position (so they don't wander off the map)
+	var offset = Vector2(cos(angle), sin(angle)) * dist
+	return home_position + offset
