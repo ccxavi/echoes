@@ -57,79 +57,6 @@
 [ext_resource type="PackedScene" uid="uid://dr8df60xkxb82" path="res://scenes/enemies/tnt.tscn" id="50_b2ybv"]
 
 [sub_resource type="GDScript" id="GDScript_ann8j"]
-script/source = "extends Node2D
-
-const LEVEL_DIALOGUE = preload(\"res://dialogue/level1.dialogue\")
-
-signal level_cleared
-
-@onready var enemies_container: Node2D = $enemies
-var enemy_count: int = 0
-@onready var fade_overlay: ColorRect = $CanvasLayer/FadeOverlay
-var is_level_active: bool = true
-
-func _ready():
-	_initialize_enemies()
-	is_level_active = true
-
-	# Force the screen to be black instantly
-	fade_overlay.color.a = 1.0 
-	
-	# Create an animation
-	var tween = create_tween()
-	tween.tween_property(fade_overlay, \"color:a\", 0.0, 2.0)
-	
-	# 2. Play the Start Dialogue 
-	get_tree().paused = true
-	await get_tree().create_timer(3.0).timeout
-	DialogueManager.show_dialogue_balloon(LEVEL_DIALOGUE, \"start\")
-	await DialogueManager.dialogue_ended
-	get_tree().paused = false
-
-func _initialize_enemies():
-	# Loop through all children of the \"Enemies\" node
-	for child in enemies_container.get_children():
-		# Verify it is an Enemy script (so we don't count random nodes)
-		if child is Enemy:
-			enemy_count += 1
-			# Connect the signal we added to Enemy.gd
-			child.enemy_died.connect(_on_enemy_killed)
-	
-	print(\"Level started. Enemies to defeat: \", enemy_count)
-
-func _exit_tree():
-	is_level_active = false
-
-func _on_enemy_killed():
-	enemy_count -= 1
-	# print(\"Enemy died. Remaining: \", enemy_count)
-	if not is_level_active or not is_inside_tree():
-		return
-		
-	if enemy_count <= 0:
-		_play_ending_sequence()
-
-func _play_ending_sequence():
-	await get_tree().create_timer(4.0).timeout
-	# 1. Emit signal (useful for UI or achievements)
-	level_cleared.emit()
-	
-	# 2. Pause the game so enemies/player stop moving
-	get_tree().paused = true
-	
-	# 3. Play the 'end' title from your dialogue file
-	# Make sure your .dialogue file has a title like ~ end
-	DialogueManager.show_dialogue_balloon(LEVEL_DIALOGUE, \"finish\")
-	
-	await DialogueManager.dialogue_ended
-	
-	# 4. Logic after dialogue (e.g., Change Level)
-	get_tree().paused = false # Only unpause if staying in this scene
-	var tween = create_tween()
-	tween.tween_property(fade_overlay, \"color:a\", 1.0, 1.5)
-	await tween.finished
-	get_tree().change_scene_to_file(\"res://scenes/levels/island1.tscn\")
-"
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_uelme"]
 tile_data = PackedInt32Array(65536, 7, 1, 131072, 7, 2, 196608, 7, 3, 262144, 7, 4, 1, 65543, 0, 65537, 65543, 1, 131073, 65543, 2, 196609, 65543, 3, 262145, 65543, 4, 2, 131079, 0, 65538, 131079, 1, 131074, 131079, 2, 196610, 131079, 3, 262146, 131079, 4, 65539, 196615, 1, 131075, 196615, 2, 196611, 196615, 3, 262147, 196615, 4)
@@ -8899,18 +8826,6 @@ gizmo_extents = 0.0
 [node name="Marker2D3" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(-643, -471)
 gizmo_extents = 0.0
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-layer = 3
-
-[node name="FadeOverlay" type="ColorRect" parent="CanvasLayer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0, 0, 0, 1)
 
 [node name="echoDeck" parent="." instance=ExtResource("48_yxxp3")]
 layer = 1
