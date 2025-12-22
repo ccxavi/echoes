@@ -11,6 +11,10 @@ signal stats_requested
 @onready var wave_title_label = $MarginContainer2/VBoxContainer/WaveTitleLabel
 @onready var wave_progress_bar = $MarginContainer2/VBoxContainer/WaveProgressBar
 
+# Points HUD Reference (Top-Right)
+@onready var points_hud_container = $MarginContainer3 
+@onready var points_label = $MarginContainer3/PointsPanel/InternalPadding/PointsLabel
+
 # Banner References (Centered Pop-up)
 @onready var wave_banner = $WaveBannerContainer
 @onready var banner_label = $WaveBannerContainer/WaveBannerPanel/InternalPadding/BannerLabel
@@ -52,6 +56,7 @@ var party_manager_ref = null
 var wave_manager_ref = null
 var is_endless_mode: bool = false
 var total_enemies_this_wave: int = 0
+var current_score: int = 0
 
 func _ready():
 	# 1. Find Managers
@@ -64,13 +69,16 @@ func _ready():
 	# 2. Setup Initial State
 	if wave_banner: wave_banner.visible = false
 	
-	# Show Wave HUD only if in endless mode
+	# Only show Wave and Points HUD if in Endless Mode
 	if wave_hud_container:
 		wave_hud_container.visible = is_endless_mode
+	if points_hud_container:
+		points_hud_container.visible = is_endless_mode
 	
 	# Wait for levels to finish instantiating characters
 	await get_tree().process_frame
 	refresh_party_ui()
+	_update_points_display()
 
 	# 3. Connect UI Signals
 	for i in range(cards.size()):
@@ -90,6 +98,16 @@ func _ready():
 func _process(_delta: float) -> void:
 	if is_endless_mode:
 		update_wave_hud()
+
+# --- POINTS LOGIC ---
+
+func add_points(amount: int):
+	current_score += amount
+	_update_points_display()
+
+func _update_points_display():
+	if points_label:
+		points_label.text = "POINTS: %d" % current_score
 
 # --- WAVE HUD LOGIC ---
 

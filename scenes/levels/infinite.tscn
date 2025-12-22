@@ -9124,8 +9124,6 @@ color = Color(0, 0, 0, 1)
 
 [node name="echoDeck" parent="." instance=ExtResource("48_yxxp3")]
 layer = 1
-visible = false
 
 [node name="pauseMenu" parent="." instance=ExtResource("49_vb4ln")]
 layer = 2
-visible = false
