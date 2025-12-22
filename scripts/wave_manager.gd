@@ -5,17 +5,18 @@ signal wave_started(wave_number: int)
 signal wave_completed
 
 # CONFIGURATION
-@export var spawn_points_container: Node2D # A Node holding Marker2D children
+@export var spawn_points_container: Node2D
 @export var time_between_waves: float = 5.0
 
-# ENEMY POOL
+# --- ENEMY CONFIGURATION ---
 @export var enemy_scenes: Array[PackedScene]
-@export var enemy_costs: Array[int] = [1, 3]
+@export var enemy_costs: Array[int] = [1, 3]  # Cost to spawn (Budget)
+@export var enemy_scores: Array[int] = [10, 50] # Points awarded on kill
 @onready var enemy_container: Node2D = $"../enemies"
 
 # DIFFICULTY SCALING
 @export var initial_budget: int = 20
-@export var budget_multiplier: float = 2.0 
+@export var budget_multiplier: float = 2.0
 @export var hp_scaling_per_wave: int = 5
 @export var damage_scaling_per_wave: int = 1
 
@@ -23,11 +24,12 @@ signal wave_completed
 var current_wave: int = 0
 var enemies_alive: int = 0
 var is_spawning: bool = false
+var score: int = 0 # Tracks total score
 
 func _ready():
 	await get_tree().create_timer(2.0).timeout
 	start_next_wave()
-
+	
 func start_next_wave():
 	current_wave += 1
 	wave_started.emit(current_wave)
@@ -45,38 +47,55 @@ func spawn_wave(budget: int):
 		var index = randi() % enemy_scenes.size()
 		var cost = enemy_costs[index]
 		
+		# Get the score value for this specific enemy type
+		# Safety check: if you forgot to set a score, default to 10
+		var score_value = 10
+		if index < enemy_scores.size():
+			score_value = enemy_scores[index]
+		
 		if cost > budget:
 			if budget < _get_cheapest_cost():
 				break
-			continue 
+			continue
 		
 		var point = spawn_points.pick_random()
 		var pos = point.global_position + Vector2(randf_range(-50, 50), randf_range(-50, 50))
 		
-		create_enemy(enemy_scenes[index], pos)
+		# Pass the score value to the creation function
+		create_enemy(enemy_scenes[index], pos, score_value)
 		budget -= cost
 		
 		await get_tree().create_timer(0.2).timeout
 	
 	is_spawning = false
 
-func create_enemy(scene: PackedScene, pos: Vector2):
+# Updated to accept 'points_worth'
+func create_enemy(scene: PackedScene, pos: Vector2, points_worth: int):
 	var enemy = scene.instantiate()
 	enemy.global_position = pos
 	
-	# --- ADD TO GROUP (IMPORTANT FOR HUD) ---
-	enemy.add_to_group("enemies")
+	# --- ADD TO GROUP ---
+	# (Merged from Main: Ensure enemies are grouped for detection/separation)
+	enemy.add_to_group("enemy") 
 	
 	# --- SCALING ---
 	if "max_hp" in enemy:
 		enemy.max_hp += (current_wave * hp_scaling_per_wave)
-		enemy.hp = enemy.max_hp 
-		
+		enemy.hp = enemy.max_hp
 	if "damage" in enemy:
 		enemy.damage += (current_wave * damage_scaling_per_wave)
 	
-	# --- TRACKING ---
-	enemy.tree_exited.connect(_on_enemy_died)
+	# --- CONNECTION LOGIC ---
+	
+	# 1. Wave Logic (Tree Exited)
+	# Keeps track of "Are there enemies left?"
+	enemy.tree_exited.connect(_on_enemy_tree_exited)
+	
+	# 2. Score Logic (Enemy Died)
+	# Only triggers if the enemy actually emits "die" (not just deleted)
+	# We use '.bind()' to attach the points value to this specific enemy connection
+	if enemy.has_signal("enemy_died"):
+		enemy.enemy_died.connect(_on_enemy_killed.bind(points_worth))
 	
 	if enemy_container:
 		enemy_container.call_deferred("add_child", enemy)
@@ -85,9 +104,14 @@ func create_enemy(scene: PackedScene, pos: Vector2):
 		
 	enemies_alive += 1
 
-func _on_enemy_died():
-	if not is_inside_tree():
-		return
+# Handler for scoring
+func _on_enemy_killed(points: int):
+	score += points
+	print("Enemy Killed! +%d Points. Total Score: %d" % [points, score])
+
+# Renamed from _on_enemy_died to avoid confusion
+func _on_enemy_tree_exited():
+	if not is_inside_tree(): return
 
 	enemies_alive -= 1
 	

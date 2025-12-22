@@ -1,5 +1,7 @@
 extends Node2D
 
+signal party_wiped
+
 # --- VARIABLES ---
 var characters: Array = []
 var active_character_index: int = 0
@@ -184,22 +186,43 @@ func update_ui_button_state(char_node):
 		var _status = char_node.get_cooldown_status() 
 
 # --- DEATH & GAME OVER ---
-func _on_character_died(_dead_char_node):
-	var next_alive_index = -1
-	for i in range(1, characters.size()):
-		var check_index = (active_character_index + i) % characters.size()
-		if not characters[check_index].is_dead:
-			next_alive_index = check_index
-			break
+func _on_character_died(dead_char_node):
+	# 1. Identify if the ACTIVE character is the one who died
+	var active_char_died = (dead_char_node == characters[active_character_index])
 	
-	if next_alive_index != -1:
-		perform_switch(next_alive_index)
-	else:
+	var survivor_index = -1
+	
+	# 2. Search for ANY living character
+	# We start checking from the "next" index to keep the rotation order natural,
+	# but we loop through the ENTIRE list (size + 1) to ensure we check everyone.
+	for i in range(1, characters.size() + 1):
+		var check_index = (active_character_index + i) % characters.size()
+		
+		if not characters[check_index].is_dead:
+			survivor_index = check_index
+			break # Found a survivor!
+	
+	# 3. Decision Logic
+	if survivor_index == -1:
+		# No survivors found at all. Game Over.
 		trigger_game_over()
+		
+	elif active_char_died:
+		# The player currently in control died, so we MUST switch to the survivor.
+		perform_switch(survivor_index)
+		
+	else:
+		# A background character died, but the active player is still alive.
+		# Do nothing (continue playing), just maybe print a log.
+		print("A background character died. Active player remains.")
 
 func trigger_game_over():
+	# Emit the signal so the Level knows we lost!
+	party_wiped.emit() 
+	
 	Engine.time_scale = 0.1 
 	can_switch = false
+	
 	await get_tree().create_timer(1.0, true).timeout
 	get_tree().paused = true
 	
