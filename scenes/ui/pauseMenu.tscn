@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://dbvl1xbqu22qb"]
+[gd_scene load_steps=31 format=3 uid="uid://dbvl1xbqu22qb"]
 
 [ext_resource type="Script" uid="uid://dgci00jo08343" path="res://scripts/ui/pauseMenu.gd" id="1_hfklj"]
 [ext_resource type="Texture2D" uid="uid://h8lgb1y1phux" path="res://assets/UI/Buttons/Button_Blue_3Slides_Pressed.png" id="2_r5qvj"]
@@ -175,8 +175,29 @@ region_rect = Rect2(33, 47.75, 126.5, 123.5)
 content_margin_left = 30.0
 content_margin_top = 30.0
 content_margin_right = 30.0
-content_margin_bottom = 50.0
+content_margin_bottom = 70.0
 texture = ExtResource("5_0vc8j")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0ud01"]
+bg_color = Color(0, 0, 0, 0.39215687)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lknqu"]
+bg_color = Color(0, 0, 0, 0.78431374)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tp0di"]
+bg_color = Color(0, 0, 0, 0.5882353)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [node name="pauseMenu" type="CanvasLayer"]
 process_mode = 3
@@ -284,7 +305,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.5882353)
+color = Color(0, 0, 0, 0.78431374)
 
 [node name="StatsPanel" type="Panel" parent="StatsModal"]
 custom_minimum_size = Vector2(600, 400)
@@ -477,6 +498,18 @@ horizontal_alignment = 1
 [node name="CritLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer4/Column4"]
 layout_mode = 2
 horizontal_alignment = 1
+
+[node name="BackButton" type="Button" parent="StatsModal"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 30.0
+offset_right = 114.0
+offset_bottom = 72.0
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_0ud01")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_lknqu")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tp0di")
+text = "< Back"
 
 [connection signal="pressed" from="NinePatchRect/VBoxContainer/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="NinePatchRect/VBoxContainer/Restart" to="." method="_on_restart_pressed"]
