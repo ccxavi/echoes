@@ -101,9 +101,15 @@ func _process(_delta: float) -> void:
 
 # --- POINTS LOGIC ---
 
+# Logic updated to prioritize syncing from WaveManager
 func add_points(amount: int):
-	current_score += amount
-	_update_points_display()
+	if is_endless_mode and wave_manager_ref:
+		# If your wave manager handles score, add it there
+		if "score" in wave_manager_ref:
+			wave_manager_ref.score += amount
+	else:
+		current_score += amount
+		_update_points_display()
 
 func _update_points_display():
 	if points_label:
@@ -112,22 +118,28 @@ func _update_points_display():
 # --- WAVE HUD LOGIC ---
 
 func update_wave_hud():
-	if wave_manager_ref and wave_progress_bar:
-		var current_count = wave_manager_ref.enemies_alive
-		
-		# Track the maximum enemies seen this wave to scale the progress bar correctly
-		if current_count > total_enemies_this_wave:
-			total_enemies_this_wave = current_count
-			wave_progress_bar.max_value = total_enemies_this_wave
-		
-		wave_progress_bar.value = current_count
-		
-		# FIX: Force display to WAVE 1 if manager is at 0
-		var display_wave = wave_manager_ref.current_wave
-		if display_wave <= 0: display_wave = 1
-		wave_title_label.text = "WAVE %d" % display_wave
+	if wave_manager_ref:
+		# POINT SYSTEM LOGIC: Sync score from WaveManager
+		if "score" in wave_manager_ref:
+			current_score = wave_manager_ref.score
+			_update_points_display()
 
-		wave_progress_bar.modulate = Color(1.0, 0.2, 0.2)
+		if wave_progress_bar:
+			var current_count = wave_manager_ref.enemies_alive
+			
+			# Track the maximum enemies seen this wave to scale the progress bar correctly
+			if current_count > total_enemies_this_wave:
+				total_enemies_this_wave = current_count
+				wave_progress_bar.max_value = total_enemies_this_wave
+			
+			wave_progress_bar.value = current_count
+			
+			# FIX: Force display to WAVE 1 if manager is at 0
+			var display_wave = wave_manager_ref.current_wave
+			if display_wave <= 0: display_wave = 1
+			wave_title_label.text = "WAVE %d" % display_wave
+
+			wave_progress_bar.modulate = Color(1.0, 0.2, 0.2)
 
 # --- WAVE & BANNER LOGIC ---
 
