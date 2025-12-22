@@ -64,14 +64,12 @@ func _ready():
 	if particles:
 		particles.emitting = false
 
-# --- NEW: INPUT HANDLING FIX ---
-# This function only runs if the UI (EchoDeck) did NOT handle the input first.
+# --- INPUT HANDLING FIX ---
 func _unhandled_input(event):
 	if is_attacking or is_dead: return
 	
 	if event.is_action_pressed("attack"):
 		start_attack()
-# -------------------------------
 
 func _physics_process(delta):
 	if knockback_velocity != Vector2.ZERO:
@@ -109,9 +107,6 @@ func _physics_process(delta):
 		else:
 			play_anim("idle")
 		
-	# REMOVED: "Input.is_action_just_pressed" block was here. 
-	# It is now handled in _unhandled_input above!
-
 	move_and_slide()
 
 # --- ABILITY LOGIC ---
@@ -152,12 +147,16 @@ func perform_heal_skill():
 func _on_vfx_finished():
 	vfx.visible = false
 
+# --- DAMAGE LOGIC (FIXED) ---
 func take_damage(amount: int, source_pos: Vector2, attacker: Node = null):
-	if is_invulnerable: return
+	if is_invulnerable or is_dead: return # Don't take damage if already dead
 	if attacker and attacker.is_in_group("player"): return
 
 	var reduced_damage = max(1, amount - defense)
-	hp -= reduced_damage
+	
+	# UPDATED: Clamp HP between 0 and max_hp to prevent negative numbers
+	hp = clamp(hp - reduced_damage, 0, max_hp)
+	
 	AudioManager.play_sfx("hurt", 0.1)
 	print("%s took %d damage. HP: %s" % [name, reduced_damage, hp])
 	
@@ -277,8 +276,13 @@ func die():
 	if collision_shape_2d_attack:
 		collision_shape_2d_attack.set_deferred("disabled", true)
 
+# --- HEAL LOGIC (FIXED) ---
 func receive_heal(amount: int):
-	hp = min(hp + amount, max_hp)
+	if is_dead: return # Dead characters shouldn't be healed
+	
+	# UPDATED: Clamp HP to max_hp
+	hp = clamp(hp + amount, 0, max_hp)
+	
 	print("%s was healed for %d! HP: %d" % [name, amount, hp])
 	health_changed.emit(hp, max_hp)
 	
