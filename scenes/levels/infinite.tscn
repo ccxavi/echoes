@@ -59,7 +59,6 @@
 [ext_resource type="PackedScene" uid="uid://dr8df60xkxb82" path="res://scenes/enemies/tnt.tscn" id="50_b2ybv"]
 
 [sub_resource type="GDScript" id="GDScript_ann8j"]
-<<<<<<< feat/inifite-points-system
 script/source = "extends Node2D
 
 # --- NODES ---
@@ -112,8 +111,6 @@ func _on_game_over():
 func _exit_tree():
 	is_level_active = false
 "
-=======
->>>>>>> main
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_uelme"]
 tile_data = PackedInt32Array(65536, 7, 1, 131072, 7, 2, 196608, 7, 3, 262144, 7, 4, 1, 65543, 0, 65537, 65543, 1, 131073, 65543, 2, 196609, 65543, 3, 262145, 65543, 4, 2, 131079, 0, 65538, 131079, 1, 131074, 131079, 2, 196610, 131079, 3, 262146, 131079, 4, 65539, 196615, 1, 131075, 196615, 2, 196611, 196615, 3, 262147, 196615, 4)
