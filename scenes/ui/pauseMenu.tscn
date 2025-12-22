@@ -1,13 +1,14 @@
-[gd_scene load_steps=26 format=3 uid="uid://dbvl1xbqu22qb"]
+[gd_scene load_steps=28 format=3 uid="uid://dbvl1xbqu22qb"]
 
 [ext_resource type="Script" uid="uid://dgci00jo08343" path="res://scripts/ui/pauseMenu.gd" id="1_hfklj"]
 [ext_resource type="Texture2D" uid="uid://h8lgb1y1phux" path="res://assets/UI/Buttons/Button_Blue_3Slides_Pressed.png" id="2_r5qvj"]
 [ext_resource type="Texture2D" uid="uid://1swawdw2lfju" path="res://assets/UI/Buttons/Button_Blue_3Slides.png" id="3_bcaeg"]
 [ext_resource type="Texture2D" uid="uid://cxbt2ks1na5bn" path="res://assets/echoDeck/warrior1.png" id="4_4vmgj"]
+[ext_resource type="Texture2D" uid="uid://b25utmmtinywl" path="res://assets/UI/Banners/Banner_Horizontal.png" id="4_bjsp3"]
+[ext_resource type="Texture2D" uid="uid://dq1a3p5x6pnol" path="res://assets/UI/Ribbons/Ribbon_Blue_Connection_Down.png" id="5_0vc8j"]
 [ext_resource type="Texture2D" uid="uid://bajwgr45km7xi" path="res://assets/echoDeck/monk.png" id="5_g8he0"]
 [ext_resource type="Texture2D" uid="uid://dvlsltbwtrovo" path="res://assets/echoDeck/lancer1.png" id="6_li6sf"]
 [ext_resource type="Texture2D" uid="uid://bholg2afaoh5h" path="res://assets/echoDeck/goblin1.png" id="7_iba8h"]
-[ext_resource type="Texture2D" uid="uid://c06y7icm2jm17" path="res://assets/echoDeck/x-button.png" id="8_ao88k"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_si01v"]
 texture = ExtResource("2_r5qvj")
@@ -166,16 +167,16 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0ud01"]
-content_margin_left = 4.0
-content_margin_top = 8.0
-content_margin_right = 4.0
-content_margin_bottom = 8.0
-bg_color = Color(0, 0, 0, 0.39215687)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4vmgj"]
+texture = ExtResource("4_bjsp3")
+region_rect = Rect2(33, 47.75, 126.5, 123.5)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_g8he0"]
+content_margin_left = 30.0
+content_margin_top = 30.0
+content_margin_right = 30.0
+content_margin_bottom = 50.0
+texture = ExtResource("5_0vc8j")
 
 [node name="pauseMenu" type="CanvasLayer"]
 process_mode = 3
@@ -293,13 +294,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+offset_left = -450.5
+offset_top = -247.5
+offset_right = 450.5
+offset_bottom = 247.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_0ud01")
+theme_override_styles/panel = SubResource("StyleBoxTexture_4vmgj")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="StatsModal/StatsPanel"]
 layout_mode = 1
@@ -308,129 +309,174 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+offset_left = -245.0
+offset_top = -129.0
+offset_right = 245.0
+offset_bottom = 49.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 50
+theme_override_constants/separation = 10
+alignment = 1
 
-[node name="Column1" type="VBoxContainer" parent="StatsModal/StatsPanel/HBoxContainer"]
+[node name="PanelContainer1" type="PanelContainer" parent="StatsModal/StatsPanel/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_g8he0")
+
+[node name="Column1" type="VBoxContainer" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer1"]
 layout_mode = 2
 size_flags_horizontal = 3
+alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="StatsModal/StatsPanel/HBoxContainer/Column1"]
+[node name="Portrait" type="TextureRect" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer1/Column1"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_4vmgj")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column1"]
+[node name="NameLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer1/Column1"]
 layout_mode = 2
-text = "Warrior"
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column1"]
+[node name="HPLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer1/Column1"]
 layout_mode = 2
-text = "HP"
 horizontal_alignment = 1
 
-[node name="Label3" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column1"]
+[node name="AtkLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer1/Column1"]
 layout_mode = 2
-text = "Atk"
 horizontal_alignment = 1
 
-[node name="Column2" type="VBoxContainer" parent="StatsModal/StatsPanel/HBoxContainer"]
+[node name="DefLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer1/Column1"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="SpdLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer1/Column1"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="CritLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer1/Column1"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="PanelContainer2" type="PanelContainer" parent="StatsModal/StatsPanel/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_g8he0")
+
+[node name="Column2" type="VBoxContainer" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
+alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="StatsModal/StatsPanel/HBoxContainer/Column2"]
+[node name="Portrait" type="TextureRect" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer2/Column2"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("5_g8he0")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column2"]
+[node name="NameLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer2/Column2"]
 layout_mode = 2
-text = "Monk"
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column2"]
+[node name="HPLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer2/Column2"]
 layout_mode = 2
-text = "HP"
 horizontal_alignment = 1
 
-[node name="Label3" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column2"]
+[node name="AtkLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer2/Column2"]
 layout_mode = 2
-text = "Atk"
 horizontal_alignment = 1
 
-[node name="Column3" type="VBoxContainer" parent="StatsModal/StatsPanel/HBoxContainer"]
+[node name="DefLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer2/Column2"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="SpdLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer2/Column2"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="CritLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer2/Column2"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="PanelContainer3" type="PanelContainer" parent="StatsModal/StatsPanel/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_g8he0")
+
+[node name="Column3" type="VBoxContainer" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
+alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="StatsModal/StatsPanel/HBoxContainer/Column3"]
+[node name="Portrait" type="TextureRect" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer3/Column3"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("6_li6sf")
-expand_mode = 2
-stretch_mode = 5
+expand_mode = 1
+stretch_mode = 6
 
-[node name="Label" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column3"]
+[node name="NameLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer3/Column3"]
 layout_mode = 2
-text = "Lancer"
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column3"]
+[node name="HPLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer3/Column3"]
 layout_mode = 2
-text = "HP"
 horizontal_alignment = 1
 
-[node name="Label3" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column3"]
+[node name="AtkLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer3/Column3"]
 layout_mode = 2
-text = "Atk"
 horizontal_alignment = 1
 
-[node name="Column4" type="VBoxContainer" parent="StatsModal/StatsPanel/HBoxContainer"]
+[node name="DefLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer3/Column3"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="SpdLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer3/Column3"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="CritLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer3/Column3"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="PanelContainer4" type="PanelContainer" parent="StatsModal/StatsPanel/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_g8he0")
+
+[node name="Column4" type="VBoxContainer" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer4"]
 layout_mode = 2
 size_flags_horizontal = 3
+alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="StatsModal/StatsPanel/HBoxContainer/Column4"]
+[node name="Portrait" type="TextureRect" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer4/Column4"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("7_iba8h")
 expand_mode = 1
-stretch_mode = 5
+stretch_mode = 6
 
-[node name="Label" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column4"]
+[node name="NameLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer4/Column4"]
 layout_mode = 2
-text = "Goblin"
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column4"]
+[node name="HPLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer4/Column4"]
 layout_mode = 2
-text = "HP"
 horizontal_alignment = 1
 
-[node name="Label3" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/Column4"]
+[node name="AtkLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer4/Column4"]
 layout_mode = 2
-text = "Atk"
 horizontal_alignment = 1
 
-[node name="Exit" type="TextureButton" parent="StatsModal/StatsPanel"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -40.0
-offset_bottom = 40.0
-grow_horizontal = 0
-texture_normal = ExtResource("8_ao88k")
-ignore_texture_size = true
-stretch_mode = 5
+[node name="DefLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer4/Column4"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="SpdLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer4/Column4"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="CritLabel" type="Label" parent="StatsModal/StatsPanel/HBoxContainer/PanelContainer4/Column4"]
+layout_mode = 2
+horizontal_alignment = 1
 
 [connection signal="pressed" from="NinePatchRect/VBoxContainer/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="NinePatchRect/VBoxContainer/Restart" to="." method="_on_restart_pressed"]
