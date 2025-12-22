@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://du6scg0nqprkx"]
+[gd_scene load_steps=22 format=3 uid="uid://du6scg0nqprkx"]
 
 [ext_resource type="Script" uid="uid://b8jctukc2vsa4" path="res://scripts/ui/echoDeck.gd" id="1_5yc16"]
 [ext_resource type="Texture2D" uid="uid://ccuskvidtdhe2" path="res://assets/echoDeck/warrior.png" id="2_2p0xq"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://bmwoquxd5r7d0" path="res://assets/echoDeck/monk1.png" id="11_wapqf"]
 [ext_resource type="Texture2D" uid="uid://dj58v1uph4sim" path="res://assets/echoDeck/hoveredPause.png" id="12_vo2he"]
 [ext_resource type="Texture2D" uid="uid://cyinyoxi82b3d" path="res://assets/echoDeck/disabledPause.png" id="13_hgt7u"]
+[ext_resource type="Texture2D" uid="uid://1swawdw2lfju" path="res://assets/UI/Buttons/Button_Blue_3Slides.png" id="15_gdm8m"]
 [ext_resource type="Texture2D" uid="uid://b21d07ueyvt7s" path="res://assets/TinySwords(OLD)/UI/Ribbons/Ribbon_Blue_3Slides.png" id="15_hjhig"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kje1l"]
@@ -58,6 +59,10 @@ content_margin_right = 150.0
 content_margin_bottom = 50.0
 texture = ExtResource("15_hjhig")
 region_rect = Rect2(3, 1.75, 186, 60)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_p3o5f"]
+texture = ExtResource("15_gdm8m")
+region_rect = Rect2(7, 0, 178, 56.25)
 
 [node name="echoDeck" type="CanvasLayer"]
 layer = 2
@@ -418,5 +423,32 @@ theme_override_constants/margin_bottom = 20
 layout_mode = 2
 theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 60
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer3" type="MarginContainer" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -172.0
+offset_bottom = 89.0
+grow_horizontal = 0
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+
+[node name="PointsPanel" type="PanelContainer" parent="MarginContainer3"]
+z_index = 2
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_p3o5f")
+
+[node name="InternalPadding" type="MarginContainer" parent="MarginContainer3/PointsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 27
+
+[node name="PointsLabel" type="Label" parent="MarginContainer3/PointsPanel/InternalPadding"]
+layout_mode = 2
 horizontal_alignment = 1
 vertical_alignment = 1
