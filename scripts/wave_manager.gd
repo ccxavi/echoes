@@ -5,37 +5,35 @@ signal wave_started(wave_number: int)
 signal wave_completed
 
 # CONFIGURATION
-@export var spawn_points_container: Node2D # A Node holding Marker2D children
+@export var spawn_points_container: Node2D
 @export var time_between_waves: float = 5.0
 
-# ENEMY POOL (The "Menu" the manager can order from)
-# We use a Dictionary to map Scenes to their "Cost"
+# --- ENEMY CONFIGURATION ---
 @export var enemy_scenes: Array[PackedScene]
-@export var enemy_costs: Array[int] = [1, 3] # Index 0 costs 1, Index 1 costs 3, etc.
+@export var enemy_costs: Array[int] = [1, 3]  # Cost to spawn (Budget)
+@export var enemy_scores: Array[int] = [10, 50] # Points awarded on kill
 @onready var enemy_container: Node2D = $"../enemies"
 
 # DIFFICULTY SCALING
 @export var initial_budget: int = 20
-@export var budget_multiplier: float = 2 # Budget grows twice each wave
-@export var hp_scaling_per_wave: int = 5    # Enemies get +5 HP per wave
-@export var damage_scaling_per_wave: int = 1 # Enemies hit +1 harder per wave
+@export var budget_multiplier: float = 2
+@export var hp_scaling_per_wave: int = 5
+@export var damage_scaling_per_wave: int = 1
 
 # STATE
 var current_wave: int = 0
 var enemies_alive: int = 0
 var is_spawning: bool = false
+var score: int = 0 # Tracks total score
 
 func _ready():
-	# Start the first wave after a short delay
 	await get_tree().create_timer(2.0).timeout
 	start_next_wave()
-
+	
 func start_next_wave():
 	current_wave += 1
 	wave_started.emit(current_wave)
 	
-	# Calculate Budget (Linear or Exponential growth)
-	# Formula: Base + (Wave * Growth)
 	var budget = float(initial_budget) * pow(budget_multiplier, current_wave - 1)
 	
 	print("--- WAVE %s STARTED (Budget: %d) ---" % [current_wave, int(budget)])
@@ -46,71 +44,76 @@ func spawn_wave(budget: int):
 	var spawn_points = spawn_points_container.get_children()
 	
 	while budget > 0:
-		# 1. Pick a random enemy type
 		var index = randi() % enemy_scenes.size()
 		var cost = enemy_costs[index]
 		
-		# 2. Can we afford it?
+		# Get the score value for this specific enemy type
+		# Safety check: if you forgot to set a score, default to 10
+		var score_value = 10
+		if index < enemy_scores.size():
+			score_value = enemy_scores[index]
+		
 		if cost > budget:
-			# If we can't afford a big guy, try to find a cheaper one
-			# (Simple fallback: just break loop if budget is tiny)
 			if budget < _get_cheapest_cost():
 				break
-			continue # Try picking again
+			continue
 		
-		# 3. Spawn the enemy
 		var point = spawn_points.pick_random()
-		# Add random offset so they don't stack perfectly on one pixel
 		var pos = point.global_position + Vector2(randf_range(-50, 50), randf_range(-50, 50))
 		
-		create_enemy(enemy_scenes[index], pos)
+		# Pass the score value to the creation function
+		create_enemy(enemy_scenes[index], pos, score_value)
 		budget -= cost
 		
-		# Small delay between spawns so they don't all appear instantly
 		await get_tree().create_timer(0.2).timeout
 	
 	is_spawning = false
 
-func create_enemy(scene: PackedScene, pos: Vector2):
+# Updated to accept 'points_worth'
+func create_enemy(scene: PackedScene, pos: Vector2, points_worth: int):
 	var enemy = scene.instantiate()
 	enemy.global_position = pos
 	
-	# --- SCALING: BUFF THE ENEMY ---
-	# We modify the properties before adding them to the scene
+	# Scaling logic
 	if "max_hp" in enemy:
 		enemy.max_hp += (current_wave * hp_scaling_per_wave)
-		enemy.hp = enemy.max_hp # Heal to full
-		
+		enemy.hp = enemy.max_hp
 	if "damage" in enemy:
 		enemy.damage += (current_wave * damage_scaling_per_wave)
 	
-	# --- TRACKING ---
-	# We need to know when they die to end the wave
-	# tree_exited is a built-in signal that fires when queue_free() finishes
-	enemy.tree_exited.connect(_on_enemy_died)
+	# --- CONNECTION LOGIC ---
+	
+	# 1. Wave Logic (Tree Exited)
+	# Keeps track of "Are there enemies left?"
+	enemy.tree_exited.connect(_on_enemy_tree_exited)
+	
+	# 2. Score Logic (Enemy Died)
+	# Only triggers if the enemy actually emits "die" (not just deleted)
+	# We use '.bind()' to attach the points value to this specific enemy connection
+	if enemy.has_signal("enemy_died"):
+		enemy.enemy_died.connect(_on_enemy_killed.bind(points_worth))
 	
 	if enemy_container:
 		enemy_container.call_deferred("add_child", enemy)
 	else:
-		print("Error: Enemy Container not assigned in WaveManager!")
-		# Fallback just in case
 		get_tree().current_scene.call_deferred("add_child", enemy)
 		
 	enemies_alive += 1
 
-func _on_enemy_died():
-	# If the game is closing, or this node isn't in the scene anymore,
-	# stop immediately. Do not try to access get_tree().
-	if not is_inside_tree():
-		return
+# Handler for scoring
+func _on_enemy_killed(points: int):
+	score += points
+	print("Enemy Killed! +%d Points. Total Score: %d" % [points, score])
+
+# Renamed from _on_enemy_died to avoid confusion
+func _on_enemy_tree_exited():
+	if not is_inside_tree(): return
 
 	enemies_alive -= 1
 	
 	if enemies_alive <= 0 and not is_spawning:
 		print("Wave Cleared!")
 		wave_completed.emit()
-		
-		# Now it is safe to call get_tree() because of the check above
 		await get_tree().create_timer(time_between_waves).timeout
 		start_next_wave()
 
