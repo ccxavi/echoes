@@ -16,7 +16,7 @@ signal wave_completed
 
 # DIFFICULTY SCALING
 @export var initial_budget: int = 20
-@export var budget_multiplier: float = 2
+@export var budget_multiplier: float = 2.0
 @export var hp_scaling_per_wave: int = 5
 @export var damage_scaling_per_wave: int = 1
 
@@ -74,7 +74,11 @@ func create_enemy(scene: PackedScene, pos: Vector2, points_worth: int):
 	var enemy = scene.instantiate()
 	enemy.global_position = pos
 	
-	# Scaling logic
+	# --- ADD TO GROUP ---
+	# (Merged from Main: Ensure enemies are grouped for detection/separation)
+	enemy.add_to_group("enemy") 
+	
+	# --- SCALING ---
 	if "max_hp" in enemy:
 		enemy.max_hp += (current_wave * hp_scaling_per_wave)
 		enemy.hp = enemy.max_hp
@@ -111,9 +115,11 @@ func _on_enemy_tree_exited():
 
 	enemies_alive -= 1
 	
+	# Check if wave is over
 	if enemies_alive <= 0 and not is_spawning:
 		print("Wave Cleared!")
 		wave_completed.emit()
+		
 		await get_tree().create_timer(time_between_waves).timeout
 		start_next_wave()
 

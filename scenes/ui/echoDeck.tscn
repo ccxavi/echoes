@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://du6scg0nqprkx"]
+[gd_scene load_steps=20 format=3 uid="uid://du6scg0nqprkx"]
 
 [ext_resource type="Script" uid="uid://b8jctukc2vsa4" path="res://scripts/ui/echoDeck.gd" id="1_5yc16"]
 [ext_resource type="Texture2D" uid="uid://ccuskvidtdhe2" path="res://assets/echoDeck/warrior.png" id="2_2p0xq"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://bmwoquxd5r7d0" path="res://assets/echoDeck/monk1.png" id="11_wapqf"]
 [ext_resource type="Texture2D" uid="uid://dj58v1uph4sim" path="res://assets/echoDeck/hoveredPause.png" id="12_vo2he"]
 [ext_resource type="Texture2D" uid="uid://cyinyoxi82b3d" path="res://assets/echoDeck/disabledPause.png" id="13_hgt7u"]
+[ext_resource type="Texture2D" uid="uid://b21d07ueyvt7s" path="res://assets/TinySwords(OLD)/UI/Ribbons/Ribbon_Blue_3Slides.png" id="15_hjhig"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kje1l"]
 content_margin_left = 10.0
@@ -50,6 +51,13 @@ corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gdm8m"]
+content_margin_left = 150.0
+content_margin_right = 150.0
+content_margin_bottom = 50.0
+texture = ExtResource("15_hjhig")
+region_rect = Rect2(3, 1.75, 186, 60)
 
 [node name="echoDeck" type="CanvasLayer"]
 layer = 2
@@ -357,3 +365,58 @@ texture_hover = ExtResource("12_vo2he")
 texture_disabled = ExtResource("13_hgt7u")
 ignore_texture_size = true
 stretch_mode = 5
+
+[node name="MarginContainer2" type="MarginContainer" parent="."]
+custom_minimum_size = Vector2(400, 0)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+theme_override_constants/margin_top = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer2"]
+layout_mode = 2
+
+[node name="WaveTitleLabel" type="Label" parent="MarginContainer2/VBoxContainer"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="WaveProgressBar" type="ProgressBar" parent="MarginContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+show_percentage = false
+
+[node name="WaveBannerContainer" type="CenterContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WaveBannerPanel" type="PanelContainer" parent="WaveBannerContainer"]
+z_index = 2
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_gdm8m")
+
+[node name="InternalPadding" type="MarginContainer" parent="WaveBannerContainer/WaveBannerPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="BannerLabel" type="Label" parent="WaveBannerContainer/WaveBannerPanel/InternalPadding"]
+layout_mode = 2
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 60
+horizontal_alignment = 1
+vertical_alignment = 1
