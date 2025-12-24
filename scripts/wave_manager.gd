@@ -27,11 +27,17 @@ var is_spawning: bool = false
 var score: int = 0 # Tracks total score
 
 func _ready():
+	AudioManager.stop_music()
+	AudioManager.play_music("higher_waves")
+	
 	await get_tree().create_timer(2.0).timeout
 	start_next_wave()
 	
 func start_next_wave():
 	current_wave += 1
+	
+	AudioManager.play_sfx("horn", 0, -10)
+	
 	wave_started.emit(current_wave)
 	
 	var budget = float(initial_budget) * pow(budget_multiplier, current_wave - 1)
@@ -48,7 +54,6 @@ func spawn_wave(budget: int):
 		var cost = enemy_costs[index]
 		
 		# Get the score value for this specific enemy type
-		# Safety check: if you forgot to set a score, default to 10
 		var score_value = 10
 		if index < enemy_scores.size():
 			score_value = enemy_scores[index]
@@ -61,7 +66,6 @@ func spawn_wave(budget: int):
 		var point = spawn_points.pick_random()
 		var pos = point.global_position + Vector2(randf_range(-50, 50), randf_range(-50, 50))
 		
-		# Pass the score value to the creation function
 		create_enemy(enemy_scenes[index], pos, score_value)
 		budget -= cost
 		
@@ -69,13 +73,11 @@ func spawn_wave(budget: int):
 	
 	is_spawning = false
 
-# Updated to accept 'points_worth'
 func create_enemy(scene: PackedScene, pos: Vector2, points_worth: int):
 	var enemy = scene.instantiate()
 	enemy.global_position = pos
 	
 	# --- ADD TO GROUP ---
-	# (Merged from Main: Ensure enemies are grouped for detection/separation)
 	enemy.add_to_group("enemy") 
 	
 	# --- SCALING ---
@@ -86,14 +88,8 @@ func create_enemy(scene: PackedScene, pos: Vector2, points_worth: int):
 		enemy.damage += (current_wave * damage_scaling_per_wave)
 	
 	# --- CONNECTION LOGIC ---
-	
-	# 1. Wave Logic (Tree Exited)
-	# Keeps track of "Are there enemies left?"
 	enemy.tree_exited.connect(_on_enemy_tree_exited)
 	
-	# 2. Score Logic (Enemy Died)
-	# Only triggers if the enemy actually emits "die" (not just deleted)
-	# We use '.bind()' to attach the points value to this specific enemy connection
 	if enemy.has_signal("enemy_died"):
 		enemy.enemy_died.connect(_on_enemy_killed.bind(points_worth))
 	
@@ -104,18 +100,15 @@ func create_enemy(scene: PackedScene, pos: Vector2, points_worth: int):
 		
 	enemies_alive += 1
 
-# Handler for scoring
 func _on_enemy_killed(points: int):
 	score += points
 	print("Enemy Killed! +%d Points. Total Score: %d" % [points, score])
 
-# Renamed from _on_enemy_died to avoid confusion
 func _on_enemy_tree_exited():
 	if not is_inside_tree(): return
 
 	enemies_alive -= 1
 	
-	# Check if wave is over
 	if enemies_alive <= 0 and not is_spawning:
 		print("Wave Cleared!")
 		wave_completed.emit()

@@ -1,7 +1,7 @@
 extends Control
 
 func _ready() -> void:
-	AudioManager.play_music("menu_theme", -10.0, true)
+	AudioManager.play_music("main_menu", -10.0, true)
 
 # --- BUTTON HANDLERS ---
 

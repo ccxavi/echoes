@@ -63,6 +63,8 @@ var is_level_active: bool = true
 func _ready():
 	_initialize_enemies()
 	is_level_active = true
+	
+	AudioManager.stop_music()
 
 	# Force the screen to be black instantly
 	fade_overlay.color.a = 1.0 
@@ -77,6 +79,8 @@ func _ready():
 	DialogueManager.show_dialogue_balloon(LEVEL_DIALOGUE, \"start\")
 	await DialogueManager.dialogue_ended
 	get_tree().paused = false
+	
+	AudioManager.play_music(\"higher_waves\")
 
 func _initialize_enemies():
 	# Loop through all children of the \"Enemies\" node

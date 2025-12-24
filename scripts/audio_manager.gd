@@ -19,11 +19,18 @@ var sounds = {
 	"tnt_throw": preload("res://assets/audio/tnt_throw.wav"),
 	"tnt_explode": preload("res://assets/audio/tnt_explode.wav"),
 	"exclamation": preload("res://assets/audio/exclamation.wav"),
+	"game_over": preload("res://assets/audio/game_over.wav"),
+	"unable": preload("res://assets/audio/unable.wav"),
+	"horn": preload("res://assets/audio/horn.wav"),
 	"click": preload("res://assets/audio/ui/click.mp3"),
 }
 
 var music_tracks = {
-	"menu_theme": preload("res://assets/audio/bgm/main_menu.ogg"),
+	"main_menu": preload("res://assets/audio/bgm/main_menu.ogg"),
+	"story": preload("res://assets/audio/bgm/story.ogg"),
+	"lower_waves": preload("res://assets/audio/bgm/lower_waves.ogg"),
+	"higher_waves": preload("res://assets/audio/bgm/higher_waves.ogg"),
+	"game_over": preload("res://assets/audio/bgm/game_over.ogg"),
 }
 
 const POOL_SIZE = 8
@@ -65,7 +72,6 @@ func _get_available_player() -> AudioStreamPlayer:
 	# This keeps the game from crashing or staying silent during chaos
 	return players[0]
 
-# --- NEW: MUSIC FUNCTION ---
 func play_music(track_name: String, volume_db: float = -10.0, loop: bool = true):
 	if not music_tracks.has(track_name):
 		print("Music track not found: ", track_name)

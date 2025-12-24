@@ -116,6 +116,7 @@ func try_switch_to_index(target_index: int):
 	
 	if characters[target_index].is_dead:
 		print("Character is dead, cannot switch.")
+		AudioManager.play_sfx("unable")
 		return
 		
 	perform_switch(target_index)
@@ -220,11 +221,15 @@ func trigger_game_over():
 	# Emit the signal so the Level knows we lost!
 	party_wiped.emit() 
 	
+	AudioManager.stop_music();
+	
 	Engine.time_scale = 0.1 
 	can_switch = false
 	
-	await get_tree().create_timer(1.0, true).timeout
+	await get_tree().create_timer(0.2, true).timeout
 	get_tree().paused = true
+	
+	AudioManager.play_sfx("game_over")
 	
 	if game_over_scene:
 		var game_over_instance = game_over_scene.instantiate()

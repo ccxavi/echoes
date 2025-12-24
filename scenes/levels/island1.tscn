@@ -71,6 +71,8 @@ func _ready():
 	# Force the screen to be black instantly
 	fade_overlay.color.a = 1.0 
 	
+	AudioManager.stop_music()
+	
 	# Create an animation
 	var tween = create_tween()
 	tween.tween_property(fade_overlay, \"color:a\", 0.0, 2.0)
@@ -81,6 +83,8 @@ func _ready():
 	DialogueManager.show_dialogue_balloon(LEVEL_DIALOGUE, \"start\")
 	await DialogueManager.dialogue_ended
 	get_tree().paused = false
+	
+	AudioManager.play_music(\"lower_waves\")
 
 func _initialize_enemies():
 	# Loop through all children of the \"Enemies\" node
