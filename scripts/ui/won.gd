@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-@onready var quit: Button = $NinePatchRect/VBoxContainer/Quit
+@onready var quit: Button = $CenterContainer/MasterVBox/VBoxContainer/Quit
 
 @export var main_menu_path: String = "res://scenes/ui/mainMenu.tscn"
 

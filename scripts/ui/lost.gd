@@ -1,39 +1,56 @@
 extends CanvasLayer
 
-@onready var restart: Button = $NinePatchRect/VBoxContainer/Restart
-@onready var exit: Button = $NinePatchRect/VBoxContainer/Exit
+# --- REFERENCES ---
+@onready var title_label: Label = $CenterContainer/MasterVBox/Label 
 
-# Drag your Main Menu scene here in the Inspector
+# Container References
+@onready var vbox_stats: VBoxContainer = $CenterContainer/MasterVBox/VBoxContainer1
+@onready var vbox_buttons: VBoxContainer = $CenterContainer/MasterVBox/VBoxContainer2
+
+# Button References
+@onready var restart: Button = $CenterContainer/MasterVBox/VBoxContainer2/Restart
+@onready var exit: Button = $CenterContainer/MasterVBox/VBoxContainer2/Exit
+
+# Label References
+@onready var wave_label: Label = $CenterContainer/MasterVBox/VBoxContainer1/WaveLabel
+@onready var score_label: Label = $CenterContainer/MasterVBox/VBoxContainer1/ScoreLabel
+
 @export var main_menu_path: String = "res://scenes/ui/mainMenu.tscn"
 
 func _ready() -> void:
-	# CRITICAL: Allows this UI to work while the game is paused
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
-	# Connect the buttons
 	restart.pressed.connect(_on_restart_pressed)
 	exit.pressed.connect(_on_exit_pressed)
 	
-	# Optional: Show cursor if it was hidden
+	_auto_detect_mode()
+	
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
+func _auto_detect_mode() -> void:
+	var wave_manager = get_tree().current_scene.find_child("WaveManager", true, false)
+	
+	if wave_manager:
+		# ENDLESS MODE
+		title_label.text = "GAME OVER!"
+		vbox_stats.visible = true # This will push VBoxContainer2 down
+		_set_endless_stats(wave_manager.current_wave, wave_manager.score)
+	else:
+		# STORY MODE
+		title_label.text = "YOU LOST!"
+		vbox_stats.visible = false # This will pull VBoxContainer2 up
+
+func _set_endless_stats(final_wave: int, final_score: int) -> void:
+	if wave_label: wave_label.text = "Final Wave: %d" % final_wave
+	if score_label: score_label.text = "Final Score: %d" % final_score
+
+# --- BUTTON FUNCTIONS ---
 func _on_restart_pressed() -> void:
-	# 1. Reset Game State
 	get_tree().paused = false
 	Engine.time_scale = 1.0
-	
-	# 2. Add sound feedback
-	if AudioManager: AudioManager.play_sfx("click")
-	
-	# 3. Reload the Level
 	get_tree().reload_current_scene()
 
 func _on_exit_pressed() -> void:
-	# 1. Reset Game State
 	get_tree().paused = false
 	Engine.time_scale = 1.0
-	
-	if AudioManager: AudioManager.play_sfx("click")
-	
-	# 2. Go to Main Menu
 	get_tree().change_scene_to_file(main_menu_path)

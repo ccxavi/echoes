@@ -86,47 +86,30 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme = SubResource("Theme_w8jvd")
 
-[node name="NinePatchRect" type="NinePatchRect" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="."]
 offset_top = 1.0
 offset_right = 1152.0
 offset_bottom = 646.0
 
-[node name="Label" type="Label" parent="NinePatchRect"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -349.5
-offset_top = -194.5
-offset_right = 349.5
-offset_bottom = 50.5
-grow_horizontal = 2
-grow_vertical = 2
+[node name="MasterVBox" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Label" type="Label" parent="CenterContainer/MasterVBox"]
+layout_mode = 2
 theme_override_font_sizes/font_size = 120
 text = "YOU WON!"
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="NinePatchRect"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/MasterVBox"]
 custom_minimum_size = Vector2(300, 100)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -150.0
-offset_top = -5.0
-offset_right = 150.0
-offset_bottom = 103.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_override_constants/separation = 6
+theme_override_constants/separation = 0
 
-[node name="Quit" type="Button" parent="NinePatchRect/VBoxContainer"]
+[node name="Quit" type="Button" parent="CenterContainer/MasterVBox/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 25
 theme_override_styles/normal = SubResource("StyleBoxFlat_lkl2y")
