@@ -154,8 +154,6 @@ func start_universal_dash():
 	if particles: particles.emitting = true
 	AudioManager.play_sfx("woosh", 0.1)
 	
-	# Tint the character Cyan/Blue (Goblin Style)
-	var original_modulate = modulate
 	modulate = Color(0.5, 1, 1) 
 	
 	# D. Dash Duration
