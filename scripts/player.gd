@@ -17,6 +17,11 @@ signal ability_used(current_cooldown, max_cooldown)
 @export var crit_multiplier = 2.0
 @export var recoil_strength = 300.0
 
+@export_group("Universal Dash")
+@export var dash_speed: float = 600.0
+@export var dash_duration: float = 0.2
+@export var dash_cooldown: float = 1.0
+
 @export_group("Special Ability")
 @export var ability_cooldown_duration = 3.0
 # Set this to "Dash" or "Heal" in the Inspector!
@@ -41,6 +46,10 @@ var is_invulnerable = false
 var is_attacking = false
 var is_dead = false
 
+# --- DASH STATE ---
+var is_dashing: bool = false
+var can_dash: bool = true
+
 const SLIDE_THRESHOLD = 50.0
 var footstep_timer: float = 0.0
 const FOOTSTEP_INTERVAL: float = 0.35 
@@ -64,14 +73,28 @@ func _ready():
 	if particles:
 		particles.emitting = false
 
-# --- INPUT HANDLING FIX ---
+# --- INPUT HANDLING ---
 func _unhandled_input(event):
 	if is_attacking or is_dead: return
+	
+	# Universal Dash Input
+	if event.is_action_pressed("dash") and can_dash and not is_dashing:
+		start_universal_dash()
 	
 	if event.is_action_pressed("attack"):
 		start_attack()
 
 func _physics_process(delta):
+	# 1. PRIORITY: DASH MOVEMENT
+	if is_dashing:
+		# VFX: Spawn a ghost trail every 4 physics frames
+		if Engine.get_physics_frames() % 4 == 0:
+			spawn_dash_ghost()
+			
+		move_and_slide() # Velocity is set in start_universal_dash
+		return
+		
+	# 2. PRIORITY: KNOCKBACK DECAY
 	if knockback_velocity != Vector2.ZERO:
 		knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, knockback_decay * delta)
 
@@ -80,6 +103,7 @@ func _physics_process(delta):
 		move_and_slide()
 		return
 
+	# 3. NORMAL MOVEMENT
 	var direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = (direction * speed) + knockback_velocity
 	
@@ -109,7 +133,63 @@ func _physics_process(delta):
 		
 	move_and_slide()
 
-# --- ABILITY LOGIC ---
+# --- UNIVERSAL DASH LOGIC (UPDATED WITH GOBLIN VFX) ---
+func start_universal_dash():
+	# A. Determine Direction
+	# Try input first. If no input, use facing direction.
+	var move_input = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	var dash_dir = move_input
+	
+	if dash_dir == Vector2.ZERO:
+		# Fallback: Dash the way we are looking
+		dash_dir = Vector2.LEFT if animated_sprite_2d.flip_h else Vector2.RIGHT
+
+	# B. Set State
+	is_dashing = true
+	can_dash = false
+	is_invulnerable = true
+	velocity = dash_dir.normalized() * dash_speed
+	
+	# C. Visual Juice
+	if particles: particles.emitting = true
+	AudioManager.play_sfx("woosh", 0.1)
+	
+	# Tint the character Cyan/Blue (Goblin Style)
+	var original_modulate = modulate
+	modulate = Color(0.5, 1, 1) 
+	
+	# D. Dash Duration
+	await get_tree().create_timer(dash_duration).timeout
+	
+	# E. End Dash
+	is_dashing = false
+	velocity = Vector2.ZERO
+	modulate = Color.WHITE # Reset color
+	is_invulnerable = false
+	if particles: particles.emitting = false
+	
+	# F. Cooldown
+	await get_tree().create_timer(dash_cooldown).timeout
+	can_dash = true
+
+# --- VFX: GHOST TRAIL ---
+func spawn_dash_ghost():
+	var ghost = Sprite2D.new()
+	var texture = animated_sprite_2d.sprite_frames.get_frame_texture(animated_sprite_2d.animation, animated_sprite_2d.frame)
+	
+	ghost.texture = texture
+	ghost.global_position = global_position
+	ghost.flip_h = animated_sprite_2d.flip_h
+	ghost.modulate = Color(0.5, 0.5, 0.5, 0.4)
+	ghost.z_index = 5
+	
+	get_tree().current_scene.add_child(ghost)
+	
+	var tween = get_tree().create_tween()
+	tween.bind_node(ghost) # Bind to ghost so if ghost is deleted, tween stops
+	tween.tween_property(ghost, "modulate:a", 0.0, 0.3)
+	tween.tween_callback(ghost.queue_free)
+
 func try_use_special_ability():
 	if is_dead: return
 	if not ability_timer.is_stopped():
@@ -117,7 +197,7 @@ func try_use_special_ability():
 		return
 
 	if ability_name == "Dash":
-		perform_dash()
+		start_universal_dash()
 	elif ability_name == "Heal":
 		perform_heal_skill()
 	else:
@@ -131,13 +211,7 @@ func get_cooldown_status():
 	return [ability_timer.time_left, ability_timer.wait_time]
 
 func perform_dash():
-	print("Performing Dash!")
-	AudioManager.play_sfx("woosh", 0.1)
-	var dash_vector = velocity.normalized()
-	if dash_vector == Vector2.ZERO: 
-		dash_vector = Vector2(-1, 0) if animated_sprite_2d.flip_h else Vector2(1, 0)
-	knockback_velocity = dash_vector * (speed * 4.0) 
-	if particles: particles.emitting = true
+	start_universal_dash()
 
 func perform_heal_skill():
 	print("Charging Heal!")
@@ -147,14 +221,12 @@ func perform_heal_skill():
 func _on_vfx_finished():
 	vfx.visible = false
 
-# --- DAMAGE LOGIC (FIXED) ---
 func take_damage(amount: int, source_pos: Vector2, attacker: Node = null):
 	if is_invulnerable or is_dead: return # Don't take damage if already dead
 	if attacker and attacker.is_in_group("player"): return
 
 	var reduced_damage = max(1, amount - defense)
 	
-	# UPDATED: Clamp HP between 0 and max_hp to prevent negative numbers
 	hp = clamp(hp - reduced_damage, 0, max_hp)
 	
 	AudioManager.play_sfx("hurt", 0.1)
@@ -276,11 +348,9 @@ func die():
 	if collision_shape_2d_attack:
 		collision_shape_2d_attack.set_deferred("disabled", true)
 
-# --- HEAL LOGIC (FIXED) ---
 func receive_heal(amount: int):
 	if is_dead: return # Dead characters shouldn't be healed
 	
-	# UPDATED: Clamp HP to max_hp
 	hp = clamp(hp + amount, 0, max_hp)
 	
 	print("%s was healed for %d! HP: %d" % [name, amount, hp])
