@@ -254,14 +254,11 @@ radius = 22.0
 height = 58.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_a13gh"]
-radius = 18.0
-height = 48.0
+radius = 37.0
+height = 74.0
 
 [node name="character" instance=ExtResource("1_55yry")]
 script = ExtResource("2_nrghv")
-dash_speed = 600.0
-dash_duration = 0.2
-dash_cooldown = 1.0
 fire_damage = 2
 damage_time = 4.0
 
@@ -273,5 +270,5 @@ sprite_frames = SubResource("SpriteFrames_4kp7v")
 shape = SubResource("CapsuleShape2D_55yry")
 
 [node name="CollisionShape2D" parent="WeaponPivot/AttackArea" index="0"]
-position = Vector2(41, 0)
+position = Vector2(59, 2)
 shape = SubResource("CapsuleShape2D_a13gh")
