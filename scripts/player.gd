@@ -6,9 +6,7 @@ signal character_died(character_node)
 signal ability_used(current_cooldown, max_cooldown)
 
 @export_group("Stats")
-# --- REQUIRED FOR STATS PANEL ---
 @export var portrait_img: Texture2D 
-# --------------------------------
 @export var max_hp = 100
 @export var speed = 300.0
 @export var damage = 1 
@@ -17,6 +15,13 @@ signal ability_used(current_cooldown, max_cooldown)
 @export var crit_multiplier = 2.0
 @export var recoil_strength = 300.0
 
+@export_group("Combat Response")
+@export var knockback_strength = 600.0 
+@export var knockback_decay = 2000.0   
+@export var invulnerability_time = 1.0 
+@export var attack_move_speed_multiplier: float = 0.5 # NEW: 50% speed while attacking
+
+# ... (Keep your Dash/Ability exports here) ...
 @export_group("Universal Dash")
 @export var dash_speed: float = 600.0
 @export var dash_duration: float = 0.2
@@ -24,13 +29,7 @@ signal ability_used(current_cooldown, max_cooldown)
 
 @export_group("Special Ability")
 @export var ability_cooldown_duration = 3.0
-# Set this to "Dash" or "Heal" in the Inspector!
 @export var ability_name = "None" 
-
-@export_group("Combat Response")
-@export var knockback_strength = 600.0 
-@export var knockback_decay = 2000.0   
-@export var invulnerability_time = 1.0 
 
 @onready var hp = max_hp
 @onready var animated_sprite_2d: AnimatedSprite2D = $main_sprite
@@ -45,8 +44,6 @@ var knockback_velocity = Vector2.ZERO
 var is_invulnerable = false
 var is_attacking = false
 var is_dead = false
-
-# --- DASH STATE ---
 var is_dashing: bool = false
 var can_dash: bool = true
 
@@ -73,37 +70,44 @@ func _ready():
 	if particles:
 		particles.emitting = false
 
-# --- INPUT HANDLING ---
 func _unhandled_input(event):
 	if is_attacking or is_dead: return
 	
-	# Universal Dash Input
 	if event.is_action_pressed("dash") and can_dash and not is_dashing:
 		start_universal_dash()
 	
 	if event.is_action_pressed("attack"):
 		start_attack()
 
+# --- PHYSICS MOVEMENT FIX ---
 func _physics_process(delta):
 	# 1. PRIORITY: DASH MOVEMENT
 	if is_dashing:
-		# VFX: Spawn a ghost trail every 4 physics frames
 		if Engine.get_physics_frames() % 4 == 0:
 			spawn_dash_ghost()
-			
-		move_and_slide() # Velocity is set in start_universal_dash
+		move_and_slide()
 		return
 		
 	# 2. PRIORITY: KNOCKBACK DECAY
 	if knockback_velocity != Vector2.ZERO:
 		knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, knockback_decay * delta)
 
+	# 3. PRIORITY: ATTACKING (Updated to allow movement)
 	if is_attacking:
-		velocity = knockback_velocity 
+		# Calculate Input Direction
+		var direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+		
+		# Combine: (Reduced Input Speed) + (Recoil)
+		velocity = (direction * speed * attack_move_speed_multiplier) + knockback_velocity
+		
+		# Optional: Update facing direction while attacking?
+		# Uncomment if you want them to turn while swinging (usually feels better off for melee)
+		# if direction.x != 0: animated_sprite_2d.flip_h = direction.x < 0
+		
 		move_and_slide()
 		return
 
-	# 3. NORMAL MOVEMENT
+	# 4. NORMAL MOVEMENT
 	var direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = (direction * speed) + knockback_velocity
 	
