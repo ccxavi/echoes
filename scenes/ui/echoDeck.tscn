@@ -1,7 +1,8 @@
-[gd_scene load_steps=22 format=3 uid="uid://du6scg0nqprkx"]
+[gd_scene load_steps=21 format=3 uid="uid://du6scg0nqprkx"]
 
 [ext_resource type="Script" uid="uid://b8jctukc2vsa4" path="res://scripts/ui/echoDeck.gd" id="1_5yc16"]
 [ext_resource type="Texture2D" uid="uid://ccuskvidtdhe2" path="res://assets/echoDeck/warrior.png" id="2_2p0xq"]
+[ext_resource type="Texture2D" uid="uid://cjgkqo6hvb6n" path="res://assets/echoDeck/cooldown.png" id="3_gdm8m"]
 [ext_resource type="Texture2D" uid="uid://bllpf2n2o44tk" path="res://assets/echoDeck/lancer.png" id="4_0rcyc"]
 [ext_resource type="Texture2D" uid="uid://47t1jva5q6nx" path="res://assets/echoDeck/1.png" id="4_hjhig"]
 [ext_resource type="Texture2D" uid="uid://bas5p868k7gkg" path="res://assets/echoDeck/goblin.png" id="5_4mf3d"]
@@ -14,7 +15,6 @@
 [ext_resource type="Texture2D" uid="uid://dj58v1uph4sim" path="res://assets/echoDeck/hoveredPause.png" id="12_vo2he"]
 [ext_resource type="Texture2D" uid="uid://cyinyoxi82b3d" path="res://assets/echoDeck/disabledPause.png" id="13_hgt7u"]
 [ext_resource type="Texture2D" uid="uid://1swawdw2lfju" path="res://assets/UI/Buttons/Button_Blue_3Slides.png" id="15_gdm8m"]
-[ext_resource type="Texture2D" uid="uid://b21d07ueyvt7s" path="res://assets/TinySwords(OLD)/UI/Ribbons/Ribbon_Blue_3Slides.png" id="15_hjhig"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kje1l"]
 content_margin_left = 10.0
@@ -28,18 +28,6 @@ corner_radius_bottom_right = 45
 corner_radius_bottom_left = 4
 
 [sub_resource type="Theme" id="Theme_hjhig"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_orrom"]
-bg_color = Color(0.54901963, 0.7647059, 0.76862746, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.54901963, 0.7647059, 0.76862746, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tttnm"]
 bg_color = Color(0.88235295, 0.83137256, 0.7411765, 1)
@@ -57,7 +45,6 @@ corner_radius_bottom_left = 2
 content_margin_left = 150.0
 content_margin_right = 150.0
 content_margin_bottom = 50.0
-texture = ExtResource("15_hjhig")
 region_rect = Rect2(3, 1.75, 186, 60)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_p3o5f"]
@@ -85,7 +72,7 @@ theme_override_constants/margin_right = 20
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 4
-theme_override_constants/separation = 15
+theme_override_constants/separation = 18
 
 [node name="HBoxContainer1" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -119,13 +106,13 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_orrom")
 theme_override_styles/fill = SubResource("StyleBoxFlat_tttnm")
 show_percentage = false
 
 [node name="Control" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer1/PanelContainer1/HBoxContainer"]
 custom_minimum_size = Vector2(50, 25)
 layout_mode = 2
+mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer1/PanelContainer1/HBoxContainer/Control"]
 z_index = 1
@@ -142,23 +129,34 @@ expand_mode = 1
 stretch_mode = 5
 flip_h = true
 
-[node name="TextureProgressBar" type="TextureProgressBar" parent="MarginContainer/VBoxContainer/HBoxContainer1/PanelContainer1/HBoxContainer/Control"]
-custom_minimum_size = Vector2(108, 113)
-layout_mode = 0
-offset_left = -22.0
-offset_top = -52.5
-offset_right = 86.0
-offset_bottom = 60.5
-value = 100.0
-fill_mode = 4
-tint_progress = Color(0, 0, 0, 0.5882353)
+[node name="TextureProgressBar" type="TextureProgressBar" parent="MarginContainer/VBoxContainer/HBoxContainer1/PanelContainer1/HBoxContainer/Control/TextureRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 28.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+step = 0.05
+fill_mode = 5
+nine_patch_stretch = true
+texture_progress = ExtResource("3_gdm8m")
+tint_progress = Color(0, 0, 0, 0.47058824)
 
-[node name="CountdownLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer1/PanelContainer1/HBoxContainer/Control"]
-layout_mode = 0
-offset_left = -22.0
-offset_top = -52.5
-offset_right = 86.0
-offset_bottom = 60.5
+[node name="Time" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer1/PanelContainer1/HBoxContainer/Control/TextureRect/TextureProgressBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 7
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -202,13 +200,13 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_orrom")
 theme_override_styles/fill = SubResource("StyleBoxFlat_tttnm")
 show_percentage = false
 
 [node name="Control" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer"]
 custom_minimum_size = Vector2(50, 25)
 layout_mode = 2
+mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer/Control"]
 z_index = 1
@@ -224,6 +222,37 @@ texture = ExtResource("11_wapqf")
 expand_mode = 1
 stretch_mode = 5
 flip_h = true
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer/Control/TextureRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 28.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+step = 0.05
+fill_mode = 5
+nine_patch_stretch = true
+texture_progress = ExtResource("3_gdm8m")
+tint_progress = Color(0, 0, 0, 0.47058824)
+
+[node name="Time" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer/Control/TextureRect/TextureProgressBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 7
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="SkillButton" type="TextureButton" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(50, 50)
@@ -265,13 +294,13 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_orrom")
 theme_override_styles/fill = SubResource("StyleBoxFlat_tttnm")
 show_percentage = false
 
 [node name="Control" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer3/PanelContainer3/HBoxContainer"]
 custom_minimum_size = Vector2(50, 25)
 layout_mode = 2
+mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/PanelContainer3/HBoxContainer/Control"]
 z_index = 1
@@ -287,6 +316,37 @@ texture = ExtResource("4_0rcyc")
 expand_mode = 1
 stretch_mode = 5
 flip_h = true
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="MarginContainer/VBoxContainer/HBoxContainer3/PanelContainer3/HBoxContainer/Control/TextureRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 28.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+step = 0.05
+fill_mode = 5
+nine_patch_stretch = true
+texture_progress = ExtResource("3_gdm8m")
+tint_progress = Color(0, 0, 0, 0.47058824)
+
+[node name="Time" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/PanelContainer3/HBoxContainer/Control/TextureRect/TextureProgressBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 7
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="SkillButton" type="TextureButton" parent="MarginContainer/VBoxContainer/HBoxContainer3"]
 custom_minimum_size = Vector2(50, 50)
@@ -328,13 +388,13 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_orrom")
 theme_override_styles/fill = SubResource("StyleBoxFlat_tttnm")
 show_percentage = false
 
 [node name="Control" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer4/PanelContainer4/HBoxContainer"]
 custom_minimum_size = Vector2(50, 25)
 layout_mode = 2
+mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer4/PanelContainer4/HBoxContainer/Control"]
 z_index = 1
@@ -350,6 +410,37 @@ texture = ExtResource("5_4mf3d")
 expand_mode = 1
 stretch_mode = 5
 flip_h = true
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="MarginContainer/VBoxContainer/HBoxContainer4/PanelContainer4/HBoxContainer/Control/TextureRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 28.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+step = 0.05
+fill_mode = 5
+nine_patch_stretch = true
+texture_progress = ExtResource("3_gdm8m")
+tint_progress = Color(0, 0, 0, 0.47058824)
+
+[node name="Time" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer4/PanelContainer4/HBoxContainer/Control/TextureRect/TextureProgressBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 7
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="SkillButton" type="TextureButton" parent="MarginContainer/VBoxContainer/HBoxContainer4"]
 custom_minimum_size = Vector2(50, 50)
@@ -421,8 +512,8 @@ theme_override_constants/margin_bottom = 20
 
 [node name="BannerLabel" type="Label" parent="WaveBannerContainer/WaveBannerPanel/InternalPadding"]
 layout_mode = 2
-theme_override_constants/outline_size = 8
-theme_override_font_sizes/font_size = 60
+theme_override_constants/outline_size = 30
+theme_override_font_sizes/font_size = 80
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -452,3 +543,145 @@ theme_override_constants/margin_bottom = 27
 layout_mode = 2
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = -1
+anchor_left = 0.39400002
+anchor_top = 0.929
+anchor_right = 0.39400002
+anchor_bottom = 0.929
+offset_left = -19.888031
+offset_top = -20.992004
+offset_right = 20.111969
+offset_bottom = 1.0079956
+grow_horizontal = 2
+grow_vertical = 0
+text = "HP"
+horizontal_alignment = 1
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+custom_minimum_size = Vector2(0, 5)
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.924
+anchor_right = 0.5
+anchor_bottom = 0.924
+offset_left = -108.0
+offset_top = -10.752014
+offset_right = 108.0
+offset_bottom = -0.75201416
+grow_horizontal = 2
+grow_vertical = 0
+show_percentage = false
+
+[node name="HealthLabel" type="Label" parent="HealthBar"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.0
+offset_right = 20.0
+offset_bottom = 11.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="P_Skill" type="TextureRect" parent="."]
+z_index = 1
+custom_minimum_size = Vector2(50, 50)
+offset_left = 996.0
+offset_top = 503.0
+offset_right = 1111.0
+offset_bottom = 618.0
+size_flags_horizontal = 3
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="P_Skill"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 7.0
+offset_top = 2.0
+offset_right = -7.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+step = 0.05
+fill_mode = 5
+nine_patch_stretch = true
+texture_progress = ExtResource("3_gdm8m")
+tint_progress = Color(0, 0, 0, 0.47058824)
+metadata/_edit_lock_ = true
+
+[node name="Time" type="Label" parent="P_Skill/TextureProgressBar"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.0
+offset_top = -16.0
+offset_right = 11.0
+offset_bottom = 6.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 7
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="S_Skill" type="TextureRect" parent="."]
+z_index = 1
+custom_minimum_size = Vector2(50, 50)
+offset_left = 888.0
+offset_top = 518.0
+offset_right = 988.0
+offset_bottom = 618.0
+size_flags_horizontal = 3
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="S_Skill"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 1.0
+offset_right = -4.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+step = 0.05
+fill_mode = 5
+nine_patch_stretch = true
+texture_progress = ExtResource("3_gdm8m")
+tint_progress = Color(0, 0, 0, 0.47058824)
+metadata/_edit_lock_ = true
+
+[node name="Time" type="Label" parent="S_Skill/TextureProgressBar"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.0
+offset_top = -16.0
+offset_right = 11.0
+offset_bottom = 6.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 7
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true

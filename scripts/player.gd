@@ -6,19 +6,19 @@ signal character_died(character_node)
 signal ability_used(current_cooldown, max_cooldown)
 
 @export_group("Stats")
-@export var portrait_img: Texture2D 
+@export var portrait_img: Texture2D
 @export var max_hp = 100
 @export var speed = 300.0
-@export var damage = 1 
+@export var damage = 1
 @export var defense = 0
 @export var crit_chance = 0.2
 @export var crit_multiplier = 2.0
 @export var recoil_strength = 300.0
 
 @export_group("Combat Response")
-@export var knockback_strength = 600.0 
-@export var knockback_decay = 2000.0   
-@export var invulnerability_time = 1.0 
+@export var knockback_strength = 600.0
+@export var knockback_decay = 2000.0
+@export var invulnerability_time = 1.0
 @export var attack_move_speed_multiplier: float = 0.5 # NEW: 50% speed while attacking
 
 # ... (Keep your Dash/Ability exports here) ...
@@ -29,7 +29,7 @@ signal ability_used(current_cooldown, max_cooldown)
 
 @export_group("Special Ability")
 @export var ability_cooldown_duration = 3.0
-@export var ability_name = "None" 
+@export var ability_name = "None"
 
 @onready var hp = max_hp
 @onready var animated_sprite_2d: AnimatedSprite2D = $main_sprite
@@ -49,15 +49,25 @@ var can_dash: bool = true
 
 const SLIDE_THRESHOLD = 50.0
 var footstep_timer: float = 0.0
-const FOOTSTEP_INTERVAL: float = 0.35 
+const FOOTSTEP_INTERVAL: float = 0.35
 
 var ability_timer: Timer
+var dash_timer: Timer # ADDED: Required for Dash HUD tracking
 
 func _ready():
+	# --- TIMER SETUP ---
+	# FIX: Set Process Mode to ALWAYS so cooldowns finish even when character is inactive
 	ability_timer = Timer.new()
 	ability_timer.one_shot = true
+	ability_timer.process_mode = Node.PROCESS_MODE_ALWAYS 
 	ability_timer.wait_time = ability_cooldown_duration
 	add_child(ability_timer)
+	
+	dash_timer = Timer.new()
+	dash_timer.one_shot = true
+	dash_timer.process_mode = Node.PROCESS_MODE_ALWAYS
+	dash_timer.wait_time = dash_cooldown
+	add_child(dash_timer)
 
 	if animated_sprite_2d.animation_finished.is_connected(_on_animation_finished) == false:
 		animated_sprite_2d.animation_finished.connect(_on_animation_finished)
@@ -69,6 +79,19 @@ func _ready():
 	
 	if particles:
 		particles.emitting = false
+
+# --- HUD HELPERS ---
+
+# FIX: This handles P_Skill and S_Skill specifically
+func get_skill_cooldown(skill_key: String) -> Array:
+	if skill_key == "dash":
+		return [dash_timer.time_left, dash_timer.wait_time]
+	# Special abilities (Heal/Charge)
+	return [ability_timer.time_left, ability_timer.wait_time]
+
+# FIX: Return zeros to prevent ability cooldowns from appearing on character cards
+func get_cooldown_status():
+	return [0.0, 1.0]
 
 func _unhandled_input(event):
 	if is_attacking or is_dead: return
@@ -100,10 +123,6 @@ func _physics_process(delta):
 		# Combine: (Reduced Input Speed) + (Recoil)
 		velocity = (direction * speed * attack_move_speed_multiplier) + knockback_velocity
 		
-		# Optional: Update facing direction while attacking?
-		# Uncomment if you want them to turn while swinging (usually feels better off for melee)
-		# if direction.x != 0: animated_sprite_2d.flip_h = direction.x < 0
-		
 		move_and_slide()
 		return
 
@@ -130,22 +149,20 @@ func _physics_process(delta):
 		if direction != Vector2.ZERO:
 			play_anim("run")
 			if footstep_timer <= 0:
-				AudioManager.play_sfx("grass", 0.1, -5.0) 
+				AudioManager.play_sfx("grass", 0.1, -5.0)
 				footstep_timer = FOOTSTEP_INTERVAL
 		else:
 			play_anim("idle")
 		
 	move_and_slide()
 
-# --- UNIVERSAL DASH LOGIC (UPDATED WITH GOBLIN VFX) ---
+# --- UNIVERSAL DASH LOGIC ---
 func start_universal_dash():
 	# A. Determine Direction
-	# Try input first. If no input, use facing direction.
 	var move_input = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var dash_dir = move_input
 	
 	if dash_dir == Vector2.ZERO:
-		# Fallback: Dash the way we are looking
 		dash_dir = Vector2.LEFT if animated_sprite_2d.flip_h else Vector2.RIGHT
 
 	# B. Set State
@@ -158,7 +175,7 @@ func start_universal_dash():
 	if particles: particles.emitting = true
 	AudioManager.play_sfx("woosh", 0.1)
 	
-	modulate = Color(0.5, 1, 1) 
+	modulate = Color(0.5, 1, 1)
 	
 	# D. Dash Duration
 	await get_tree().create_timer(dash_duration).timeout
@@ -170,8 +187,9 @@ func start_universal_dash():
 	is_invulnerable = false
 	if particles: particles.emitting = false
 	
-	# F. Cooldown
-	await get_tree().create_timer(dash_cooldown).timeout
+	# F. Cooldown (Updated for Timer node sync)
+	dash_timer.start()
+	await dash_timer.timeout
 	can_dash = true
 
 # --- VFX: GHOST TRAIL ---
@@ -200,6 +218,7 @@ func try_use_special_ability():
 
 	if ability_name == "Dash":
 		start_universal_dash()
+		return
 	elif ability_name == "Heal":
 		perform_heal_skill()
 	else:
@@ -209,16 +228,13 @@ func try_use_special_ability():
 	ability_timer.start()
 	emit_signal("ability_used", ability_cooldown_duration, ability_cooldown_duration)
 
-func get_cooldown_status():
-	return [ability_timer.time_left, ability_timer.wait_time]
-
 func perform_dash():
 	start_universal_dash()
 
 func perform_heal_skill():
 	print("Charging Heal!")
 	if get_parent().has_method("queue_heal_for_next_switch"):
-		get_parent().queue_heal_for_next_switch(50) 
+		get_parent().queue_heal_for_next_switch(50)
 
 func _on_vfx_finished():
 	vfx.visible = false
@@ -249,7 +265,7 @@ func take_damage(amount: int, source_pos: Vector2, attacker: Node = null):
 		var knockback_dir = (global_position - source_pos).normalized()
 		knockback_velocity = knockback_dir * knockback_strength
 		if particles:
-			particles.rotation = knockback_dir.angle() + PI 
+			particles.rotation = knockback_dir.angle() + PI
 			particles.emitting = true
 
 	flash_hurt_effect()
@@ -301,7 +317,7 @@ func start_attack():
 	var final_damage = damage
 	if is_critical: final_damage *= crit_multiplier
 	
-	var hit_count = 0 
+	var hit_count = 0
 	for body in bodies:
 		if body.is_in_group("enemy") and body.has_method("take_damage"):
 			body.take_damage(final_damage, global_position, is_critical)
@@ -336,7 +352,7 @@ func _on_animation_finished():
 		is_attacking = false
 
 func die():
-	if is_dead: return 
+	if is_dead: return
 	print("%s Died!" % [name])
 	is_dead = true
 	character_died.emit(self)
@@ -358,14 +374,14 @@ func receive_heal(amount: int):
 	print("%s was healed for %d! HP: %d" % [name, amount, hp])
 	health_changed.emit(hp, max_hp)
 	
-	modulate = Color(0, 1, 0) 
+	modulate = Color(0, 1, 0)
 	var tween = create_tween()
 	tween.tween_property(self, "modulate", Color.WHITE, 0.5)
 	
 	if vfx:
 		vfx.visible = true
 		vfx.frame = 0
-		if vfx.sprite_frames.has_animation("heal"): 
+		if vfx.sprite_frames.has_animation("heal"):
 			vfx.play("heal")
 			AudioManager.play_sfx("healing", 0.1, -10)
 		else:

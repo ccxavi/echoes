@@ -7,6 +7,7 @@ signal wave_completed
 # CONFIGURATION
 @export var spawn_points_container: Node2D
 @export var time_between_waves: float = 5.0
+@export var banner_prep_time: float = 2.5 # Time for banner animation before spawning
 
 # --- ENEMY CONFIGURATION ---
 @export var enemy_scenes: Array[PackedScene]
@@ -30,6 +31,7 @@ func _ready():
 	AudioManager.stop_music()
 	AudioManager.play_music("higher_waves")
 	
+	# Initial delay before the very first wave starts
 	await get_tree().create_timer(2.0).timeout
 	start_next_wave()
 	
@@ -38,7 +40,11 @@ func start_next_wave():
 	
 	AudioManager.play_sfx("horn", 0, -10)
 	
+	# 1. Show the Banner
 	wave_started.emit(current_wave)
+	
+	# 2. PREP PHASE: Wait for the UI banner to finish/peak before spawning
+	await get_tree().create_timer(banner_prep_time).timeout
 	
 	var budget = float(initial_budget) * pow(budget_multiplier, current_wave - 1)
 	
@@ -111,8 +117,10 @@ func _on_enemy_tree_exited():
 	
 	if enemies_alive <= 0 and not is_spawning:
 		print("Wave Cleared!")
+		# Show "SURVIVED" banner immediately
 		wave_completed.emit()
 		
+		# Wait for the peaceful inter-wave period
 		await get_tree().create_timer(time_between_waves).timeout
 		start_next_wave()
 

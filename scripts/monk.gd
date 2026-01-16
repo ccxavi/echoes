@@ -1,11 +1,11 @@
 extends Character
 
 @export var heal_amount = 30
-@export var heal_cooldown_duration = 5.0
-
-var can_heal = true
 
 func _ready():
+	# Update the cooldown duration from the base Character class
+	ability_cooldown_duration = 5.0
+	
 	super._ready()
 	
 	# override default stats
@@ -18,8 +18,8 @@ func _ready():
 	hp = max_hp
 
 func start_attack():
-	# If we are cooling down or already attacking, stop.
-	if not can_heal or is_attacking:
+	# Check if the ability_timer is running instead of a local boolean
+	if not ability_timer.is_stopped() or is_attacking:
 		return
 	
 	AudioManager.play_sfx("heal", 0.1, -15)
@@ -42,22 +42,15 @@ func start_attack():
 func perform_heal():
 	print("Monk cast Heal!")
 
-	# 2. SEND TO MANAGER
+	# 1. SEND TO MANAGER
 	# We assume the parent of the Monk is the PartyManager
 	var manager = get_parent()
 	if manager.has_method("queue_heal_for_next_switch"):
 		manager.queue_heal_for_next_switch(heal_amount)
 	
-	# 3. START COOLDOWN
-	start_cooldown()
-
-func start_cooldown():
-	can_heal = false
-	
-	await get_tree().create_timer(heal_cooldown_duration).timeout
-	
-	can_heal = true
-	print("Monk heal ready!")
+	# 2. START COOLDOWN
+	# This starts the timer that echoDeck.gd is watching
+	ability_timer.start()
 
 func _on_animation_finished():
 	if animated_sprite_2d.animation == "heal":
