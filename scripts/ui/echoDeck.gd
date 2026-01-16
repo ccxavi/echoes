@@ -370,12 +370,12 @@ func _play_banner_sequence(top_text: String, sub_text: String, banner_color: Col
 	var intro = create_tween().set_parallel(true).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	intro.tween_property(wave_banner, "modulate:a", 1.0, 0.4)
 	intro.tween_property(wave_banner, "scale", Vector2(1.0, 1.0), 0.4)
-	await get_tree().create_timer(1.5).timeout
+	await get_tree().create_timer(1.0).timeout
 	var punch = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 	punch.tween_property(wave_banner, "scale", Vector2(1.2, 1.2), 0.1)
 	punch.tween_callback(func(): banner_label.text = sub_text)
 	punch.tween_property(wave_banner, "scale", Vector2(1.0, 1.0), 0.1)
-	await get_tree().create_timer(2.0).timeout
+	await get_tree().create_timer(1.5).timeout
 	var fade = create_tween()
 	fade.tween_property(wave_banner, "modulate:a", 0.0, 0.5)
 	await fade.finished
@@ -453,10 +453,12 @@ func update_character_health(index: int, current_hp: int, max_hp: int):
 			if main_health_bar is TextureProgressBar:
 				main_health_bar.tint_progress = health_color
 			else:
-				main_health_bar.modulate = health_color
+				# Use self_modulate to prevent the label (child) from changing color
+				main_health_bar.self_modulate = health_color
 		
 		if main_health_label:
 			main_health_label.text = str(current_hp) + "/" + str(max_hp)
+			main_health_label.modulate = Color.WHITE
 
 	# 2. Update Card individual Health Bar
 	if progress_bar:

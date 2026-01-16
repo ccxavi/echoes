@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://du6scg0nqprkx"]
+[gd_scene load_steps=21 format=3 uid="uid://du6scg0nqprkx"]
 
 [ext_resource type="Script" uid="uid://b8jctukc2vsa4" path="res://scripts/ui/echoDeck.gd" id="1_5yc16"]
 [ext_resource type="Texture2D" uid="uid://ccuskvidtdhe2" path="res://assets/echoDeck/warrior.png" id="2_2p0xq"]
@@ -15,7 +15,6 @@
 [ext_resource type="Texture2D" uid="uid://dj58v1uph4sim" path="res://assets/echoDeck/hoveredPause.png" id="12_vo2he"]
 [ext_resource type="Texture2D" uid="uid://cyinyoxi82b3d" path="res://assets/echoDeck/disabledPause.png" id="13_hgt7u"]
 [ext_resource type="Texture2D" uid="uid://1swawdw2lfju" path="res://assets/UI/Buttons/Button_Blue_3Slides.png" id="15_gdm8m"]
-[ext_resource type="Texture2D" uid="uid://b21d07ueyvt7s" path="res://assets/TinySwords(OLD)/UI/Ribbons/Ribbon_Blue_3Slides.png" id="15_hjhig"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kje1l"]
 content_margin_left = 10.0
@@ -46,7 +45,6 @@ corner_radius_bottom_left = 2
 content_margin_left = 150.0
 content_margin_right = 150.0
 content_margin_bottom = 50.0
-texture = ExtResource("15_hjhig")
 region_rect = Rect2(3, 1.75, 186, 60)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_p3o5f"]
@@ -514,8 +512,8 @@ theme_override_constants/margin_bottom = 20
 
 [node name="BannerLabel" type="Label" parent="WaveBannerContainer/WaveBannerPanel/InternalPadding"]
 layout_mode = 2
-theme_override_constants/outline_size = 8
-theme_override_font_sizes/font_size = 60
+theme_override_constants/outline_size = 30
+theme_override_font_sizes/font_size = 80
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -610,7 +608,7 @@ anchor_bottom = 1.0
 offset_left = 7.0
 offset_top = 2.0
 offset_right = -7.0
-offset_bottom = -9.0
+offset_bottom = -7.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -659,7 +657,7 @@ anchor_bottom = 1.0
 offset_left = 5.0
 offset_top = 1.0
 offset_right = -4.0
-offset_bottom = -8.0
+offset_bottom = -6.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -668,6 +666,7 @@ fill_mode = 5
 nine_patch_stretch = true
 texture_progress = ExtResource("3_gdm8m")
 tint_progress = Color(0, 0, 0, 0.47058824)
+metadata/_edit_lock_ = true
 
 [node name="Time" type="Label" parent="S_Skill/TextureProgressBar"]
 layout_mode = 1
