@@ -65,6 +65,7 @@ script/source = "extends Node2D
 @onready var wave_manager: WaveManager = $WaveManager
 @onready var party_manager: Node2D = $party_manager
 @onready var fade_overlay: ColorRect = $CanvasLayer/FadeOverlay
+@onready var http_request = $HTTPRequest
 
 var is_level_active: bool = true
 
@@ -98,8 +99,8 @@ func _on_game_over():
 	print(\" Final Score: %d\" % final_score)
 	print(\"========================================\")
 	
-	# 3. HTTP REQUEST (Optional: Send to Leaderboard here)
-	# _submit_score_to_leaderboard(final_score)
+	# 3. HTTP REQUEST (Send to Leaderboard here)
+	_submit_score_to_leaderboard(final_score)
 	
 	var tween = create_tween()
 	tween.tween_property(fade_overlay, \"color:a\", 1.0, 1.5)
@@ -110,6 +111,37 @@ func _on_game_over():
 
 func _exit_tree():
 	is_level_active = false
+
+func _submit_score_to_leaderboard(final_score: int):
+	var allowed_origin = \"https://echoes-web-rosy.vercel.app\"
+	var url = allowed_origin + \"/api/game-data\"
+	
+	var headers = [
+		\"Content-Type: application/json\",
+		\"Origin: \" + allowed_origin
+	]
+	
+	var data = {
+		\"wave\": wave_manager.current_wave,
+		\"points\": final_score
+	}
+	var json_body = JSON.stringify(data)
+
+	print(\"Sending POST to: \", url)
+	var error = http_request.request(url, headers, HTTPClient.METHOD_POST, json_body)
+	
+	if error != OK:
+		print(\"HTTP Request failed to start.\")
+		return
+
+	var response = await http_request.request_completed
+	var response_code = response[1]
+	
+	if response_code >= 200 and response_code < 300:
+		print(\"Successfully synced: \", response_code)
+	else:
+		print(\"Sync failed! Response Code: \", response_code)
+		print(\"Response Body: \", response[3].get_string_from_utf8())
 "
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_uelme"]
@@ -9127,3 +9159,5 @@ layer = 1
 
 [node name="pauseMenu" parent="." instance=ExtResource("49_vb4ln")]
 layer = 2
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
