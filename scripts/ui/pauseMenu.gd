@@ -94,22 +94,27 @@ func _refresh_stats_display():
 
 func _on_back_button_pressed() -> void:
 	# Closes the stats modal and returns to the main pause menu
+	AudioManager.play_sfx("click")
 	stats_modal.visible = false
 
 func _on_close_stats():
 	stats_modal.visible = false
 
 func _on_resume_pressed() -> void:
+	AudioManager.play_sfx("click")
 	_toggle_pause_state()
 
 func _on_restart_pressed() -> void:
+	AudioManager.play_sfx("click")
 	_toggle_pause_state() 
 	get_tree().reload_current_scene()
 
 func _on_stats_pressed() -> void:
+	AudioManager.play_sfx("click")
 	stats_modal.visible = true
 	_refresh_stats_display()
 	
 func _on_quit_pressed() -> void:
+	AudioManager.play_sfx("click")
 	_toggle_pause_state()
 	get_tree().change_scene_to_file("res://scenes/ui/mainMenu.tscn")

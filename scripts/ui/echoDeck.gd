@@ -499,6 +499,7 @@ func _input(event):
 func _on_pause_pressed():
 	if pause_menu_layer:
 		pause_menu_layer._toggle_pause_state()
+	AudioManager.play_sfx("click")
 
 func _on_card_input(event: InputEvent, index: int):
 	if not switch_timer.is_stopped(): return
@@ -510,6 +511,7 @@ func _on_card_input(event: InputEvent, index: int):
 		if index != current_active_index:
 			var target_char = party_members[index]
 			if not target_char.is_dead:
+				AudioManager.play_sfx("click")
 				get_viewport().set_input_as_handled()
 				switch_timer.start()
 				emit_signal("switch_requested", index)
