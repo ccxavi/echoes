@@ -1,16 +1,20 @@
 ~ start
 Soldier 1: The enemy is attacking!
 Solder 2: Make a defensive line!
-Warrior: [shake rate=20 level=10]Charge!!![/shake]
--- ENTER BATTLE --
+You: [shake rate=20 level=10]Charge!!![/shake]
+PRESS (LEFT MOUSE BUTTON) TO ATTACK !
+PRESS (LEFT SHIFT) TO DASH !
 => END
 
 ~ finish
-Warrior: How could they do this...! [shake rate=20 level=10]I’ll make them pay![/shake]
+You notice the destruction on the ground
+You decide to sail to the enemy stronghold to finish them once and for all
+You: [shake rate=20 level=10]...[/shake]
+- Walk to the nearby boat
 Soldier 1: Hey, where are you going?!
-Warrior: [shake rate=20 level=10]To avenge our fallen![/shake]
-- sail to the next island
-=> END
+You: Don't worry... I'll be back.
+- Sail to the next island
+=> END                                                                           
 
 
 
