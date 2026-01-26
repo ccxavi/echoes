@@ -17,8 +17,8 @@ func _ready():
 	
 	# Override default stats for Lancer class
 	speed = 310.0
-	max_hp = 110
-	defense = 4
+	max_hp = 100
+	defense = 5
 	damage = 8        # Base poke damage
 	crit_chance = 0.25
 	

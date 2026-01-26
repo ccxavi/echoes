@@ -1,12 +1,12 @@
 extends Area2D
 
 @export var speed = 300.0
-@export var damage = 20
+@export var damage = 15
 @export var blast_radius = 50.0
 
 # --- SHAKE SETTINGS ---
-@export var shake_intensity = 20.0  # How many pixels to shake (Standard hit is ~5)
-@export var shake_duration = 0.4    # How long the earth quakes
+@export var shake_intensity = 15.0  # How many pixels to shake (Standard hit is ~5)
+@export var shake_duration = 0.2    # How long the earth quakes
 
 var target_pos: Vector2
 var velocity: Vector2

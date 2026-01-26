@@ -9,9 +9,9 @@ func _ready():
 	# override default stats
 	speed = 260.0
 	max_hp = 100
-	defense = 6
+	defense = 7
 	crit_chance = 0.3
-	damage = 100
+	damage = 9
 	
 	hp = max_hp
 

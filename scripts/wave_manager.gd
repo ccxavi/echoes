@@ -17,8 +17,8 @@ signal wave_completed
 
 # DIFFICULTY SCALING
 @export var initial_budget: int = 20
-@export var budget_multiplier: float = 2.0
-@export var hp_scaling_per_wave: int = 5
+@export var budget_multiplier: float = 1.5
+@export var hp_scaling_per_wave: int = 2
 @export var damage_scaling_per_wave: int = 1
 
 # STATE

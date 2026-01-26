@@ -1,7 +1,7 @@
 extends Character
 
 # --- CONFIGURATION ---
-@export var fire_damage = 2
+@export var fire_damage = 4
 @export var damage_time = 4.0 # do fire_damage every 4 seconds
 
 func _ready():
@@ -12,7 +12,7 @@ func _ready():
 	max_hp = 100
 	defense = 3
 	crit_chance = 0.5
-	damage = 0 # Direct hit deals 0, the Burn does the damage
+	damage = 2
 	
 	hp = max_hp
 
