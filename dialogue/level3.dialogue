@@ -1,18 +1,19 @@
 ~ start
-Warrior: Another outpost...
--- SPOTTED BY AN ENEMY --
-Warrior: I guess it's time to test this ‘echo’, whatever it is...
--- ENTER BATTLE --
+You: Another outpost...
+Enemy: [shake rate=20 level=10]INTRUDER!![/shake]
+You: I guess it's time to test this ‘echo’, whatever it is...
 => END
 
 ~ finish
-Warrior: it's another one!
-- pick up the lancer
--- you feel energy emanating through the lone memento of a past warrior --
--- YOU HAVE OBTAINED ECHO OF THE 'LANCER' ! --
-Warrior: I can feel the power of a lancer within me… I wonder whose power this is?
-Warrior: It feels like ive held a lancer for my whole life!
--- the power weakens --
-Warrior: Huh...I guess it's time to go, still have a long way ahead.
-- sail to the next island.
+You see a mysterious lance on the ground
+You: A lance?
+- Pickup the lance
+[wave amp=25 freq=5]You have obtained 'ECHO OF THE LANCER' ![/wave]
+You: Its another one!
+Lancer: [wave amp=25 freq=5]Us Echoes of heroes of the past guide you on this treacherous path, hero of the new age…[/wave]
+PRESS (3) TO USE THE ECHO OF THE Lancer !
+PRESS/HOLD (LEFT MOUSE BUTTON) TO ATTACK USING ECHO OF THE LANCER !
+HOLD TO USE THE DASH ATTACK !
+You: More voices...
+- Sail to the next island
 => END
