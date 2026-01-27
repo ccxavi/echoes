@@ -1,4 +1,4 @@
-[gd_scene load_steps=117 format=4 uid="uid://bc6psoa7d3ndn"]
+[gd_scene load_steps=120 format=4 uid="uid://bc6psoa7d3ndn"]
 
 [ext_resource type="Script" uid="uid://c31hciya3r48y" path="res://scripts/camera.gd" id="1_vcyrc"]
 [ext_resource type="Texture2D" uid="uid://cpaudifcfs7f3" path="res://assets/Terrain/Tileset/Tilemap_color1.png" id="2_qq8ng"]
@@ -44,8 +44,11 @@
 [ext_resource type="PackedScene" uid="uid://crptpm7brbr5u" path="res://scenes/characters/monk.tscn" id="41_a40xn"]
 [ext_resource type="PackedScene" uid="uid://d0buro6mkrfpt" path="res://scenes/characters/lancer.tscn" id="42_1tr8i"]
 [ext_resource type="PackedScene" uid="uid://f8a0hr62euxq" path="res://scenes/characters/goblin.tscn" id="43_v702u"]
+[ext_resource type="PackedScene" uid="uid://d1v642dhddsy5" path="res://scenes/enemies/pawn_hammer.tscn" id="45_v702u"]
 [ext_resource type="PackedScene" uid="uid://dbvl1xbqu22qb" path="res://scenes/ui/pauseMenu.tscn" id="46_oq762"]
+[ext_resource type="PackedScene" uid="uid://cwpobefk08538" path="res://scenes/enemies/pawn_axe.tscn" id="47_6xki1"]
 [ext_resource type="PackedScene" uid="uid://du6scg0nqprkx" path="res://scenes/ui/echoDeck.tscn" id="47_a40xn"]
+[ext_resource type="PackedScene" uid="uid://dr8df60xkxb82" path="res://scenes/enemies/tnt.tscn" id="47_p6vyk"]
 [ext_resource type="PackedScene" uid="uid://cdimmxll0i1dh" path="res://scenes/enemies/warrior.tscn" id="47_pjul6"]
 
 [sub_resource type="GDScript" id="GDScript_a40xn"]
@@ -8028,8 +8031,71 @@ animation = &"switch"
 z_index = 5
 position = Vector2(-66, 1)
 
+[node name="warrior9" parent="enemies" instance=ExtResource("47_pjul6")]
+position = Vector2(-996, -289)
+
+[node name="Hammer3" parent="enemies" instance=ExtResource("45_v702u")]
+position = Vector2(-964, -229)
+
+[node name="Bomber4" parent="enemies" instance=ExtResource("47_p6vyk")]
+position = Vector2(-1062, -233)
+
+[node name="warrior8" parent="enemies" instance=ExtResource("47_pjul6")]
+position = Vector2(-784, -287)
+
+[node name="Bomber3" parent="enemies" instance=ExtResource("47_p6vyk")]
+position = Vector2(-739, -234)
+
+[node name="Axe4" parent="enemies" instance=ExtResource("47_6xki1")]
+position = Vector2(-1055, 241)
+
+[node name="Axe6" parent="enemies" instance=ExtResource("47_6xki1")]
+position = Vector2(-907, 194)
+
+[node name="Axe5" parent="enemies" instance=ExtResource("47_6xki1")]
+position = Vector2(-963, 231)
+
+[node name="Axe2" parent="enemies" instance=ExtResource("47_6xki1")]
+position = Vector2(-327, -103)
+
+[node name="warrior10" parent="enemies" instance=ExtResource("47_pjul6")]
+position = Vector2(-1144, 161)
+
+[node name="warrior7" parent="enemies" instance=ExtResource("47_pjul6")]
+position = Vector2(-285, 58)
+
+[node name="Hammer4" parent="enemies" instance=ExtResource("45_v702u")]
+position = Vector2(-1045, 159)
+
+[node name="Hammer2" parent="enemies" instance=ExtResource("45_v702u")]
+position = Vector2(-325, 123)
+
+[node name="Bomber5" parent="enemies" instance=ExtResource("47_p6vyk")]
+position = Vector2(-1248, 186)
+
+[node name="Bomber2" parent="enemies" instance=ExtResource("47_p6vyk")]
+position = Vector2(-494, 32)
+
+[node name="Bomber" parent="enemies" instance=ExtResource("47_p6vyk")]
+position = Vector2(-498, -53)
+
+[node name="Hammer5" parent="enemies" instance=ExtResource("45_v702u")]
+position = Vector2(-960, 152)
+
+[node name="Hammer" parent="enemies" instance=ExtResource("45_v702u")]
+position = Vector2(-373, 84)
+
+[node name="warrior11" parent="enemies" instance=ExtResource("47_pjul6")]
+position = Vector2(-1141, 258)
+
 [node name="warrior6" parent="enemies" instance=ExtResource("47_pjul6")]
-position = Vector2(-320, 10)
+position = Vector2(-291, -18)
+
+[node name="Axe3" parent="enemies" instance=ExtResource("47_6xki1")]
+position = Vector2(-843, -220)
+
+[node name="Axe" parent="enemies" instance=ExtResource("47_6xki1")]
+position = Vector2(-378, -64)
 
 [node name="pauseMenu" parent="." instance=ExtResource("46_oq762")]
 layer = 2
