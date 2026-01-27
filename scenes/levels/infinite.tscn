@@ -127,21 +127,10 @@ func _submit_score_to_leaderboard(final_score: int):
 	}
 	var json_body = JSON.stringify(data)
 
-	print(\"Sending POST to: \", url)
 	var error = http_request.request(url, headers, HTTPClient.METHOD_POST, json_body)
 	
 	if error != OK:
-		print(\"HTTP Request failed to start.\")
 		return
-
-	var response = await http_request.request_completed
-	var response_code = response[1]
-	
-	if response_code >= 200 and response_code < 300:
-		print(\"Successfully synced: \", response_code)
-	else:
-		print(\"Sync failed! Response Code: \", response_code)
-		print(\"Response Body: \", response[3].get_string_from_utf8())
 "
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_uelme"]

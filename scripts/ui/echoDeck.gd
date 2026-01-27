@@ -74,7 +74,7 @@ var start_messages = [
 	"THEY'RE COMING...",
 	"SHOW NO MERCY!",
 	"PREPARE FOR GLORY!",
-	"DEFEND THE ECHO!"
+	"THE ECHO AWAKENS..."
 ]
 
 var clear_messages = [
@@ -82,7 +82,7 @@ var clear_messages = [
 	"AREA SECURED!",
 	"EXTERMINATED!",
 	"ABSOLUTE VICTORY!",
-	"WELL DONE, HEROES!"
+	"ONE STEP CLOSER..."
 ]
 
 @onready var pause_button = $MainMenu
