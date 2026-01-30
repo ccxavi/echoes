@@ -113,7 +113,7 @@ func _exit_tree():
 	is_level_active = false
 
 func _submit_score_to_leaderboard(final_score: int):
-	var allowed_origin = \"https://echoes-web-rosy.vercel.app\"
+	var allowed_origin = \"https://echoes.dcism.org\"
 	var url = allowed_origin + \"/api/game-data\"
 	
 	var headers = [
