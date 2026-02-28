@@ -1,6 +1,8 @@
 # echoes: The Past Fights Back
 
-A 2D top-down action RPG built with **Godot 4.5**. You play as a lone warrior who calls upon the *echoes* of fallen heroes — a Lancer, a Monk, and a Goblin — and fights through 5 enemy-filled levels to reach an enemy stronghold and avenge your fallen comrades.
+![Banner](docs/banner.png)
+
+A 2D top-down action RPG built with **Godot 4.5**. You play as a lone warrior who calls upon the *echoes* of fallen heroes — a Monk, a Lancer, and a Goblin — and fights through 5 enemy-filled levels to reach an enemy stronghold and avenge your fallen comrades.
 
 The game features two modes: **Story Mode** (5 campaign levels with narrative) and **Endless Mode** (infinite wave survival).
 
@@ -9,6 +11,8 @@ The game features two modes: **Story Mode** (5 campaign levels with narrative) a
 ## Gameplay
 
 Echoes is built around a **party-switching combat system**. You control one character at a time and can swap to any living ally mid-fight (with a 1-second cooldown between switches). Each character has a unique playstyle, stats, and ability.
+
+![Gameplay Preview](docs/preview.gif)
 
 ### Controls
 
@@ -25,8 +29,8 @@ Echoes is built around a **party-switching combat system**. You control one char
 | Character | Role | Unique Mechanic |
 |---|---|---|
 | **Warrior** | Balanced fighter | Two-hit combo — click again during the first swing to chain into a stronger second slash (+50% damage). |
-| **Lancer** | Aggressive bruiser | *Hold* to charge a spear lunge; the longer you hold, the further and harder you hit (up to 2.5× base damage). Charge is interrupted if hit. |
 | **Monk** | Support | Attacks heal the *next* character you switch to instead of dealing damage (30 HP, 5s cooldown). |
+| **Lancer** | Aggressive bruiser | *Hold* to charge a spear lunge; the longer you hold, the further and harder you hit (up to 2.5× base damage). Charge is interrupted if hit. |
 | **Goblin** | Glass cannon | High crit chance (50%). Attacks apply a **burn** status that deals fire damage over time. |
 
 ### Core Mechanics
@@ -86,6 +90,13 @@ echoes/
 - **Engine:** [Godot 4.5](https://godotengine.org/) (GL Compatibility renderer)
 - **Language:** GDScript
 - **Dialogue:** [Dialogue Manager](https://github.com/nathanhoad/godot_dialogue_manager) addon
+
+---
+
+## Credits
+
+- **Sprites:** [Tiny Swords](https://pixelfrog-assets.itch.io/tiny-swords) by Pixel Frog
+- **VFX & SFX:** [Ninja Adventure Asset Pack](https://pixel-boy.itch.io/ninja-adventure-asset-pack) by Pixel-Boy
 
 ---
 
