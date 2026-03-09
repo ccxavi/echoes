@@ -28,8 +28,8 @@ func start_attack():
 	velocity = Vector2.ZERO
 	
 	# 1. FACE MOUSE
-	var mouse_pos = get_global_mouse_position()
-	animated_sprite_2d.flip_h = (mouse_pos.x < global_position.x)
+	var aim_vector := get_aim_vector()
+	animated_sprite_2d.flip_h = (aim_vector.x < 0.0)
 
 	# 2. PLAY ANIMATION
 	play_anim("heal")

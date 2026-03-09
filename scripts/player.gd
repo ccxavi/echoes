@@ -50,6 +50,16 @@ var can_dash: bool = true
 const SLIDE_THRESHOLD = 50.0
 var footstep_timer: float = 0.0
 const FOOTSTEP_INTERVAL: float = 0.35
+const CONTROLLER_AIM_DEADZONE: float = 0.35
+const CONTROLLER_AIM_DISTANCE: float = 96.0
+const CONTROLLER_AIM_AXIS_X: int = JOY_AXIS_RIGHT_X
+const CONTROLLER_AIM_AXIS_Y: int = JOY_AXIS_RIGHT_Y
+const AIM_SOURCE_MOUSE: StringName = &"mouse"
+const AIM_SOURCE_CONTROLLER: StringName = &"controller"
+
+var aim_source: StringName = AIM_SOURCE_MOUSE
+var last_controller_aim_vector: Vector2 = Vector2.RIGHT
+var controller_aim_device: int = -1
 
 var ability_timer: Timer
 var dash_timer: Timer # ADDED: Required for Dash HUD tracking
@@ -79,6 +89,20 @@ func _ready():
 	
 	if particles:
 		particles.emitting = false
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion or event is InputEventMouseButton:
+		aim_source = AIM_SOURCE_MOUSE
+		return
+
+	if event is InputEventJoypadMotion:
+		var joypad_event := event as InputEventJoypadMotion
+		if joypad_event.axis == CONTROLLER_AIM_AXIS_X or joypad_event.axis == CONTROLLER_AIM_AXIS_Y:
+			controller_aim_device = joypad_event.device
+			var controller_aim := _get_controller_aim_vector_for_device(joypad_event.device)
+			if controller_aim != Vector2.ZERO:
+				last_controller_aim_vector = controller_aim
+				aim_source = AIM_SOURCE_CONTROLLER
 
 # --- HUD HELPERS ---
 
@@ -129,9 +153,7 @@ func _physics_process(delta):
 	# 4. NORMAL MOVEMENT
 	var direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = (direction * speed) + knockback_velocity
-	
-	var mouse_pos = get_global_mouse_position()
-	animated_sprite_2d.flip_h = (mouse_pos.x < global_position.x)
+	update_aim_facing()
 
 	# ANIMATION & SOUND
 	var current_speed = velocity.length()
@@ -302,12 +324,10 @@ func start_attack():
 	is_attacking = true
 	AudioManager.play_sfx("woosh", 0.1)
 	
-	var mouse_pos = get_global_mouse_position()
-	var attack_vector = (mouse_pos - global_position)
-	var attack_dir = attack_vector.normalized()
-	knockback_velocity = -attack_dir * recoil_strength
+	var attack_vector := get_aim_vector()
+	knockback_velocity = -attack_vector * recoil_strength
 
-	weapon_pivot.look_at(mouse_pos)
+	weapon_pivot.look_at(get_aim_target_position())
 	play_attack_animation(attack_vector)
 	
 	await get_tree().create_timer(0.2).timeout
@@ -334,6 +354,73 @@ func freeze_frame(time_scale: float, duration: float):
 	Engine.time_scale = time_scale
 	await get_tree().create_timer(duration, true, false, true).timeout
 	Engine.time_scale = 1.0
+
+func get_aim_vector() -> Vector2:
+	var controller_aim := get_controller_aim_vector()
+	if controller_aim != Vector2.ZERO:
+		return controller_aim
+
+	if aim_source == AIM_SOURCE_CONTROLLER:
+		return last_controller_aim_vector
+
+	var mouse_vector := get_global_mouse_position() - global_position
+	if mouse_vector != Vector2.ZERO:
+		return mouse_vector.normalized()
+
+	return get_default_aim_vector()
+
+func get_aim_target_position() -> Vector2:
+	var aim_vector := get_aim_vector()
+	if aim_source == AIM_SOURCE_CONTROLLER:
+		return global_position + (aim_vector * CONTROLLER_AIM_DISTANCE)
+
+	var mouse_target := get_global_mouse_position()
+	if mouse_target == global_position:
+		return global_position + (aim_vector * CONTROLLER_AIM_DISTANCE)
+
+	return mouse_target
+
+func update_aim_facing() -> void:
+	var aim_vector := get_aim_vector()
+	if aim_vector != Vector2.ZERO:
+		animated_sprite_2d.flip_h = (aim_vector.x < 0.0)
+
+func get_controller_aim_vector() -> Vector2:
+	if controller_aim_device != -1:
+		var preferred_aim := _get_controller_aim_vector_for_device(controller_aim_device)
+		if preferred_aim != Vector2.ZERO:
+			last_controller_aim_vector = preferred_aim
+			aim_source = AIM_SOURCE_CONTROLLER
+			return preferred_aim
+
+	for device in Input.get_connected_joypads():
+		if device == controller_aim_device:
+			continue
+
+		var controller_aim := _get_controller_aim_vector_for_device(device)
+		if controller_aim != Vector2.ZERO:
+			controller_aim_device = device
+			last_controller_aim_vector = controller_aim
+			aim_source = AIM_SOURCE_CONTROLLER
+			return controller_aim
+
+	return Vector2.ZERO
+
+func get_default_aim_vector() -> Vector2:
+	if aim_source == AIM_SOURCE_CONTROLLER:
+		return last_controller_aim_vector
+
+	return Vector2.LEFT if animated_sprite_2d.flip_h else Vector2.RIGHT
+
+func _get_controller_aim_vector_for_device(device: int) -> Vector2:
+	var stick_input := Vector2(
+		Input.get_joy_axis(device, CONTROLLER_AIM_AXIS_X),
+		Input.get_joy_axis(device, CONTROLLER_AIM_AXIS_Y)
+	)
+	if stick_input.length() < CONTROLLER_AIM_DEADZONE:
+		return Vector2.ZERO
+
+	return stick_input.normalized()
 
 func play_attack_animation(diff: Vector2):
 	if abs(diff.y) > abs(diff.x):
