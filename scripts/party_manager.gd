@@ -252,6 +252,7 @@ func activate_character(char_node):
 		char_node.get_node("main_sprite").visible = true
 	
 	char_node.set_process_unhandled_input(true)
+	char_node.set_process_input(true)
 	char_node.set_physics_process(true)
 	char_node.process_mode = Node.PROCESS_MODE_INHERIT
 	if camera: 
@@ -262,6 +263,7 @@ func deactivate_character(char_node):
 		char_node.reset_visuals()
 
 	char_node.visible = false
+	char_node.set_process_input(false)
 	char_node.set_process_unhandled_input(false)
 	char_node.set_physics_process(false)
 	char_node.process_mode = Node.PROCESS_MODE_DISABLED

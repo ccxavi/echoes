@@ -79,10 +79,10 @@ func handle_charging_movement(_delta):
 	var direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = direction * (speed * CHARGE_WALK_SPEED)
 	
-	# Force character to face mouse while charging (strafing)
-	var mouse_pos = get_global_mouse_position()
-	animated_sprite_2d.flip_h = (mouse_pos.x < global_position.x)
-	weapon_pivot.look_at(mouse_pos) # Aim the spear
+	# Keep the spear and sprite aligned with the current aim source while charging.
+	var aim_vector := get_aim_vector()
+	animated_sprite_2d.flip_h = (aim_vector.x < 0.0)
+	weapon_pivot.look_at(get_aim_target_position())
 	
 	# Play run or idle anim slowly
 	if direction != Vector2.ZERO:
@@ -123,11 +123,10 @@ func perform_lunge_attack(charge_time):
 	is_attacking = true
 	AudioManager.play_sfx("woosh", 0.1, 5.0) # Higher pitch woosh
 	
-	var mouse_pos = get_global_mouse_position()
-	var attack_vector = (mouse_pos - global_position).normalized()
+	var attack_vector := get_aim_vector()
 	
 	# 1. LOCK ROTATION AND LAUNCH PLAYER
-	weapon_pivot.look_at(mouse_pos)
+	weapon_pivot.look_at(get_aim_target_position())
 	play_attack_animation(attack_vector) # Use 8-dir logic
 	
 	# Calculate power based on charge time (clamped to max)

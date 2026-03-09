@@ -37,9 +37,8 @@ func perform_slash(hit_index: int):
 	combo_queued = false # Consumed the queue
 	
 	# A. Aim & Visuals
-	var mouse_pos = get_global_mouse_position()
-	var attack_vector = (mouse_pos - global_position)
-	weapon_pivot.look_at(mouse_pos)
+	var attack_vector := get_aim_vector()
+	weapon_pivot.look_at(get_aim_target_position())
 	
 	# Determine Animation Name (attack_side, attack_side_2, etc.)
 	var suffix = ""
@@ -58,7 +57,7 @@ func perform_slash(hit_index: int):
 	AudioManager.play_sfx("woosh", 0.1, 0)
 
 	# C. Recoil (Push player back slightly)
-	knockback_velocity = -attack_vector.normalized() * (recoil_strength * 0.5)
+	knockback_velocity = -attack_vector * (recoil_strength * 0.5)
 
 	# D. Damage (Delayed slightly to match sword swing)
 	await get_tree().create_timer(0.15).timeout

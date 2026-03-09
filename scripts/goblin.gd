@@ -23,12 +23,11 @@ func start_attack():
 	
 	AudioManager.play_sfx("torch", 0.1)
 	
-	var mouse_pos = get_global_mouse_position()
-	var diff = mouse_pos - global_position
+	var diff := get_aim_vector()
 	
 	# 2. Rotate & Animate
 	if weapon_pivot:
-		weapon_pivot.look_at(mouse_pos)
+		weapon_pivot.look_at(get_aim_target_position())
 		
 	play_attack_animation(diff)
 	
